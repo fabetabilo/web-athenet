@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import logo from '../../assets/react.svg' // <---- TEMPORAL!!
+import logo from '../../assets/icon/brand.png'
+import Button from '../ui/Button/Button'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
@@ -13,20 +14,24 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
+    <nav className={`${styles.navbar} ${(scrolled || menuOpen) ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
         {/* Logo */}
         <a href="#" className={styles.logo} aria-label="Inicio">
           <img src={logo} alt="Logo" className={styles.logoIcon} />
         </a>
-        
-        {/* --- links escritorio TEMPORAL !!!!! */}
+
+        {/* --- Links escritorio */}
         <div className={styles.links}>
-          {['Inicio', 'Eventos', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
+          {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
             <a key={item} href="#" className={styles.link}>{item}</a>
           ))}
         </div>
-        
+
+        <div className={styles.cta}>
+          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-base)' }}>EVENTOS</Button>
+        </div>
+
         {/* menu hamburguesa */}
         <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)} aria-label="Menú">
           <span className={styles.hamburgerLine} style={{ transform: menuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none' }} />
@@ -36,12 +41,13 @@ export default function Navbar() {
 
       </div>
 
-      {/* --- links movil TEMPORAL !!!!! */}
+      {/* --- Menú móvil (Drawer) */}
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileMenuInner}>
-          {['Inicio', 'Eventos', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
+          {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
             <a key={item} href="#" className={styles.mobileLink}>{item}</a>
           ))}
+          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-lg)' }}>EVENTOS</Button>
         </div>
       </div>
     </nav>

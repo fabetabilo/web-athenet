@@ -45,3 +45,17 @@
   color: #080B14;
   border-color: #fff;
 }
+
+/* variante ACCENT para resaltar */
+.accent {
+  background: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+  color: var(--text-dark);
+}
+
+.accent:hover,
+.accent:active {
+  background: #fff;
+  color: var(--text-dark);
+  border-color: #fff;
+}
