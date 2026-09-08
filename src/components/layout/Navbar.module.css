@@ -1,19 +1,28 @@
 /* --- Navbar */
 .navbar {
   position: fixed;
-  top: 0;
+  top: 1.25rem;
   left: 0;
   right: 0;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 85rem;
   z-index: 50;
-  background: linear-gradient(to bottom, rgba(8, 11, 20, 0.85), transparent);
-  backdrop-filter: none;
-  box-shadow: none;
-  transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+  background: rgba(8, 11, 20, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* Use 2.5rem instead of var(--radius-full) to prevent the "giant circle" effect when height expands */
+  border-radius: 2.5rem;
+  transition: all 0.4s ease;
 }
 
 .scrolled {
-  background: rgba(8, 11, 20, 0.97);
-  backdrop-filter: blur(12px);
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: 100%;
+  border-radius: 0;
+  background: rgba(8, 11, 20, 0.98);
   box-shadow: 0 1px 0 var(--color-border);
 }
 
@@ -35,6 +44,11 @@
   text-decoration: none;
 }
 
+.logoIcon {
+  height: clamp(36px, 4vw, 56px);
+  width: auto;
+}
+
 /* Desktop links */
 .links {
   display: none;
@@ -52,8 +66,20 @@
   transition: color 0.2s;
 }
 
-.link:hover {
+.link:active {
   color: var(--text-primary);
+}
+
+.link:focus-visible {
+  color: var(--text-primary);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--text-primary);
+  }
 }
 
 /* Desktop CTA */
@@ -88,24 +114,26 @@
   max-height: 0;
   background: rgba(8, 11, 20, 0.98);
   border-top: none;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.4s ease;
 }
 
 .mobileMenuOpen {
-  max-height: 400px;
+  max-height: 100vh;
+  height: 100vh;
   border-top: 1px solid var(--color-border);
+  overflow-y: auto;
 }
 
 .mobileMenuInner {
-  padding: 1.25rem;
+  padding: 2rem 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .mobileLink {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -116,7 +144,6 @@
 /* BREAKPOINT */
 @media (min-width: 768px) {
   .inner {
-    height: 4.5rem;
     padding: 0 2rem;
   }
 

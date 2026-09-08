@@ -26,8 +26,10 @@
 }
 
 /* Pausar animación al hacer hover EXACTAMENTE en el contenedor de las tarjetas */
-.carouselContainer:hover .carouselTrack {
-  animation-play-state: paused;
+@media (hover: hover) and (pointer: fine) {
+  .carouselContainer:hover .carouselTrack {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes scroll {
@@ -62,9 +64,22 @@
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.cardLink:hover .card {
+.cardLink:active .card {
   border-color: var(--color-cyan);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.cardLink:focus-visible .card {
+  border-color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cardLink:hover .card {
+    border-color: var(--color-cyan);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
 }
 
 .logoWrapper {

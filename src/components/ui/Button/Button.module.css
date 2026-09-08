@@ -26,11 +26,23 @@
   color: #080B14;
 }
 
-.light:hover,
 .light:active {
   background: #080B14;
   color: #fff;
   border-color: #080B14;
+}
+
+.light:focus-visible {
+  outline: 2px solid #080B14;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .light:hover {
+    background: #080B14;
+    color: #fff;
+    border-color: #080B14;
+  }
 }
 
 /* variante DARK para fondos oscuros */
@@ -39,9 +51,47 @@
   color: #fff;
 }
 
-.dark:hover,
 .dark:active {
   background: #fff;
   color: #080B14;
   border-color: #fff;
+}
+
+.dark:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dark:hover {
+    background: #fff;
+    color: #080B14;
+    border-color: #fff;
+  }
+}
+
+/* variante ACCENT para resaltar */
+.accent {
+  background: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+  color: var(--text-dark);
+}
+
+.accent:active {
+  background: #fff;
+  color: var(--text-dark);
+  border-color: #fff;
+}
+
+.accent:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .accent:hover {
+    background: #fff;
+    color: var(--text-dark);
+    border-color: #fff;
+  }
 }
