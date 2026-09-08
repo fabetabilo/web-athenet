@@ -55,12 +55,6 @@
   line-height: 1.6;
 }
 
-.contactBtn {
-  align-self: center;
-  font-family: var(--font-heading);
-  letter-spacing: 1px;
-}
-
 /* LINKS COLUMN (DERECHA) */
 .linksCol {
   display: grid;
@@ -104,8 +98,20 @@
   transition: color 0.2s ease;
 }
 
-.linkGroup a:hover {
+.linkGroup a:active {
   color: var(--color-cyan);
+}
+
+.linkGroup a:focus-visible {
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linkGroup a:hover {
+    color: var(--color-cyan);
+  }
 }
 
 /* SOCIAL ICONS */
@@ -133,10 +139,26 @@
   height: 18px;
 }
 
-.socialBtn:hover {
+.socialBtn:active {
   border-color: var(--color-cyan);
   background-color: var(--color-cyan);
   color: var(--color-navy);
+}
+
+.socialBtn:focus-visible {
+  border-color: var(--color-cyan);
+  background-color: var(--color-cyan);
+  color: var(--color-navy);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .socialBtn:hover {
+    border-color: var(--color-cyan);
+    background-color: var(--color-cyan);
+    color: var(--color-navy);
+  }
 }
 
 /* RESPONSIVE DESIGN */

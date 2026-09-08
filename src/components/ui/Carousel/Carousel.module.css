@@ -115,7 +115,21 @@
   border-radius: var(--radius-full);
   transition: background 0.2s;
 }
-.ctaBtn:hover { background: #fff; }
+.ctaBtn:active {
+  background: #fff;
+}
+
+.ctaBtn:focus-visible {
+  background: #fff;
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ctaBtn:hover {
+    background: #fff;
+  }
+}
 
 /* flechas */
 .arrow {
@@ -134,9 +148,23 @@
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
-.arrow:hover {
+.arrow:active {
   border-color: var(--color-cyan);
   color: var(--color-cyan);
+}
+
+.arrow:focus-visible {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .arrow:hover {
+    border-color: var(--color-cyan);
+    color: var(--color-cyan);
+  }
 }
 .arrowPrev { left: 1rem; }
 .arrowNext { right: 1rem; }

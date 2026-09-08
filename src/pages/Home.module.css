@@ -60,7 +60,12 @@
   display: block;
   transition: transform 0.5s;
 }
-.featured:hover .featuredImg { transform: scale(1.05); }
+.featured:active .featuredImg {
+  transform: scale(1.05);
+}
+@media (hover: hover) and (pointer: fine) {
+  .featured:hover .featuredImg { transform: scale(1.05); }
+}
 .featuredOverlay {
   position: absolute;
   inset: 0;
@@ -93,8 +98,18 @@
   color: var(--text-primary);
   transition: color 0.2s;
 }
-.featured:hover .featuredTitle { /* <- idk */
+.featured:active .featuredTitle {
   color: var(--color-cyan);
+}
+.featured:focus-visible .featuredTitle {
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .featured:hover .featuredTitle { /* <- idk */
+    color: var(--color-cyan);
+  }
 }
 .date {
   font-size: 0.625rem;
@@ -134,8 +149,13 @@
   display: block;
   transition: transform 0.5s;
 }
-.sideCard:hover .sideThumbImg {
+.sideCard:active .sideThumbImg {
   transform: scale(1.05);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sideCard:hover .sideThumbImg {
+    transform: scale(1.05);
+  }
 }
 .sideThumbOverlay {
   position: absolute;
@@ -165,8 +185,18 @@
   color: var(--text-dark);
   transition: color 0.2s;
 }
-.sideCard:hover .sideTitle {
+.sideCard:active .sideTitle {
   color: var(--color-cyan);
+}
+.sideCard:focus-visible .sideTitle {
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sideCard:hover .sideTitle {
+    color: var(--color-cyan);
+  }
 }
 .sideDate {
   font-size: 0.5625rem;

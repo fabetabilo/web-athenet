@@ -66,8 +66,20 @@
   transition: color 0.2s;
 }
 
-.link:hover {
+.link:active {
   color: var(--text-primary);
+}
+
+.link:focus-visible {
+  color: var(--text-primary);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--text-primary);
+  }
 }
 
 /* Desktop CTA */

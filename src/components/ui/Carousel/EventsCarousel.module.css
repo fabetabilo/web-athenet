@@ -24,7 +24,7 @@
   left: 0;
   width: 35%;
   height: 100%;
-  background: linear-gradient(to right, rgba(0, 27, 63, 0.4) 0%, transparent 100%);
+  background: radial-gradient(circle at bottom left, color-mix(in srgb, var(--color-cyan) 40%, transparent) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -83,9 +83,23 @@
   transition: all 0.2s ease;
 }
 
-.navBtn:hover {
+.navBtn:active {
   border-color: var(--color-cyan);
   color: var(--color-cyan);
+}
+
+.navBtn:focus-visible {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navBtn:hover {
+    border-color: var(--color-cyan);
+    color: var(--color-cyan);
+  }
 }
 
 .navIcon {
@@ -238,8 +252,20 @@
   flex-shrink: 0;
 }
 
-.footerBtn:hover {
+.footerBtn:active {
   background: var(--color-navy);
+}
+
+.footerBtn:focus-visible {
+  background: var(--color-navy);
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footerBtn:hover {
+    background: var(--color-navy);
+  }
 }
 
 .footerIcon {

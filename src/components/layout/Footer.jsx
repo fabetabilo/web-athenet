@@ -49,9 +49,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <Button variant="accent" showArrow className={styles.contactBtn}>
-            CONTÁCTANOS
-          </Button>
+          <Button variant="accent" showArrow>CONTÁCTANOS</Button>
         </div>
 
         <div className={styles.linksCol}>
