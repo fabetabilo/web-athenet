@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/icon/brand.png'
 import Button from '../ui/Button/Button'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
+  const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -29,7 +31,7 @@ export default function Navbar() {
         </div>
 
         <div className={styles.cta}>
-          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-base)' }}>EVENTOS</Button>
+          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-base)' }} onClick={() => navigate('/events')}>EVENTOS</Button>
         </div>
 
         {/* menu hamburguesa */}
@@ -47,7 +49,7 @@ export default function Navbar() {
           {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
             <a key={item} href="#" className={styles.mobileLink}>{item}</a>
           ))}
-          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-lg)' }}>EVENTOS</Button>
+          <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-lg)' }} onClick={() => { setMenuOpen(false); navigate('/events'); }}>EVENTOS</Button>
         </div>
       </div>
     </nav>

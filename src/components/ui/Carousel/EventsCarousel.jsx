@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ArrowRight, ChevronLeft, ChevronRight } from '../icons'
 import Button from '../Button/Button'
 import styles from './EventsCarousel.module.css'
 
 export default function EventsCarousel({ events = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const navigate = useNavigate()
 
   const handleNext = () => {
     if (events.length === 0) return;
@@ -25,7 +27,7 @@ export default function EventsCarousel({ events = [] }) {
             <h2 className={styles.title}>SIGUIENTES EVENTOS</h2>
           </div>
           <div className={styles.headerRight}>
-            <Button variant="dark">TODOS LOS EVENTOS</Button>
+            <Button variant="dark" onClick={() => navigate('/events')}>TODOS LOS EVENTOS</Button>
             <div className={styles.navButtons}>
               <button className={styles.navBtn} onClick={handlePrev} aria-label="Evento anterior">
                 <ChevronLeft className={styles.navIcon} />
