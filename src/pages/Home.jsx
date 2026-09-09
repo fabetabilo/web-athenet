@@ -1,9 +1,11 @@
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
+import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
 import InstCarousel from '../components/ui/Carousel/InstCarousel'
 import Button from '../components/ui/Button/Button'
 import { nextEvents } from '../data/nextEvents'
+import { nextEvent } from '../data/nextEvent'
 import { heroSlides } from '../data/heroSlides'
 import { institutions } from '../data/institutions'
 import { newsCards } from '../data/newsCards.js'
@@ -16,6 +18,7 @@ export default function Home() {
   return (
     <>
       <Carousel slides={heroSlides} />
+      <EventCountdown event={nextEvent} />
       <EventsCarousel events={nextEvents} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
