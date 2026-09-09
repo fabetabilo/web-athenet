@@ -1,0 +1,58 @@
+.page {
+  min-height: 100vh;
+}
+
+.content {
+  background: var(--bg-light);
+  padding: var(--spacing-md) 0 4rem;
+}
+
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+/* ---- Vista Grid ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+/*
+  Fuerza las EventCards a ocupar el 100% de la celda.
+  EventCard usa width: var(--card-width) del contexto del carrusel;
+  aquí lo sobreescribimos sin modificar el componente.
+*/
+.grid > * {
+  width: 100%;
+}
+
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
