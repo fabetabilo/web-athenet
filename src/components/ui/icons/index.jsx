@@ -7,7 +7,9 @@ import {
   Globe as Facebook, 
   MessageSquare as Twitter, 
   Video as Youtube, 
-  Briefcase as Linkedin 
+  Briefcase as Linkedin,
+  Calendar,
+  Tag
 } from 'lucide-react';
 
 export {
@@ -20,4 +22,6 @@ export {
   Twitter,
   Youtube,
   Linkedin,
+  Calendar,
+  Tag
 };

@@ -13,7 +13,11 @@ export default function EventCard({ event, isPrincipal = false }) {
   const navigate = useNavigate()
 
   return (
-    <div className={`${styles.card} ${isPrincipal ? styles.principalCard : ''}`}>
+    <div 
+      className={`${styles.card} ${isPrincipal ? styles.principalCard : ''}`}
+      onClick={() => navigate(`/events/${event.id}`)}
+      style={{ cursor: 'pointer' }}
+    >
       <div className={styles.cardImageWrapper}>
         <img src={event.image} alt={event.title} className={styles.cardImage} />
         <div className={styles.pill}>{event.category}</div>
@@ -39,7 +43,7 @@ export default function EventCard({ event, isPrincipal = false }) {
         <button
           className={styles.footerBtn}
           aria-label={`Ver detalles de ${event.title}`}
-          onClick={() => navigate(`/events/${event.id}`)}
+          onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}`); }}
         >
           <ArrowRight className={styles.footerIcon} />
         </button>

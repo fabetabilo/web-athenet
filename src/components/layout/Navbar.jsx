@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import logo from '../../assets/icon/brand.png'
 import Button from '../ui/Button/Button'
 import styles from './Navbar.module.css'
@@ -19,14 +19,14 @@ export default function Navbar() {
     <nav className={`${styles.navbar} ${(scrolled || menuOpen) ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
         {/* Logo */}
-        <a href="#" className={styles.logo} aria-label="Inicio">
+        <Link to="/" className={styles.logo} aria-label="Inicio">
           <img src={logo} alt="Logo" className={styles.logoIcon} />
-        </a>
+        </Link>
 
         {/* --- Links escritorio */}
         <div className={styles.links}>
           {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
-            <a key={item} href="#" className={styles.link}>{item}</a>
+            <Link key={item} to={item === 'Inicio' ? '/' : '#'} className={styles.link}>{item}</Link>
           ))}
         </div>
 
@@ -47,7 +47,7 @@ export default function Navbar() {
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileMenuInner}>
           {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
-            <a key={item} href="#" className={styles.mobileLink}>{item}</a>
+            <Link key={item} to={item === 'Inicio' ? '/' : '#'} className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{item}</Link>
           ))}
           <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-lg)' }} onClick={() => { setMenuOpen(false); navigate('/events'); }}>EVENTOS</Button>
         </div>
