@@ -9,7 +9,13 @@ import { nextEvent } from '../data/nextEvent'
 import { heroSlides } from '../data/heroSlides'
 import { institutions } from '../data/institutions'
 import { newsCards } from '../data/newsCards.js'
+import { normalizeEvent } from '../utils/normalizeEvent'
 import styles from './Home.module.css'
+
+// Normalizar datos antes de pasarlos a los componentes.
+// Cuando se integre el API real, estos vendrán de los fetches correspondientes.
+const normalizedNextEvents = nextEvents.map(normalizeEvent).filter((e) => e.isVisible)
+const normalizedNextEvent = normalizeEvent(nextEvent)
 
 export default function Home() {
   const featured = newsCards.find((c) => c.featured)
@@ -18,8 +24,8 @@ export default function Home() {
   return (
     <>
       <Carousel slides={heroSlides} />
-      <EventCountdown event={nextEvent} />
-      <EventsCarousel events={nextEvents} />
+      <EventCountdown event={normalizedNextEvent} />
+      <EventsCarousel events={normalizedNextEvents} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
       <section className={styles.section}>

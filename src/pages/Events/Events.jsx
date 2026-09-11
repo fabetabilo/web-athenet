@@ -3,6 +3,7 @@ import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
 import { allEvents } from '../../data/allEvents'
+import { normalizeEvent } from '../../utils/normalizeEvent'
 import styles from './Events.module.css'
 
 /**
@@ -12,6 +13,9 @@ import styles from './Events.module.css'
 const VIEW_OPTIONS = [
   { value: 'grid', label: 'GRID' },
 ]
+
+// Normalizar y filtrar solo eventos visibles (status PUBLISHED)
+const publicEvents = allEvents.map(normalizeEvent).filter((e) => e.isVisible)
 
 export default function Events() {
   const [view, setView] = useState('grid')
@@ -38,7 +42,7 @@ export default function Events() {
           {/* Vista grid */}
           {view === 'grid' && (
             <div className={styles.grid}>
-              {allEvents.map((event) => (
+              {publicEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
@@ -51,5 +55,3 @@ export default function Events() {
     </div>
   )
 }
-
-

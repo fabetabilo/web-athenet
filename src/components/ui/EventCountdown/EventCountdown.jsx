@@ -3,19 +3,13 @@ import { MapPin } from '../icons'
 import Button from '../Button/Button'
 import styles from './EventCountdown.module.css'
 
-// formatea string ISO "YYYY-MM-DD" a "23 de Septiembre, 2026"
-function formatDate(isoDate) {
-  const [year, month, day] = isoDate.split('-').map(Number)
-  const date = new Date(year, month - 1, day)
-  return date.toLocaleDateString('es-CL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
-// --- calcula el tiempo restante hacia fecha ISO
-// CONSIDERACION: ahora mismo se hace el calculo, mas adelante, se podria implementar LocalDateTime desde la api para ahorrar esto.
+/**
+ * Calcula el tiempo restante hacia una fecha ISO "YYYY-MM-DD".
+ * Se usa `isoDate + 'T00:00:00'` para forzar interpretación en hora local
+ * y evitar desfases de timezone al calcular la diferencia.
+ *
+ * @param {string} isoDate - Fecha en formato "YYYY-MM-DD"
+ */
 function getTimeLeft(isoDate) {
   const target = new Date(isoDate + 'T00:00:00')
   const diff = target - Date.now()
@@ -32,27 +26,22 @@ function getTimeLeft(isoDate) {
  * Muestra una sección de cuenta regresiva para el próximo evento.
  *
  * @param {Object} props
- * @param {Object} props.event - Objeto del evento próximo.
- * @param {number} props.event.id - ID del evento.
- * @param {string} props.event.title - Nombre del evento.
- * @param {string} props.event.date - Fecha ISO "YYYY-MM-DD" (LocalDate).
- * @param {string} props.event.location - Lugar del evento.
+ * @param {import('../../../utils/normalizeEvent').NormalizedEvent} props.event - Evento ya normalizado
  */
 export default function EventCountdown({ event }) {
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(event.date))
+  // Usa event.eventDate (ISO "YYYY-MM-DD") como fuente de verdad para el cálculo
+  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(event.eventDate))
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setTimeLeft(getTimeLeft(event.date))
+    const intervalId = setInterval(() => {
+      setTimeLeft(getTimeLeft(event.eventDate))
     }, 1000)
-    return () => clearInterval(id)
-  }, [event.date])
-
-  const formattedDate = formatDate(event.date)
+    return () => clearInterval(intervalId)
+  }, [event.eventDate])
 
   const units = [
-    { value: timeLeft.days, label: 'Días' },
-    { value: timeLeft.hours, label: 'Horas' },
+    { value: timeLeft.days,    label: 'Días' },
+    { value: timeLeft.hours,   label: 'Horas' },
     { value: timeLeft.minutes, label: 'Minutos' },
     { value: timeLeft.seconds, label: 'Segundos' },
   ]
@@ -63,7 +52,8 @@ export default function EventCountdown({ event }) {
         <div className={styles.info}>
           <span className={styles.label}>Próxima Fecha</span>
           <h2 className={styles.title}>{event.title}</h2>
-          <p className={styles.date}>{formattedDate}</p>
+          {/* formattedDate viene pre-calculado desde normalizeEvent (timezone-safe) */}
+          <p className={styles.date}>{event.formattedDate}</p>
           <p className={styles.location}>
             <MapPin size={32} strokeWidth={1} aria-hidden="true" />
             {event.location}

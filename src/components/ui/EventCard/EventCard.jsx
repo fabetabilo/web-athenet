@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { BadgeCheck } from 'lucide-react'
 import { MapPin, ArrowRight } from '../icons'
 import styles from './Event.module.css'
 
@@ -6,21 +7,29 @@ import styles from './Event.module.css'
  * EventCard
  * Card reutilizable para un evento individual.
  *
- * @param {object}  event - Datos del evento
- * @param {boolean} isPrincipal - Si es la card activa/principal del carrusel (activa)
+ * @param {import('../../../utils/normalizeEvent').NormalizedEvent} event - Evento ya normalizado
+ * @param {boolean} isPrincipal - Si es la card activa/principal del carrusel
  */
 export default function EventCard({ event, isPrincipal = false }) {
   const navigate = useNavigate()
 
   return (
-    <div 
+    <div
       className={`${styles.card} ${isPrincipal ? styles.principalCard : ''}`}
       onClick={() => navigate(`/events/${event.id}`)}
       style={{ cursor: 'pointer' }}
     >
       <div className={styles.cardImageWrapper}>
         <img src={event.image} alt={event.title} className={styles.cardImage} />
-        <div className={styles.pill}>{event.category}</div>
+        <div className={styles.pill}>{event.categoryLabel}</div>
+        {/* es oficial? */}
+        {event.isOfficial && (
+          <BadgeCheck
+            className={styles.officialBadge}
+            aria-label="Evento oficial verificado"
+          />
+        )}
+
         <div className={styles.cardMeta}>
           {event.location && (
             <span className={styles.cardLocation}>
@@ -31,13 +40,13 @@ export default function EventCard({ event, isPrincipal = false }) {
           <h3 className={styles.cardTitle}>{event.title}</h3>
         </div>
       </div>
-      
+
       <div className={styles.cardFooter}>
         <div className={styles.dateInfo}>
-          <span className={styles.dateDays}>{event.days}</span>
+          <span className={styles.dateDays}>{event.displayDay}</span>
           <div className={styles.dateMonthYear}>
-            <span className={styles.dateMonth}>{event.month}</span>
-            <span className={styles.dateYear}>{event.year}</span>
+            <span className={styles.dateMonth}>{event.displayMonth}</span>
+            <span className={styles.dateYear}>{event.displayYear}</span>
           </div>
         </div>
         <button
