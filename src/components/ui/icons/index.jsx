@@ -9,8 +9,18 @@ import {
   Video as Youtube, 
   Briefcase as Linkedin,
   Calendar,
-  Tag
+  Tag,
+  BadgeCheck
 } from 'lucide-react';
+
+// EVENTO_OFICIAL_BADGE: icono personalizado
+export const OfficialIcon = ({ className, ...props }) => (
+  <img src="/icon/oficial.png" alt="Oficial" className={className} {...props} />
+);
+
+export const OfficialIconH = ({ className, ...props }) => (
+  <img src="/icon/oficial_h.png" alt="Oficial" className={className} {...props} />
+);
 
 export {
   ChevronRight,
@@ -23,5 +33,6 @@ export {
   Youtube,
   Linkedin,
   Calendar,
-  Tag
+  Tag,
+  BadgeCheck
 };

@@ -26,10 +26,10 @@ function getTimeLeft(isoDate) {
  * Muestra una sección de cuenta regresiva para el próximo evento.
  *
  * @param {Object} props
- * @param {import('../../../utils/normalizeEvent').NormalizedEvent} props.event - Evento ya normalizado
+ * @param {import('../../../utils/normalizeEvent').NormalizedEvent} props.event - evento normalizado
  */
 export default function EventCountdown({ event }) {
-  // Usa event.eventDate (ISO "YYYY-MM-DD") como fuente de verdad para el cálculo
+  // Usa event.eventDate (ISO "YYYY-MM-DD")
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(event.eventDate))
 
   useEffect(() => {

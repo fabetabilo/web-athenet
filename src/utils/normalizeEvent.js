@@ -111,30 +111,26 @@ function splitDisplayDate(isoDate) {
  * @property {string}      displayDay     - número de día como string (ej. "4"), para layout de card
  * @property {string}      displayMonth   - nombre del mes en español (ej. "Octubre"), para layout de card
  * @property {string}      displayYear    - año como string (ej. "2026"), para layout de card
- *
  * Clasificación
  * @property {string}      type           - enum original: MATCH | MEETING | TRACKDAY | OTHER
  * @property {string}      typeLabel      - label legible en español
  * @property {string}      category       - enum original: FUTBOL | BASQUETBOL | ...
  * @property {string}      categoryLabel  - label legible en español
- *
  * Estado
  * @property {string}      status         - enum original: DRAFT | PUBLISHED | CANCELLED
  * @property {string}      statusLabel    - label legible en español
  * @property {boolean}     isVisible      - true solo si status === 'PUBLISHED'
- *
  * Oficial
  * @property {boolean}     isOfficial     - true si el evento es verificado/oficial
- *
  * Equipos
  * @property {boolean}     hasTeams       - true si teamOneId y teamTwoId son no-nulos
  *                                          Decisión de negocio: type=MATCH garantiza hasTeams=true.
  *                                          Otros tipos pueden tener equipos o no.
  * @property {number|null} teamOneId
  * @property {number|null} teamTwoId
- *
  * Misc
  * @property {string|null} location
+ * @property {string|null} address
  * @property {number}      organizationId
  */
 
@@ -159,42 +155,35 @@ export function normalizeEvent(rawEvent) {
   return {
     // Identificación
     id: rawEvent.internalId,
-
     // Contenido
     title:          rawEvent.title,
     description:    rawEvent.description,
     descriptionOpt: rawEvent.description_opt ?? null,
-
     // Imagen
     image:  rawEvent.coverImage,
     photos: Array.isArray(rawEvent.photos) ? rawEvent.photos : [],
-
     // Fecha
     eventDate:     rawEvent.eventDate,
     formattedDate: formatEventDate(rawEvent.eventDate),
     ...splitDisplayDate(rawEvent.eventDate),
-
     // Clasificación
     type:          rawEvent.type,
     typeLabel:     TYPE_LABELS[rawEvent.type]     ?? rawEvent.type,
     category:      rawEvent.category,
     categoryLabel: CATEGORY_LABELS[rawEvent.category] ?? rawEvent.category,
-
     // Estado
     status:      rawEvent.status,
     statusLabel: STATUS_LABELS[rawEvent.status] ?? rawEvent.status,
     isVisible:   rawEvent.status === 'PUBLISHED',
-
     // Oficial
     isOfficial: Boolean(rawEvent.isOfficial),
-
     // Equipos
     hasTeams,
     teamOneId: rawEvent.teamOneId ?? null,
     teamTwoId: rawEvent.teamTwoId ?? null,
-
     // Misc
     location:       rawEvent.location ?? null,
+    address:        rawEvent.address ?? null,
     organizationId: rawEvent.organizationId,
   }
 }

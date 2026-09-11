@@ -1,11 +1,10 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BadgeCheck } from 'lucide-react';
-import { MapPin, Calendar, Tag, ChevronLeft } from '../../components/ui/icons';
+import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/ui/icons';
 import { allEvents } from '../../data/allEvents';
 import { normalizeEvent } from '../../utils/normalizeEvent';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
-import styles from './Event.module.css';
+import styles from './EventDetail.module.css';
 
 // Normalizar todos los eventos una vez al cargar el módulo.
 // Cuando se integre el API real, este array vendrá del fetch en su lugar.
@@ -43,18 +42,16 @@ export default function EventDetail() {
               </Link>
               <h1 className={styles.title}>
                 {event.title}
-                {/* Ícono de evento oficial — posicionamiento/estilo visual pendiente */}
-                {event.isOfficial && (
-                  <BadgeCheck
-                    className={styles.officialBadge}
-                    aria-label="Evento oficial verificado"
-                  />
-                )}
               </h1>
             </div>
           </div>
 
           <div className={styles.bannerFooter}>
+            {event.isOfficial && (
+              <div className={styles.footerItem} style={{ padding: 0 }}>
+                <OfficialIconH className={styles.officialItemIcon} aria-label="Evento oficial" />
+              </div>
+            )}
             <div className={styles.footerItem}>
               <MapPin className={styles.itemIcon} />
               <span className={styles.itemText}>{event.location}</span>
@@ -65,22 +62,40 @@ export default function EventDetail() {
               <span className={styles.itemText}>{event.formattedDate}</span>
             </div>
             <div className={styles.footerItem}>
-              <Tag className={styles.itemIcon} />
-              <span className={styles.itemText}>{event.categoryLabel}</span>
+              
+              <div className={styles.pill}>{event.categoryLabel}</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Sección de equipos: solo se renderiza si el evento tiene dos equipos.
-          Decisión de negocio: type=MATCH garantiza hasTeams=true;
-          otros tipos pueden también tener equipos (hasTeams=true). */}
-      {event.hasTeams && (
-        <TeamsVersus teamOneId={event.teamOneId} teamTwoId={event.teamTwoId} />
-      )}
+      <TeamsVersus event={event} />
 
-      <div className={styles.eventContent}>
-        <p>{event.description}</p>
+      <div className={styles.eventContentLayout}>
+        <div>
+          <p className={styles.boldDescription}>
+            <strong>{event.descriptionOpt}</strong></p>
+          <p className={styles.loremText}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore 
+            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
+            voluptate velit esse cillum dolore.
+          </p>
+        </div>
+
+        <div className={styles.sidebarContent}>
+          <div className={styles.addressCard}>
+            <MapPin className={styles.addressIcon} />
+            <h3 className={styles.addressTitle}>Dirección</h3>
+            <p className={styles.addressText}>{event.address || event.location}
+              <br />
+              Ingreso gratuito
+            </p>
+            <a href="#" className={styles.addressLink}>
+              Cómo llegar <ArrowRight className={styles.addressLinkIcon} />
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

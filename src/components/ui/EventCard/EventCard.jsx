@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { BadgeCheck } from 'lucide-react'
-import { MapPin, ArrowRight } from '../icons'
+import { MapPin, ArrowRight, OfficialIcon } from '../icons'
 import styles from './Event.module.css'
 
 /**
@@ -24,10 +23,7 @@ export default function EventCard({ event, isPrincipal = false }) {
         <div className={styles.pill}>{event.categoryLabel}</div>
         {/* es oficial? */}
         {event.isOfficial && (
-          <BadgeCheck
-            className={styles.officialBadge}
-            aria-label="Evento oficial verificado"
-          />
+          <OfficialIcon className={styles.officialBadgeImg} aria-label="Evento oficial verificado" />
         )}
 
         <div className={styles.cardMeta}>
