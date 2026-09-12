@@ -1,0 +1,152 @@
+.card {
+  width: var(--card-width);
+  flex-shrink: 0;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-light);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* card principal isPrincipal (activa): más ancha */
+.principalCard {
+  width: var(--principal-width);
+}
+
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.cardImageWrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.1) 60%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+.pill {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ffd700;
+  color: #000;
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  padding: 0.25rem 1rem;
+  border-radius: var(--radius-full);
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.officialBadgeImg {
+  position: absolute;
+  top: 3rem;
+  right: 1rem;
+  width: clamp(3.5rem, 5vw, 4rem);
+  height: auto;
+  z-index: 10;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.cardMeta {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.cardLocation {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.locationIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.cardTitle {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-subheading-weight);
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.dateInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-left: 1.2rem;
+}
+
+.dateDays {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.dateMonthYear {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.dateMonth {
+  font-family: var(--font-primary);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dateYear {
+  font-family: var(--font-primary);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}

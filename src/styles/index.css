@@ -7,6 +7,11 @@
   --color-navy: #080B14;
   --color-dark: #0A0D1A;
   --color-cyan: #00C8FF;
+  --color-secondary: #3b82f6;
+  --color-tertiary: #ffd700;
+
+  --color-local: var(--bg-light);
+  --color-visitor: var(--color-local);
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -22,6 +27,7 @@
   --font-condensed: 'Barlow Condensed', sans-serif;
   --font-heading-weight: 800;
   --font-subheading-weight: 800;
+  --font-text-strong-weight: 600;
   --font-text-weight: 400;
 
   /* Font Sizes */
@@ -29,7 +35,8 @@
   --text-sm: 0.8125rem; /* 13px */
   --text-base: 0.875rem; /* 14px */
   --text-md: 1rem; /* 16px */
-  --text-lg: 1.125rem; /* 18px */
+  --text-body: clamp(1.1rem, 1.1vw, 1.5rem);
+  --text-lg: clamp(1.125rem, 3vw, 2.2rem);
 
   --heading-md: clamp(2rem, 4vw, 3rem);
   --heading-sm: clamp(1.5rem, 4vw, 2.1rem);
@@ -37,10 +44,13 @@
   /* Bordes especificos reutilizables */
   --radius-sm: 8px;
   --radius-md: 10px;
+  --radius-lg: 20px;
   --radius-full: 9999px; /* full curvo, pildoras */
 
   /* Espaciados */
+  --spacing-sm: 1.5rem;
   --spacing-md: 2.5rem;
+  --spacing-lg: 3rem;
 }
 
 /* reset */
@@ -65,9 +75,18 @@ body,
 
 body {
   font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-text-weight);
   background: var(--color-dark);
   color: var(--text-primary);
-  line-height: 1.5;
+}
+
+p + p {
+  margin-top: var(--spacing-sm);
+}
+
+body strong {
+  font-weight: var(--font-text-strong-weight);
 }
 
 img {
@@ -90,6 +109,5 @@ button {
   background: none;
   border: none;
   font: inherit;
-  /* --------------------------------------------------- */
   padding: 0;
 }

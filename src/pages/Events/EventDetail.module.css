@@ -1,0 +1,249 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+.bannerContainer {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.titleWrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2rem;
+}
+
+.title {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(3rem, 6vw, 5rem);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.bannerFooter {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  border-top: 1px dotted rgba(255, 255, 255, 0.3);
+  margin-top: auto;
+}
+
+.footerItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  color: var(--text-primary);
+}
+
+/* Bordes divisorios verticales */
+.footerItem:not(:last-child) {
+  border-right: 1px dotted rgba(255, 255, 255, 0.3);
+}
+
+.itemIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2px;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.officialItemIcon {
+  height: clamp(1.5rem, 4vw, 2.5rem);
+  width: auto;
+  flex-shrink: 0;
+}
+
+.itemText {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-text-weight);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pill {
+  background: var(--color-tertiary);
+  color: var(--text-dark);
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  padding: 0.25rem 1rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 768px) {
+  .bannerFooter {
+    grid-template-columns: 1fr;
+    border-top: none;
+  }
+
+  .footerItem {
+    justify-content: flex-start;
+    padding: 0.75rem 0;
+    border-top: 1px dotted rgba(255, 255, 255, 0.2);
+  }
+
+  .footerItem:not(:last-child) {
+    border-right: none;
+  }
+}
+
+.eventContentLayout {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+}
+
+
+
+.boldDescription {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.loremText {
+  font-family: var(--font-primary);
+  font-weight: var(--font-text-weight);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.addressCard {
+  background-color: var(--color-navy);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
+  padding: 20px 20px 40px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.25rem;
+}
+
+.addressIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  stroke-width: 1px;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+.addressTitle {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.75rem;
+  margin: 0;
+  text-transform: uppercase;
+  align-self: center;
+  letter-spacing: 0.02em;
+}
+
+.addressText {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0;
+  margin-top: 1.25rem;
+}
+
+.addressLink {
+  grid-column: 2;
+  grid-row: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  text-decoration: none;
+  border-bottom: 1px solid #ffffff;
+  padding-bottom: 0.25rem;
+  font-size: var(--text-body);
+  margin-top: 1.5rem;
+  justify-self: flex-start;
+}
+
+.addressLink:hover {
+  opacity: 0.9;
+}
+
+.addressLinkIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 768px) {
+  .eventContentLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+.notFound {
+  text-align: center;
+  padding: 5rem 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: var(--text-lg);
+}

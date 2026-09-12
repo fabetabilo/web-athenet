@@ -1,0 +1,137 @@
+.countdown {
+  background: var(--color-navy);
+  padding: 3rem 0;
+}
+
+.inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-cyan);
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--heading-md);
+  font-weight: var(--font-heading-weight);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.date {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: var(--font-text-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.timerLabel {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+}
+
+.boxes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cyan);
+  padding: 0.875rem 1.25rem;
+  min-width: 6rem;
+  /* border-radius: var(--radius-sm); */
+}
+
+.value {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-dark);
+}
+
+.unit {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dark);
+  margin-top: 0.25rem;
+}
+
+
+@media (min-width: 768px) {
+  .inner {
+    padding: 0 2rem;
+  }
+
+  .boxes {
+    gap: 0.5rem;
+  }
+
+  .box {
+    min-width: 7.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .info {
+    max-width: 50%;
+  }
+}

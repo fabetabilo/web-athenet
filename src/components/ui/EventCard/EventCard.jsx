@@ -1,0 +1,57 @@
+import { useNavigate } from 'react-router-dom'
+import { MapPin, ArrowRight, OfficialIcon } from '../icons'
+import ButtonAction from '../Button/ButtonAction'
+import styles from './Event.module.css'
+
+/**
+ * EventCard
+ * Card reutilizable para un evento individual.
+ *
+ * @param {import('../../../utils/normalizeEvent').NormalizedEvent} event - Evento ya normalizado
+ * @param {boolean} isPrincipal - Si es la card activa/principal del carrusel
+ */
+export default function EventCard({ event, isPrincipal = false }) {
+  const navigate = useNavigate()
+
+  return (
+    <div
+      className={`${styles.card} ${isPrincipal ? styles.principalCard : ''}`}
+      onClick={() => navigate(`/events/${event.id}`)}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className={styles.cardImageWrapper}>
+        <img src={event.image} alt={event.title} className={styles.cardImage} />
+        <div className={styles.pill}>{event.categoryLabel}</div>
+        {/* es oficial? */}
+        {event.isOfficial && (
+          <OfficialIcon className={styles.officialBadgeImg} aria-label="Evento oficial verificado" />
+        )}
+
+        <div className={styles.cardMeta}>
+          {event.location && (
+            <span className={styles.cardLocation}>
+              <MapPin className={styles.locationIcon} />
+              {event.location}
+            </span>
+          )}
+          <h3 className={styles.cardTitle}>{event.title}</h3>
+        </div>
+      </div>
+
+      <div className={styles.cardFooter}>
+        <div className={styles.dateInfo}>
+          <span className={styles.dateDays}>{event.displayDay}</span>
+          <div className={styles.dateMonthYear}>
+            <span className={styles.dateMonth}>{event.displayMonth}</span>
+            <span className={styles.dateYear}>{event.displayYear}</span>
+          </div>
+        </div>
+        <ButtonAction
+          icon={ArrowRight}
+          aria-label={`Ver detalles de ${event.title}`}
+          onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}`); }}
+        />
+      </div>
+    </div>
+  )
+}
