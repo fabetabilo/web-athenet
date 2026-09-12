@@ -32,7 +32,7 @@
   EventCard usa width: var(--card-width) del contexto del carrusel;
   aquí lo sobreescribimos sin modificar el componente.
 */
-.grid > * {
+.grid>* {
   width: 100%;
 }
 
@@ -56,3 +56,108 @@
   }
 }
 
+/* --- Vista Lista (Tabla) --- */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  background: var(--bg-light);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  color: var(--text-dark);
+  min-width: 700px; /* asegura que sobrevive en mobile */
+}
+
+.table th {
+  background: var(--color-navy);
+  color: var(--text-primary);
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--text-body);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  vertical-align: middle;
+  font-size: var(--text-body);
+}
+
+.clickableRow {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clickableRow:active {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.clickableRow:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: -2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .clickableRow:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    transition: background-color 0.2s ease;
+  }
+}
+
+/* 
+  PARA COLOR INTERCALADO: ---------
+*/
+/*
+.table tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+*/
+
+.categoryCell {
+  font-weight: var(--font-text-strong-weight);
+  color: var(--text-dark);
+}
+
+.nameCell {
+  font-weight: var(--font-text-strong-weight);
+  color: var(--color-secondary);
+}
+
+.nameCell {
+  color: var(--color-secondary);
+  font-weight: var(--font-text-strong-weight);
+}
+
+.cityCell {
+  font-weight: var(--font-text-strong-weight);
+  color: var(--color-navy);
+}
+
+.dateCell {
+  color: var(--text-dark-muted);
+}
+
+.badgeCell {
+  width: 120px;
+  text-align: right;
+}
+
+.officialBadge {
+  height: 24px;
+  width: auto;
+  max-width: none;
+  display: inline-block;
+}
+
+.actionCell {
+  text-align: right;
+  width: 4rem; /* Ancho suficiente para el botón */
+}

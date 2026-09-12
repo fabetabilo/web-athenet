@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { MapPin, ArrowRight, OfficialIcon } from '../icons'
+import ButtonAction from '../Button/ButtonAction'
 import styles from './Event.module.css'
 
 /**
@@ -45,13 +46,11 @@ export default function EventCard({ event, isPrincipal = false }) {
             <span className={styles.dateYear}>{event.displayYear}</span>
           </div>
         </div>
-        <button
-          className={styles.footerBtn}
+        <ButtonAction
+          icon={ArrowRight}
           aria-label={`Ver detalles de ${event.title}`}
           onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}`); }}
-        >
-          <ArrowRight className={styles.footerIcon} />
-        </button>
+        />
       </div>
     </div>
   )
