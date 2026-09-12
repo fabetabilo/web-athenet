@@ -1,31 +1,44 @@
+import { useState, useEffect } from 'react'
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
 import InstCarousel from '../components/ui/Carousel/InstCarousel'
 import Button from '../components/ui/Button/Button'
-import { nextEvents } from '../data/nextEvents'
-import { nextEvent } from '../data/nextEvent'
 import { heroSlides } from '../data/heroSlides'
 import { institutions } from '../data/institutions'
 import { newsCards } from '../data/newsCards.js'
-import { normalizeEvent } from '../utils/normalizeEvent'
+import { getNextEvent, getNextEvents } from '../service/eventsApi'
 import styles from './Home.module.css'
 
-// Normalizar datos antes de pasarlos a los componentes.
-// Cuando se integre el API real, estos vendrán de los fetches correspondientes.
-const normalizedNextEvents = nextEvents.map(normalizeEvent).filter((e) => e.isVisible)
-const normalizedNextEvent = normalizeEvent(nextEvent)
-
 export default function Home() {
+  const [featuredEvent, setFeaturedEvent] = useState(null)
+  const [upcomingEvents, setUpcomingEvents] = useState([])
+
+  useEffect(() => {
+    let isMounted = true
+
+    getNextEvent().then((event) => {
+      if (isMounted) setFeaturedEvent(event)
+    })
+
+    getNextEvents().then((events) => {
+      if (isMounted) setUpcomingEvents(events.filter((e) => e.isVisible))
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   const featured = newsCards.find((c) => c.featured)
   const rest = newsCards.filter((c) => !c.featured)
 
   return (
     <>
       <Carousel slides={heroSlides} />
-      <EventCountdown event={normalizedNextEvent} />
-      <EventsCarousel events={normalizedNextEvents} />
+      <EventCountdown event={featuredEvent} />
+      <EventsCarousel events={upcomingEvents} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
       <section className={styles.section}>

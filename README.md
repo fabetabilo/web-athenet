@@ -26,25 +26,39 @@ Más que una cartelera, esta plataforma es una herramienta dinámica diseñada p
 
 ### Desarrollo Local
 
+> **Nota:** El proyecto cuenta con un fallback, si no hay una API configurada, el frontend utiliza datos demo (mocks). Revisa la advertencia informativa en la consola del navegador.
+
 Levanta el proyecto en tu entorno local:
 
-1.1 Verifica dependencias:
+1. **Verifica dependencias:**
    ```bash
    node -v
-   ```
-   ```bash
    npm -v
    ```
 
-2.1 Instala las dependencias:
+2. **Instala las dependencias:**
    ```bash
    npm install
    ```
 
-2.2 Inicia el servidor de desarrollo:
+3. **Configura las variables de entorno:**
+   Copia el archivo de ejemplo para crear tu configuración local:
+   ```bash
+   cp .env.example .env
+   ```
+
+   Variables disponibles en `.env`:
+   | Variable | Descripción | Valor por defecto |
+   | :--- | :--- | :--- |
+   | `VITE_EVENTS_API_URL` | URL base del microservicio `ms-events` (Public Controller). Si se omite, se usan mocks. | `http://localhost:8080/api/public` |
+   | `VITE_USE_EVENT_MOCKS` | Forzar el uso de mocks locales ignorando llamadas de red (`true` \| `false`). | `false` |
+
+4. **Inicia el servidor de desarrollo:**
    ```bash
    npm run dev
    ```
-##### Dependencias:
+
+##### Dependencias principales:
 - react-router-dom
 - lucide-react
+- axios

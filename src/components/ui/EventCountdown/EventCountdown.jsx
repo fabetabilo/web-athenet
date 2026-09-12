@@ -30,14 +30,19 @@ function getTimeLeft(isoDate) {
  */
 export default function EventCountdown({ event }) {
   // Usa event.eventDate (ISO "YYYY-MM-DD")
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(event.eventDate))
+  const [timeLeft, setTimeLeft] = useState(() =>
+    event?.eventDate ? getTimeLeft(event.eventDate) : { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  )
 
   useEffect(() => {
+    if (!event?.eventDate) return
     const intervalId = setInterval(() => {
       setTimeLeft(getTimeLeft(event.eventDate))
     }, 1000)
     return () => clearInterval(intervalId)
-  }, [event.eventDate])
+  }, [event?.eventDate])
+
+  if (!event) return null
 
   const units = [
     { value: timeLeft.days,    label: 'Días' },
