@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
 import ButtonAction from '../../components/ui/Button/ButtonAction'
 import { OfficialIconH, ArrowRight } from '../../components/ui/icons'
-import { allEvents } from '../../data/allEvents'
-import { normalizeEvent } from '../../utils/normalizeEvent'
+import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
 
 /**
@@ -17,12 +16,23 @@ const VIEW_OPTIONS = [
   { value: 'list', label: 'LISTA' },
 ]
 
-// Normalizar y filtrar solo eventos visibles (status PUBLISHED)
-const publicEvents = allEvents.map(normalizeEvent).filter((e) => e.isVisible)
-
 export default function Events() {
+  const [publicEvents, setPublicEvents] = useState([])
   const [view, setView] = useState('grid')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let isMounted = true
+    getAllEvents().then((events) => {
+      if (isMounted) {
+        setPublicEvents(events.filter((e) => e.isVisible))
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   return (
     <div className={styles.page}>

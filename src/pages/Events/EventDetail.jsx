@@ -1,20 +1,46 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/ui/icons';
-import { allEvents } from '../../data/allEvents';
-import { normalizeEvent } from '../../utils/normalizeEvent';
+import { getEventById } from '../../service/eventsApi';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
 import styles from './EventDetail.module.css';
 
-// Normalizar todos los eventos una vez al cargar el módulo.
-// Cuando se integre el API real, este array vendrá del fetch en su lugar.
-const normalizedEvents = allEvents.map(normalizeEvent)
-
 export default function EventDetail() {
   const { id } = useParams();
+  const [event, setEvent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Lookup por internalId (string). Ya no se usa parseInt — el id del back es string.
-  const event = normalizedEvents.find((e) => e.id === id);
+  useEffect(() => {
+    let isMounted = true;
+
+    getEventById(id)
+      .then((data) => {
+        if (isMounted) {
+          setEvent(data);
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setEvent(null);
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.notFound}>
+          <h2>Cargando evento...</h2>
+        </div>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
