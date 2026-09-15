@@ -101,7 +101,7 @@ function splitDisplayDate(isoDate) {
  * Contenido
  * @property {string}      title
  * @property {string}      description
- * @property {string|null} descriptionOpt - description_opt del backend, null si ausente
+ * @property {string|null} descriptionOpt - null si ausente
  * Imagen
  * @property {string}      image          - alias de coverImage, para compatibilidad con componentes existentes
  * @property {string[]}    photos         - lista de fotos adicionales; [] si viene vacío o null
@@ -158,7 +158,7 @@ export function normalizeEvent(rawEvent) {
     // Contenido
     title:          rawEvent.title,
     description:    rawEvent.description,
-    descriptionOpt: rawEvent.description_opt ?? null,
+    descriptionOpt: rawEvent.descriptionOpt ?? null,
     // Imagen
     image:  rawEvent.coverImage,
     photos: Array.isArray(rawEvent.photos) ? rawEvent.photos : [],
