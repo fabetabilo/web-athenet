@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap');
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  background-color: var(--bg-light);
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+}
+
+.titleStroke {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: #030303;
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: calc(3.5rem + 5.1163vw - 10.2326px);
+  font-style: italic;
+  font-weight: 800;
+  min-height: 0;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.titleSolid {
+  font-family: 'Barlow Semi Condensed', sans-serif;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  font-style: italic;
+  font-weight: 900;
+  color: #030303;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-top: -0.8em;  /* Margen negativo para sobreponerlo al texto de atras */
+  position: relative;
+  z-index: 1;
+  /* sombra blanca para despegarlo del texto del fondo */
+  text-shadow: 
+    -3px -3px 0 #ffffff,  
+     3px -3px 0 #ffffff,
+    -3px  3px 0 #ffffff,
+     3px  3px 0 #ffffff,
+     0px 8px 20px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .titleStroke {
+    font-size: clamp(3rem, 12vw, 5rem);
+  }
+  
+  .titleSolid {
+    margin-top: -0.75em;
+  }
+}

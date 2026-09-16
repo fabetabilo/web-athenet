@@ -1,0 +1,97 @@
+/* estilos base compartidos para los botones UI */
+.base {
+  background: transparent;
+  border-radius: var(--radius-full);
+  padding: 0.875rem 2rem;
+  font-size: var(--text-md);
+  font-family: var(--font-primary);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.arrow {
+  flex-shrink: 0;
+}
+
+/* variante LIGHT para fondos claros */
+.light {
+  border: 1px solid #080B14;
+  color: #080B14;
+}
+
+.light:active {
+  background: #080B14;
+  color: #fff;
+  border-color: #080B14;
+}
+
+.light:focus-visible {
+  outline: 2px solid #080B14;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .light:hover {
+    background: #080B14;
+    color: #fff;
+    border-color: #080B14;
+  }
+}
+
+/* variante DARK para fondos oscuros */
+.dark {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.dark:active {
+  background: #fff;
+  color: #080B14;
+  border-color: #fff;
+}
+
+.dark:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dark:hover {
+    background: #fff;
+    color: #080B14;
+    border-color: #fff;
+  }
+}
+
+/* variante ACCENT para resaltar */
+.accent {
+  background: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+  color: var(--text-dark);
+}
+
+.accent:active {
+  background: #fff;
+  color: var(--text-dark);
+  border-color: #fff;
+}
+
+.accent:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .accent:hover {
+    background: #fff;
+    color: var(--text-dark);
+    border-color: #fff;
+  }
+}

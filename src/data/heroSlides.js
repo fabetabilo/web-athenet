@@ -1,0 +1,42 @@
+export const heroSlides = [
+  {
+    id: 1,
+    image: "https://images.unsplash.com/photo-1659303388053-6078a001ea21?w=1600&h=900&fit=crop&auto=format",
+    category: "Tenis de Mesa",
+    title: "Grand Slam 2026",
+    subtitle: "Del 15 al 20 de septiembre en Viña del Mar, se dearrolla el torneo más importante del año.",
+    cta: "Ver Detalles",
+  },
+  {
+    id: 2,
+    image: "https://images.unsplash.com/photo-1710739513833-48b074290a8e?q=80&w=1171&auto=format",
+    category: "Natación",
+    title: "Medalla de Oro y Record Nacional",
+    subtitle: "El estudiante de la UTRO, Elías Sanchez, ganó la medalla de oro y batió el récord nacional absoluto en los 100 metros mariposa durante los IV FISU Juegos Panamericanos Universitarios en Lima 2026.",
+    cta: "Leer Más",
+  },
+  {
+    id: 3,
+    image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1170&auto=format",
+    category: "Tenis",
+    title: "Tenis Universitario",
+    subtitle: "El tenis universitario cobra un rol cada vez más importante como salto hacia el profesionalismo y destaca en las recientes competencias nacionales.",
+    cta: "Conocer Más",
+  },
+  {
+    id: 4,
+    image: "https://images.unsplash.com/photo-1518928286447-dc161b7cd6fb?w=1600&h=900&fit=crop&auto=format",
+    category: "Tenis de Mesa",
+    title: "UTFM en el Campeonato Sudamericano",
+    subtitle: "Estudiantes de la selección de la UTFM representan al país con orgullo en Brasil",
+    cta: "Leer Más",
+  },
+  {
+    id: 5,
+    image: "https://images.unsplash.com/photo-1659303388076-de1535159d6c?w=1600&h=900&fit=crop&auto=format",
+    category: "Tenis de Mesa",
+    title: "Nuevas Generaciones del Tenis de Mesa",
+    subtitle: "Programa de formación intensiva para jóvenes talentos chilenos se desarrolla en Santiago",
+    cta: "Ver Más",
+  },
+]

@@ -1,0 +1,86 @@
+/* en caso de colores diferentes para local y visitante */
+.versusContainer {
+  width: 100%;
+  /*
+  background: 
+    linear-gradient(to top, rgba(0, 0, 0, 0.2) 0%, transparent 90%),
+    linear-gradient(to right, var(--color-local) 50%, var(--color-visitor) 50%);
+  */
+}
+
+.versusContent {
+  display: flex;
+  width: 100%;
+  max-width: 70rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.teamSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(1.5rem, 5vw, 3rem) 1rem;
+  text-align: center;
+}
+
+.teamLogo {
+  width: clamp(60px, 15vw, 120px);
+  height: clamp(60px, 15vw, 120px);
+  object-fit: contain;
+  margin-bottom: 0.75rem;
+}
+
+.teamName {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--font-heading-weight);
+  font-style: italic;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.teamInstitution {
+  font-size: var(--text-md);
+  color: var(--text-dark);
+  margin: 0.25rem 0 0 0;
+}
+
+.matchInfo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+}
+
+.matchRound,
+.matchCompetition {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.matchDate {
+  font-family: var(--font-heading, sans-serif);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-heading-weight);
+  font-style: italic;
+  color: var(--text-dark);
+  margin: 0.75rem 0;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+

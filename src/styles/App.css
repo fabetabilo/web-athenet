@@ -1,0 +1,16 @@
+/* LAYOUT a nivel APP */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--andu-navy);
+}
+
+.content {
+  flex: 1;
+}
+
+.nav-collapsed {
+  /* reservada para futura sidebar, quizas */
+}
