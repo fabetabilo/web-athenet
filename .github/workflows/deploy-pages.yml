@@ -1,0 +1,57 @@
+name: Despliegue a GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir proyecto
+        env:
+          VITE_EVENTS_API_URL: ${{ secrets.VITE_EVENTS_API_URL }}
+          VITE_USE_EVENT_MOCKS: ${{ secrets.VITE_USE_EVENT_MOCKS }}
+        run: npm run build
+
+      - name: Crear 404.html para soporte de SPA routing en GitHub Pages
+        run: cp dist/index.html dist/404.html
+
+      - name: Subir artefacto para GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
