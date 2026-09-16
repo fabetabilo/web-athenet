@@ -10,7 +10,9 @@ import {
   Briefcase as Linkedin,
   Calendar,
   Tag,
-  BadgeCheck
+  BadgeCheck,
+  Building2,
+  Users
 } from 'lucide-react';
 
 // EVENTO_OFICIAL_BADGE: icono personalizado
@@ -34,5 +36,7 @@ export {
   Linkedin,
   Calendar,
   Tag,
-  BadgeCheck
+  BadgeCheck,
+  Building2,
+  Users
 };

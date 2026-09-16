@@ -1,4 +1,5 @@
 import styles from './InstCarousel.module.css';
+import { Link } from 'react-router-dom';
 
 export default function InstCarousel({ institutions = [] }) {
   if (!institutions || institutions.length === 0) {
@@ -14,11 +15,10 @@ export default function InstCarousel({ institutions = [] }) {
         <div className={styles.carouselContainer}>
           <div className={styles.carouselTrack}>
             {items.map((inst, index) => (
-              <a 
-                href="#" 
+              <Link
+                to={`/institutions/${inst.id}`}
                 key={`inst-${inst.id}-${index}`} 
                 className={styles.cardLink}
-                onClick={(e) => e.preventDefault()}
               >
                 <div className={styles.card}>
                   <div className={styles.logoWrapper}>
@@ -29,7 +29,7 @@ export default function InstCarousel({ institutions = [] }) {
                     {inst.campus && <p className={styles.instCampus}>{inst.campus}</p>}
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

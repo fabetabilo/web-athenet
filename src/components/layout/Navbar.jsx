@@ -26,7 +26,7 @@ export default function Navbar() {
         {/* --- Links escritorio */}
         <div className={styles.links}>
           {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
-            <Link key={item} to={item === 'Inicio' ? '/' : '#'} className={styles.link}>{item}</Link>
+            <Link key={item} to={item === 'Inicio' ? '/' : item === 'Instituciones' ? '/institutions' : '#'} className={styles.link}>{item}</Link>
           ))}
         </div>
 
@@ -47,7 +47,7 @@ export default function Navbar() {
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
         <div className={styles.mobileMenuInner}>
           {['Inicio', 'Rankings', 'Instituciones', 'Noticias', 'Quiénes Somos'].map((item) => (
-            <Link key={item} to={item === 'Inicio' ? '/' : '#'} className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{item}</Link>
+            <Link key={item} to={item === 'Inicio' ? '/' : item === 'Instituciones' ? '/institutions' : '#'} className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{item}</Link>
           ))}
           <Button variant="accent" style={{ height: '38px', fontSize: 'var(--text-lg)' }} onClick={() => { setMenuOpen(false); navigate('/events'); }}>EVENTOS</Button>
         </div>
