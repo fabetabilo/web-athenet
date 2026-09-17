@@ -35,6 +35,8 @@ jobs:
         env:
           VITE_EVENTS_API_URL: ${{ secrets.VITE_EVENTS_API_URL }}
           VITE_USE_EVENT_MOCKS: ${{ secrets.VITE_USE_EVENT_MOCKS }}
+          VITE_INSTITUTIONS_API_URL: ${{ secrets.VITE_INSTITUTIONS_API_URL }}
+          VITE_USE_INSTITUTION_MOCKS: ${{ secrets.VITE_USE_INSTITUTION_MOCKS }}
         run: npm run build
 
       - name: Crear 404.html para soporte de SPA routing en GitHub Pages

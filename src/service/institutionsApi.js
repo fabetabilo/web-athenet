@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { institutions as institutionsMock } from '../data/institutions'
 
-const BASE_URL = import.meta.env.VITE_INSTITUTIONS_API_URL || 'http://35.169.199.111:8080/api/v1'
+const BASE_URL = import.meta.env.VITE_INSTITUTIONS_API_URL || ''
 const FORCED_MOCK = import.meta.env.VITE_USE_INSTITUTION_MOCKS === 'true'
 
 const institutionsClient = axios.create({
