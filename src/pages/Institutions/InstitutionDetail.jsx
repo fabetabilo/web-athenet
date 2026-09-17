@@ -1,11 +1,32 @@
 import { Link, useParams } from 'react-router-dom'
-import { ArrowRight, Building2, Calendar, ChevronLeft, MapPin, Users } from '../../components/ui/icons'
-import { institutions } from '../../data/institutions'
+import { useEffect, useState } from 'react'
+import { ArrowRight, Building2, ChevronLeft, MapPin, Users } from '../../components/ui/icons'
+import { getInstitutionById } from '../../service/institutionsApi'
 import styles from './InstitutionDetail.module.css'
 
 export default function InstitutionDetail() {
   const { id } = useParams()
-  const institution = institutions.find((item) => String(item.id) === id)
+  const [institution, setInstitution] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let mounted = true
+
+    getInstitutionById(id).then((data) => {
+      if (mounted) {
+        setInstitution(data)
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [id])
+
+  if (loading) {
+    return <main className={styles.notFound}><h1>Cargando institución...</h1></main>
+  }
 
   if (!institution) {
     return (
@@ -17,9 +38,9 @@ export default function InstitutionDetail() {
   }
 
   const stats = [
-    { label: 'Equipos', value: `+${institution.teams}`, icon: Users },
-    { label: 'Sedes', value: institution.campuses, icon: Building2 },
-    { label: 'Eventos', value: institution.events, icon: Calendar },
+    { label: 'Equipos', value: institution.teams, icon: Users },
+    { label: 'Sedes', value: institution.sedes.length, icon: Building2 },
+    { label: 'Disciplinas', value: institution.disciplines.length, icon: Users },
     { label: 'Ciudad', value: institution.city, icon: MapPin },
   ]
 
@@ -37,7 +58,11 @@ export default function InstitutionDetail() {
               <p>{institution.description}</p>
             </div>
             <div className={styles.logoPanel}>
-              <img src={institution.image} alt={`Logo de ${institution.name}`} />
+              {institution.image ? (
+                <img src={institution.image} alt={`Logo de ${institution.name}`} />
+              ) : (
+                <span className={styles.logoFallback} aria-hidden="true">{institution.acronym}</span>
+              )}
             </div>
           </div>
         </div>
@@ -60,33 +85,33 @@ export default function InstitutionDetail() {
         <article className={styles.announcements}>
           <div className={styles.sectionLabel}>ANUNCIOS</div>
           <div className={styles.announcementBody}>
-            <span className={styles.liveDot}>ACTUALIZADO</span>
+            <span className={styles.liveDot}>{institution.active ? 'ACTIVA' : 'INACTIVA'}</span>
             <h2>La comunidad deportiva se mueve en {institution.city}.</h2>
-            <p>{institution.announcement}</p>
-            <Link to="/events" className={styles.actionLink}>Explorar eventos <ArrowRight aria-hidden="true" /></Link>
+            <p>{institution.sedes.length ? `${institution.sedes.length} sede${institution.sedes.length === 1 ? '' : 's'} registrada${institution.sedes.length === 1 ? '' : 's'} en el microservicio.` : 'Aun no hay sedes registradas.'}</p>
+            <Link to="/institutions" className={styles.actionLink}>Volver al listado <ArrowRight aria-hidden="true" /></Link>
           </div>
         </article>
 
         <div className={styles.infoGrid}>
           <article className={styles.infoCard}>
-            <span className={styles.cardKicker}>PRÓXIMO EVENTO</span>
-            <h2>{institution.nextEvent}</h2>
-            <span className={styles.cardMeta}><Calendar aria-hidden="true" /> Calendario Athenet</span>
+            <span className={styles.cardKicker}>SEDES REGISTRADAS</span>
+            <h2>{institution.sedes.map((sede) => sede.nombre).join(' / ') || 'Sin sedes'}</h2>
+            <span className={styles.cardMeta}><Building2 aria-hidden="true" /> Ubicaciones de la institución</span>
           </article>
           <article className={styles.infoCard + ' ' + styles.accentCard}>
             <span className={styles.cardKicker}>SEDE PRINCIPAL</span>
-            <h2>{institution.campus || institution.city}</h2>
-            <span className={styles.cardMeta}><MapPin aria-hidden="true" /> {institution.city}, Chile</span>
+            <h2>{institution.city}</h2>
+            <span className={styles.cardMeta}><MapPin aria-hidden="true" /> Ubicación registrada</span>
           </article>
           <article className={styles.infoCard}>
             <span className={styles.cardKicker}>DISCIPLINAS</span>
-            <h2>{institution.disciplines.join(' / ')}</h2>
-            <span className={styles.cardMeta}><Users aria-hidden="true" /> Equipos registrados</span>
+            <h2>{institution.disciplines.join(' / ') || 'Sin disciplinas'}</h2>
+            <span className={styles.cardMeta}><Users aria-hidden="true" /> Disciplinas de sus equipos</span>
           </article>
           <article className={styles.infoCard + ' ' + styles.darkCard}>
-            <span className={styles.cardKicker}>CONTACTO</span>
-            <h2>{institution.contact}</h2>
-            <a href={`mailto:${institution.email}`} className={styles.cardMeta}>{institution.email} <ArrowRight aria-hidden="true" /></a>
+            <span className={styles.cardKicker}>SIGLA</span>
+            <h2>{institution.acronym}</h2>
+            <span className={styles.cardMeta}>Identificador institucional</span>
           </article>
         </div>
       </section>

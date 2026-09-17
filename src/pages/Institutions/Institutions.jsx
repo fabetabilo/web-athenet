@@ -1,9 +1,28 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
-import { institutions } from '../../data/institutions'
+import { getInstitutions } from '../../service/institutionsApi'
 import styles from './Institutions.module.css'
 
 export default function Institutions() {
+  const [institutions, setInstitutions] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let mounted = true
+
+    getInstitutions().then((data) => {
+      if (mounted) {
+        setInstitutions(data)
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
   return (
     <div className={styles.page}>
       <PageBanner
@@ -23,6 +42,12 @@ export default function Institutions() {
             </p>
           </div>
 
+          {loading && <p className={styles.status}>Cargando instituciones...</p>}
+
+          {!loading && institutions.length === 0 && (
+            <p className={styles.status}>No hay instituciones disponibles.</p>
+          )}
+
           <div className={styles.grid}>
             {institutions.map((institution) => (
               <Link
@@ -31,10 +56,14 @@ export default function Institutions() {
                 className={styles.card}
               >
                 <div className={styles.logoWrapper}>
-                  <img src={institution.image} alt={`Logo de ${institution.name}`} className={styles.logo} />
+                  {institution.image ? (
+                    <img src={institution.image} alt={`Logo de ${institution.name}`} className={styles.logo} />
+                  ) : (
+                    <span className={styles.logoFallback} aria-hidden="true">{institution.acronym}</span>
+                  )}
                 </div>
                 <div className={styles.cardBody}>
-                  <span className={styles.campus}>{institution.campus || institution.city}</span>
+                  <span className={styles.campus}>{institution.acronym} / {institution.city}</span>
                   <h3>{institution.name}</h3>
                   <span className={styles.viewLink}>Ver institución <span aria-hidden="true">→</span></span>
                 </div>
