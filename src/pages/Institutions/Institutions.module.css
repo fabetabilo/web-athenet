@@ -52,6 +52,11 @@
   line-height: 1.5;
 }
 
+.status {
+  padding: 2rem 0;
+  color: var(--text-dark-muted);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -83,6 +88,19 @@
   width: min(100%, 10rem);
   height: 7rem;
   object-fit: contain;
+}
+
+.logoFallback {
+  display: grid;
+  width: 7rem;
+  height: 7rem;
+  place-items: center;
+  border: 2px solid var(--color-secondary);
+  border-radius: 50%;
+  color: var(--color-secondary);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
 }
 
 .cardBody {
