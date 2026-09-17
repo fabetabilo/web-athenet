@@ -17,11 +17,11 @@ import {
 
 // EVENTO_OFICIAL_BADGE: icono personalizado
 export const OfficialIcon = ({ className, ...props }) => (
-  <img src="/icon/oficial.png" alt="Oficial" className={className} {...props} />
+  <img src={`${import.meta.env.BASE_URL}icon/oficial.png`} alt="Oficial" className={className} {...props} />
 );
 
 export const OfficialIconH = ({ className, ...props }) => (
-  <img src="/icon/oficial_h.png" alt="Oficial" className={className} {...props} />
+  <img src={`${import.meta.env.BASE_URL}icon/oficial_h.png`} alt="Oficial" className={className} {...props} />
 );
 
 export {
