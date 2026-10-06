@@ -11,8 +11,8 @@
 .heroInner,
 .statsInner,
 .dashboard {
-  width: min(80rem, calc(100% - 2.5rem));
-  margin: 0 auto;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
 }
 
 .heroInner {

@@ -1,12 +1,14 @@
 /* --- Fuentes globales */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* --- Variables CSS */
 :root {
   --bg-light: #fff;
-  --color-navy: #080B14;
+  --color-navy: #03172c;
   --color-dark: #0A0D1A;
   --color-cyan: #00C8FF;
+  --color-red: #D82028;
   --color-secondary: #3b82f6;
   --color-tertiary: #ffd700;
 
@@ -51,6 +53,13 @@
   --spacing-sm: 1.5rem;
   --spacing-md: 2.5rem;
   --spacing-lg: 3rem;
+
+  /* --- Layout: UNICA fuente de verdad del ancho de la app ---------------
+     --layout-max-width es fluido: parte en 80rem (1280px de viewport),
+     crece con el viewport y topa en 92rem a partir de 1920px.
+     No usar literales de ancho en los .module.css: usar estos tokens. */
+  --layout-max-width: clamp(80rem, 56rem + 30vw, 92rem);
+  --layout-gutter: clamp(1.25rem, 3vw, 2rem);
 }
 
 /* reset */
@@ -110,4 +119,12 @@ button {
   border: none;
   font: inherit;
   padding: 0;
+}
+
+/* --- Layout -----------------------------------------------------------
+   Container canonico. Usar esta clase en markup nuevo, o replicar el
+   patron en un .module.css cuando el wrapper necesite props extra. */
+.layout-container {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
 }

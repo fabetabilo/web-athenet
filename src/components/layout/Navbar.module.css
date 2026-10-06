@@ -1,35 +1,26 @@
 /* --- Navbar */
 .navbar {
   position: fixed;
-  top: 1.25rem;
+  top: 0;
   left: 0;
   right: 0;
   width: 100%;
   margin: 0 auto;
-  max-width: 85rem;
+  max-width: 100%;
   z-index: 50;
-  background: rgba(8, 11, 20, 0.95);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  /* Use 2.5rem instead of var(--radius-full) to prevent the "giant circle" effect when height expands */
-  border-radius: 2.5rem;
-  transition: all 0.4s ease;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, top 0.4s ease;
 }
 
 .scrolled {
   top: 0;
-  left: 0;
-  right: 0;
-  max-width: 100%;
-  border-radius: 0;
   background: rgba(8, 11, 20, 0.98);
+  backdrop-filter: blur(12px);
   box-shadow: 0 1px 0 var(--color-border);
 }
 
 .inner {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -143,8 +134,13 @@
 
 /* BREAKPOINT */
 @media (min-width: 768px) {
-  .inner {
-    padding: 0 2rem;
+  /* En desktop el navbar se separa del borde superior; al hacer scroll se pega */
+  .navbar {
+    top: 1.25rem;
+  }
+
+  .scrolled {
+    top: 0;
   }
 
   .links {

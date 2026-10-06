@@ -55,10 +55,8 @@
   padding-top: 72px;
 }
 .contentInner {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.25rem;
-  width: 100%;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
 }
 .textBox {
   max-width: 42rem;
@@ -207,9 +205,6 @@
 }
 
 @media (min-width: 768px) {
-  .contentInner {
-    padding: 0 2rem;
-  }
   .subtitle {
     font-size: 1.125rem;
   }
