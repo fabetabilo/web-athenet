@@ -4,7 +4,7 @@ import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
 import ButtonAction from '../../components/ui/Button/ButtonAction'
-import { OfficialIconH, ArrowRight } from '../../components/ui/icons'
+import { OfficialIconH, ArrowRight } from '../../components/icons'
 import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
 

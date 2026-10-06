@@ -1,5 +1,5 @@
 import styles from './Button.module.css';
-import { ArrowRight } from '../icons';
+import { ArrowRight } from '../../icons';
 
 /**
  * Componente Button reutilizable para la interfaz de usuario.

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/ui/icons';
+import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/icons';
 import { getEventById } from '../../service/eventsApi';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
 import styles from './EventDetail.module.css';

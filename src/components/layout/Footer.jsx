@@ -1,7 +1,7 @@
 import styles from './Footer.module.css';
 import Button from '../ui/Button/Button';
-import { Instagram, Facebook, Twitter, Youtube, Linkedin } from '../ui/icons';
-import brandIcon from '../../assets/icon/brand.png';
+import { Instagram, Facebook, XTwitter, Youtube, Linkedin } from '../icons';
+import brandIcon from '../../assets/icon/brand2.png';
 
 const ORGANIZATION = [
   { label: 'Portal de Athenet', href: '#' },
@@ -24,7 +24,7 @@ const INSTITUTION = [
 const SOCIAL_LINKS = [
   { icon: <Instagram />, href: '#', label: 'Instagram' },
   { icon: <Facebook />, href: '#', label: 'Facebook' },
-  { icon: <Twitter />, href: '#', label: 'Twitter' },
+  { icon: <XTwitter />, href: '#', label: 'X' },
   { icon: <Youtube />, href: '#', label: 'Youtube' },
   { icon: <Linkedin />, href: '#', label: 'LinkedIn' },
 ];

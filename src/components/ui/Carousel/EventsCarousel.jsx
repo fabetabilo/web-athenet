@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from '../icons'
+import { ChevronLeft, ChevronRight } from '../../icons'
 import Button from '../Button/Button'
 import EventCard from '../EventCard/EventCard'
 import styles from './EventsCarousel.module.css'

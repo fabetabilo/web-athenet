@@ -26,7 +26,9 @@
   /* Typography */
   --font-heading: 'Barlow Semi Condensed', sans-serif;
   --font-primary: 'Barlow', sans-serif;
+  --font-secondary: 'Roboto', sans-serif;
   --font-condensed: 'Barlow Condensed', sans-serif;
+
   --font-heading-weight: 800;
   --font-subheading-weight: 800;
   --font-text-strong-weight: 600;
@@ -128,3 +130,6 @@ button {
   width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
   margin-inline: auto;
 }
+
+/* --- Mobile considera mobile-tablet a 640px y 1024px respectivamente */
+

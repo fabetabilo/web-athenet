@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { ArrowRight, Building2, ChevronLeft, MapPin, Users } from '../../components/ui/icons'
+import { ArrowRight, Building2, ChevronLeft, MapPin, Users } from '../../components/icons'
 import { getInstitutionById } from '../../service/institutionsApi'
 import styles from './InstitutionDetail.module.css'
 

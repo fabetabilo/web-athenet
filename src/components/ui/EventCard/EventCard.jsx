@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { MapPin, ArrowRight, OfficialIcon } from '../icons'
+import { MapPin, ArrowRight, OfficialIcon } from '../../icons'
 import ButtonAction from '../Button/ButtonAction'
 import styles from './Event.module.css'
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { ArrowRight, ChevronLeft, ChevronRight } from '../icons'
+import { ArrowRight, ChevronLeft, ChevronRight } from '../../icons'
 import styles from './Carousel.module.css'
 
 export default function Carousel({ slides = [] }) {

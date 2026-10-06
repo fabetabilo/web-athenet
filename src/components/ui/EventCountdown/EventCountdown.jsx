@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MapPin } from '../icons'
+import { MapPin } from '../../icons'
 import Button from '../Button/Button'
 import styles from './EventCountdown.module.css'
 
