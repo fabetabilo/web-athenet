@@ -36,26 +36,30 @@ export default function Footer() {
         <div className={styles.brandCol}>
           <div className={styles.logoContainer}>
             <img src={brandIcon} alt="Athenet logo" className={styles.logoImage} />
+            <p className={styles.description}>
+              La plataforma que conecta la comunidad deportiva estudiantil, competencias e instituciones
+              de Chile.
+            </p>
           </div>
+
+          <Button variant="solid" showArrow>CONTÁCTANOS</Button>
 
           <div className={styles.infoRow}>
             <div className={styles.infoBlock}>
-              <span className={styles.infoLabel}>DIRECCIÓN</span>
+              <span className={styles.infoLabel}>Dirección</span>
               <p>Av. Chorrillos 123, Viña del Mar<br />Chile</p>
             </div>
             <div className={styles.infoBlock}>
-              <span className={styles.infoLabel}>TELÉFONO</span>
-              <p>+56 2 789 321</p>
+              <span className={styles.infoLabel}>Teléfono</span>
+              <p>+56 2 7898 3214</p>
             </div>
           </div>
-
-          <Button variant="accent" showArrow>CONTÁCTANOS</Button>
         </div>
 
         <div className={styles.linksCol}>
           <div className={styles.subCol}>
             <div className={styles.linkGroup}>
-              <h4 className={styles.groupTitle}>CALENDARIO</h4>
+              <h4 className={styles.groupTitle}>Calendario</h4>
               <ul>
                 {CALENDAR.map((link, i) => (
                   <li key={i}><a href={link.href}>{link.label}</a></li>
@@ -63,7 +67,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className={styles.linkGroup}>
-              <h4 className={styles.groupTitle}>ORGANIZACIÓN</h4>
+              <h4 className={styles.groupTitle}>Organización</h4>
               <ul>
                 {ORGANIZATION.map((link, i) => (
                   <li key={i}><a href={link.href}>{link.label}</a></li>
@@ -73,7 +77,7 @@ export default function Footer() {
           </div>
           <div className={styles.subCol}>
             <div className={styles.linkGroup}>
-              <h4 className={styles.groupTitle}>INSTITUCIONES</h4>
+              <h4 className={styles.groupTitle}>Instituciones</h4>
               <ul>
                 {INSTITUTION.map((link, i) => (
                   <li key={i}><a href={link.href}>{link.label}</a></li>
@@ -81,7 +85,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className={styles.linkGroup}>
-              <h4 className={styles.groupTitle}>MANTENTE CONECTADO</h4>
+              <h4 className={styles.groupTitle}>Mantente Conectado</h4>
               <div className={styles.socialIcons}>
                 {SOCIAL_LINKS.map((social, i) => (
                   <a key={i} href={social.href} aria-label={social.label} className={styles.socialBtn}>
@@ -92,6 +96,12 @@ export default function Footer() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className={styles.bottomBar}>
+        <p className={styles.copyright}>
+          © {new Date().getFullYear()} Athenet. Proyecto Cloud Native I
+        </p>
       </div>
     </footer>
   );

@@ -1,8 +1,8 @@
 .footer {
-  background-color: var(--color-navy);
+  background-color: var(--color-ink);
   color: var(--text-primary);
   padding: 4rem var(--layout-gutter);
-  font-family: var(--font-primary);
+  font-family: var(--font-secondary);
   border-top: 1px solid var(--color-border);
 }
 
@@ -23,9 +23,26 @@
   text-align: center;
 }
 
+.logoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .logoImage {
-  max-width: 180px;
+  max-width: 240px;
   height: auto;
+}
+
+/* descripcion estatica: mismo estilo que los links, sin estados */
+.description {
+  margin: 0;
+  max-width: 38ch;
+  margin-top: 2rem;
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .infoRow {
@@ -41,10 +58,9 @@
 }
 
 .infoLabel {
-  font-family: var(--font-primary);
-  font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-family: var(--font-secondary);
+  font-size: var(--text-body);
+  font-weight: var(--font-text-weight);
   color: var(--text-primary);
 }
 
@@ -78,9 +94,9 @@
 }
 
 .groupTitle {
-  font-family: var(--font-primary);
-  font-size: var(--text-base);
-  letter-spacing: 0.15em;
+  font-family: var(--font-secondary);
+  font-size: var(--text-body);
+  font-weight: var(--font-text-weight);
   color: var(--text-primary);
   margin: 0;
 }
@@ -92,25 +108,24 @@
 }
 
 .linkGroup a {
-  font-family: var(--font-primary);
   font-size: var(--text-md);
   color: var(--text-secondary);
   transition: color 0.2s ease;
 }
 
 .linkGroup a:active {
-  color: var(--color-cyan);
+  color: var(--color-red);
 }
 
 .linkGroup a:focus-visible {
-  color: var(--color-cyan);
-  outline: 2px solid var(--color-cyan);
+  color: var(--color-red);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .linkGroup a:hover {
-    color: var(--color-cyan);
+    color: var(--color-red);
   }
 }
 
@@ -140,25 +155,40 @@
 }
 
 .socialBtn:active {
-  border-color: var(--color-cyan);
-  background-color: var(--color-cyan);
+  border-color: var(--color-red);
+  background-color: var(--color-red);
   color: var(--color-navy);
 }
 
 .socialBtn:focus-visible {
-  border-color: var(--color-cyan);
-  background-color: var(--color-cyan);
+  border-color: var(--color-red);
+  background-color: var(--color-red);
   color: var(--color-navy);
-  outline: 2px solid var(--color-cyan);
+  outline: 2px solid var(--color-red);
   outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .socialBtn:hover {
-    border-color: var(--color-cyan);
-    background-color: var(--color-cyan);
+    border-color: var(--color-red);
     color: var(--color-navy);
+    transition: color 0s ease;
   }
+}
+
+/* BARRA INFERIOR (COPYRIGHT) */
+.bottomBar {
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  margin-top: 3rem;
+}
+
+.copyright {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
 }
 
 /* RESPONSIVE DESIGN */
@@ -182,6 +212,10 @@
     text-align: left;
   }
 
+  .logoContainer {
+    align-items: flex-start;
+  }
+
   .contactBtn {
     align-self: flex-start;
   }
@@ -202,5 +236,9 @@
 
   .socialIcons {
     justify-content: flex-start;
+  }
+
+  .copyright {
+    text-align: left;
   }
 }
