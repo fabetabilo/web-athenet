@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import logo from '../../assets/icon/brand2.png'
-import { Search, Menu, Close } from '../icons'
+import { Search } from '../icons'
 import styles from './Navbar.module.css'
 
-// Debe coincidir con el breakpoint de Navbar.module.css
-const DESKTOP_QUERY = '(min-width: 1024px)'
+const MENU_DELAY = 70
 
 const NAV_LINKS = [
   { label: 'Eventos', to: '/events' },
@@ -15,23 +14,51 @@ const NAV_LINKS = [
   { label: 'Equipos', to: '#' },
 ]
 
+// Portales y redes se consideran URLs externas
+const SECONDARY_LINKS = [
+  { label: 'Portal deportistas Athenet', to: '#' },
+  { label: 'Funcionarios Athenet', to: '#' },
+  { label: 'YouTube', to: '#' },
+  { label: 'Facebook', to: '#' },
+  { label: 'Instagram', to: '#' },
+  { label: 'X', to: '#' },
+]
+
+// Paginas rutas internas de la propia web
+const LEGAL_LINKS = [
+  { label: 'Términos y Condiciones', to: '#' },
+  { label: 'Plan de ayuda', to: '#' },
+  { label: 'Compromiso con la Seguridad Estudiantil', to: '#' },
+  { label: 'Sostenibilidad', to: '#' },
+]
+
+// Externo o interno segun la URL para no tener que marcarlo a mano
+function DrawerLink({ to, className, onNavigate, children }) {
+  if (to.startsWith('http')) {
+    return <a href={to} className={className} target="_blank" rel="noopener noreferrer">{children}</a>
+  }
+  return <Link to={to} className={className} onClick={onNavigate}>{children}</Link>
+}
+
+// Destinos marcan activo. TEMPORAL: con to="#" se resuelve a la ruta actual para los que no tienen ruta aun.
+function TopLink({ to, label }) {
+  if (to === '#') return <Link to={to} className={styles.link}>{label}</Link>
+  return (
+    <NavLink to={to} className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ''}`}>
+      {label}
+    </NavLink>
+  )
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [sweep, setSweep] = useState(false)   // barrido de las barras al pasar el cursor
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 24)
     window.addEventListener('scroll', handler, { passive: true })
     return () => window.removeEventListener('scroll', handler)
-  }, [])
-
-  // En desktop el drawer no existe: al cruzar el breakpoint hay que cerrarlo
-  // o el bloqueo de scroll se queda puesto sobre una pagina sin drawer
-  useEffect(() => {
-    const mq = window.matchMedia(DESKTOP_QUERY)
-    const handler = (e) => { if (e.matches) setMenuOpen(false) }
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
   }, [])
 
   // Bloquea el scroll de la pagina mientras el drawer esta abierto
@@ -40,21 +67,49 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
+  // Su estado cambia con retardo
+  const toggleMenu = () => {
+    setSweep(false)   // el barrido no sobrevive al click: a partir de aqui manda el morph a X
+    window.setTimeout(() => setMenuOpen((open) => !open), MENU_DELAY)
+  }
+
   return (
     <>
+      {/* Controles de la barra (menu y buscador): viven fuera del nav para escapar de su stacking context y quedar siempre por encima del drawer*/}
+      <div className={styles.topControls}>
+        <div className={styles.topControlsInner}>
+          <button
+            type="button"
+            className={`${styles.iconBtn} ${styles.menuBtn} ${menuOpen ? styles.menuBtnOpen : ''} ${sweep ? styles.menuBtnSweep : ''}`}
+            onClick={toggleMenu}
+            onMouseEnter={() => { if (!menuOpen) setSweep(true) }}
+            aria-label={menuOpen ? 'Cerrar menú' : 'Menú'}
+            aria-expanded={menuOpen}
+            aria-controls="navbar-drawer"
+          >
+            <span className={styles.burger} aria-hidden="true">
+              <span className={`${styles.bar} ${styles.barTop}`}>
+                <span className={styles.barFill} />
+              </span>
+              <span className={`${styles.bar} ${styles.barBottom}`}>
+                <span className={styles.barFill} onAnimationEnd={() => setSweep(false)} />
+              </span>
+            </span>
+            <span className={styles.menuLabel} aria-hidden="true">Cerrar</span>
+          </button>
+
+          {/* Buscador: TEMPORAL AUN NO BUSCA :V */}
+          <div className={styles.cta}>
+            <button type="button" className={styles.iconBtn} aria-label="Buscar">
+              <Search className={styles.searchIcon} aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </div>
+
       <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
           <div className={styles.left}>
-            {/* menu hamburguesa escritorio (sin logica todavia) */}
-            <button type="button" className={`${styles.iconBtn} ${styles.menuBtn}`} aria-label="Menú">
-              <Menu className={styles.menuIcon} aria-hidden="true" />
-            </button>
-
-            {/* menu hamburguesa movil: abre el drawer */}
-            <button type="button" className={`${styles.iconBtn} ${styles.hamburger}`} onClick={() => setMenuOpen(true)} aria-label="Menú" aria-expanded={menuOpen}>
-              <Menu className={styles.menuIcon} aria-hidden="true" />
-            </button>
-
             {/* Logo */}
             <Link to="/" className={styles.logo} aria-label="Inicio">
               <img src={logo} alt="Logo" className={styles.logoIcon} />
@@ -64,42 +119,62 @@ export default function Navbar() {
           {/* --- Links escritorio */}
           <div className={styles.links}>
             {NAV_LINKS.map(({ label, to }) => (
-              <Link key={label} to={to} className={styles.link}>{label}</Link>
+              <TopLink key={label} to={to} label={label} />
             ))}
           </div>
 
-          <div className={styles.cta}>
-            <button type="button" className={styles.iconBtn} aria-label="Buscar">
-              <Search className={styles.searchIcon} aria-hidden="true" />
-            </button>
-          </div>
         </div>
       </nav>
 
-      <div className={`${styles.scrim} ${menuOpen ? styles.scrimOpen : ''}`} aria-hidden="true" />
+      <div
+        className={`${styles.scrim} ${menuOpen ? styles.scrimOpen : ''}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
 
-      {/* --- Drawer movil/tablet: entra desde la izquierda y cubre la pantalla */}
-      <div className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ''}`}>
-        <div className={styles.drawerHeader}>
-          <div className={styles.drawerActions}>
-            <button type="button" className={styles.iconBtn} onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">
-              <Close className={styles.menuIcon} aria-hidden="true" />
-            </button>
-            <button type="button" className={styles.iconBtn} aria-label="Buscar">
-              <Search className={styles.searchIcon} aria-hidden="true" />
-            </button>
+      {/* --- Drawer: acordeon de 5 capas que baja desde arriba */}
+      <div id="navbar-drawer" className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ''}`}>
+        <div className={`${styles.layer} ${styles.layerFirst}`} aria-hidden="true" />
+        <div className={`${styles.layer} ${styles.layerSecond}`} aria-hidden="true" />
+        <div className={`${styles.layer} ${styles.layerThird}`} aria-hidden="true" />
+        <div className={`${styles.layer} ${styles.layerFourth}`} aria-hidden="true" />
+
+        <div className={`${styles.layer} ${styles.layerMain}`}>
+          <div className={styles.layerContent}>
+            <div className={styles.drawerHeader}>
+              <Link to="/" className={styles.logo} aria-label="Inicio" onClick={() => setMenuOpen(false)}>
+                <img src={logo} alt="Logo" className={styles.drawerLogoIcon} />
+              </Link>
+            </div>
+
+            <div className={styles.drawerNav}>
+              <div className={styles.drawerMain}>
+                {NAV_LINKS.map(({ label, to }) => (
+                  <DrawerLink key={label} to={to} className={styles.drawerMainLink} onNavigate={() => setMenuOpen(false)}>
+                    {label}
+                  </DrawerLink>
+                ))}
+              </div>
+
+              <div className={styles.drawerAside}>
+                <div className={styles.drawerGroup}>
+                  {SECONDARY_LINKS.map(({ label, to }) => (
+                    <DrawerLink key={label} to={to} className={styles.drawerAsideLink} onNavigate={() => setMenuOpen(false)}>
+                      {label}
+                    </DrawerLink>
+                  ))}
+                </div>
+
+                <div className={styles.drawerGroup}>
+                  {LEGAL_LINKS.map(({ label, to }) => (
+                    <DrawerLink key={label} to={to} className={styles.drawerLegalLink} onNavigate={() => setMenuOpen(false)}>
+                      {label}
+                    </DrawerLink>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-
-          <Link to="/" className={styles.logo} aria-label="Inicio" onClick={() => setMenuOpen(false)}>
-            <img src={logo} alt="Logo" className={styles.logoIcon} />
-          </Link>
-        </div>
-
-        {/* Links: se rediseñan en el siguiente paso */}
-        <div className={styles.drawerNav}>
-          {NAV_LINKS.map(({ label, to }) => (
-            <Link key={label} to={to} className={styles.mobileLink} onClick={() => setMenuOpen(false)}>{label}</Link>
-          ))}
         </div>
       </div>
     </>

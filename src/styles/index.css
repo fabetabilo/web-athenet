@@ -1,12 +1,15 @@
 /* --- Fuentes globales */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 
 /* --- Variables CSS */
 :root {
   --bg-light: #fff;
-  --color-navy: #03172c;
+  --bg-light-alt: #e9e9e9;
+  --color-navy: #052344;
   --color-dark: #0A0D1A;
+  --color-ink: #080b14;
+  --color-ink-translucent: rgba(8, 11, 20, 0.98);
   --color-cyan: #00C8FF;
   --color-red: #D82028;
   --color-secondary: #3b82f6;
@@ -17,7 +20,8 @@
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.65);
+  --text-muted-alpha: 0.65;   /* util: para pintar por opacidad lo que no es texto */
+  --text-muted: rgba(255, 255, 255, var(--text-muted-alpha));
   --text-dark: #111111;
   --text-dark-muted: #555555;
 
@@ -26,7 +30,7 @@
   /* Typography */
   --font-heading: 'Barlow Semi Condensed', sans-serif;
   --font-primary: 'Barlow', sans-serif;
-  --font-secondary: 'Roboto', sans-serif;
+  --font-secondary: "Google Sans", sans-serif;
   --font-condensed: 'Barlow Condensed', sans-serif;
 
   --font-heading-weight: 800;
@@ -52,6 +56,7 @@
   --radius-full: 9999px; /* full curvo, pildoras */
 
   /* Espaciados */
+  --spacing-xxsm: 0.3rem;
   --spacing-sm: 1.5rem;
   --spacing-md: 2.5rem;
   --spacing-lg: 3rem;
@@ -65,7 +70,7 @@
 
   /* Alto de la barra: lo comparten el navbar y la cabecera del drawer */
   --navbar-height: 5rem;
-  
+
   /* --- Jerarquia de capas ----------------------------------------------- */
   --z-base: 1;
   --z-raised: 10;
@@ -73,12 +78,21 @@
   --z-navbar: 200;
   --z-overlay: 300;
   --z-drawer: 400;
+  --z-drawer-top: 450;
   --z-modal: 500;
   --z-toast: 600;
 
   /* Duraciones de transicion */
   --duration-fast: 0.2s;
   --duration-base: 0.4s;
+  --duration-slow: 0.5s;
+  --duration-slower: 0.8s;
+
+  /* Drawer acordeon */
+  --drawer-stagger: 70ms;   /* desfase entre capas */
+  --drawer-settle: calc(var(--duration-base) + 4 * var(--drawer-stagger));
+  
+  --icon-btn-size: 2.5rem;
 }
 
 /* reset */

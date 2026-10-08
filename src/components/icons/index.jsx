@@ -17,11 +17,6 @@ import {
   FaLinkedinIn
 } from 'react-icons/fa6';
 
-import {
-  RiMenu2Line,
-  RiCloseLine
-} from 'react-icons/ri';
-
 // EVENTO_OFICIAL_BADGE: icono personalizado
 export const OfficialIcon = ({ className, ...props }) => (
   <img src={`${import.meta.env.BASE_URL}icon/oficial.png`} alt="Oficial" className={className} {...props} />
@@ -41,12 +36,6 @@ export {
   LuBuilding2 as Building2,
   LuUsers as Users,
   LuSearch as Search
-};
-
-// Menu hamburguesa (set Remix Icon)
-export {
-  RiMenu2Line as Menu,
-  RiCloseLine as Close
 };
 
 // Logos de redes sociales (set Font Awesome 6)
