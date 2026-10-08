@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useTransitionNavigate } from '../../transition'
 import { ChevronLeft, ChevronRight } from '../../icons'
 import Button from '../Button/Button'
 import EventCard from '../EventCard/EventCard'
@@ -7,7 +7,7 @@ import styles from './EventsCarousel.module.css'
 
 export default function EventsCarousel({ events = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const navigate = useNavigate()
+  const navigate = useTransitionNavigate()
 
   const handleNext = () => {
     if (events.length === 0) return;

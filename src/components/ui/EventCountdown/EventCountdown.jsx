@@ -63,7 +63,7 @@ export default function EventCountdown({ event }) {
             <MapPin size={32} strokeWidth={1} aria-hidden="true" />
             {event.location}
           </p>
-          <Button variant="accent" showArrow href={`/events/${event.id}`} style={{ marginTop: 'var(--spacing-sm)' }}>
+          <Button variant="accent" showArrow to={`/events/${event.id}`} style={{ marginTop: 'var(--spacing-sm)' }}>
             Ver Evento
           </Button>
         </div>

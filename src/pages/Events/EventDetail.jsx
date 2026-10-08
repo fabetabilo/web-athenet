@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { TransitionLink, useTransitionHold } from '../../components/transition';
 import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/icons';
 import { getEventById } from '../../service/eventsApi';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
@@ -9,6 +10,8 @@ export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  useTransitionHold(isLoading);
 
   useEffect(() => {
     let isMounted = true;
@@ -47,9 +50,9 @@ export default function EventDetail() {
       <div className={styles.page}>
         <div className={styles.notFound}>
           <h2>Evento no encontrado</h2>
-          <Link to="/events" style={{ color: 'var(--color-cyan)', marginTop: '1rem', display: 'inline-block' }}>
+          <TransitionLink to="/events" style={{ color: 'var(--color-cyan)', marginTop: '1rem', display: 'inline-block' }}>
             Volver a eventos
-          </Link>
+          </TransitionLink>
         </div>
       </div>
     );
@@ -62,10 +65,10 @@ export default function EventDetail() {
         <div className={styles.contentWrapper}>
           <div className={styles.titleWrapper}>
             <div>
-              <Link to="/events" style={{ display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: 'var(--text-sm)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <TransitionLink to="/events" style={{ display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: 'var(--text-sm)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 <ChevronLeft style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
                 Todos los eventos
-              </Link>
+              </TransitionLink>
               <h1 className={styles.title}>
                 {event.title}
               </h1>

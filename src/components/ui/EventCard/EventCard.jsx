@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useTransitionNavigate } from '../../transition'
 import { MapPin, ArrowRight, OfficialIcon } from '../../icons'
 import ButtonAction from '../Button/ButtonAction'
 import styles from './Event.module.css'
@@ -11,7 +11,7 @@ import styles from './Event.module.css'
  * @param {boolean} isPrincipal - Si es la card activa/principal del carrusel
  */
 export default function EventCard({ event, isPrincipal = false }) {
-  const navigate = useNavigate()
+  const navigate = useTransitionNavigate()
 
   return (
     <div

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useTransitionNavigate, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
@@ -19,13 +19,17 @@ const VIEW_OPTIONS = [
 export default function Events() {
   const [publicEvents, setPublicEvents] = useState([])
   const [view, setView] = useState('grid')
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useTransitionNavigate()
+
+  useTransitionHold(isLoading)
 
   useEffect(() => {
     let isMounted = true
     getAllEvents().then((events) => {
       if (isMounted) {
         setPublicEvents(events.filter((e) => e.isVisible))
+        setIsLoading(false)
       }
     })
 

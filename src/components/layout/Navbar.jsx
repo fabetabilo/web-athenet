@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import logo from '../../assets/icon/brand2.png'
+import { TransitionLink, TransitionNavLink } from '../transition'
+import { lockScroll, unlockScroll } from '../../utils/scrollLock'
 import { Search } from '../icons'
 import styles from './Navbar.module.css'
 
@@ -37,16 +39,16 @@ function DrawerLink({ to, className, onNavigate, children }) {
   if (to.startsWith('http')) {
     return <a href={to} className={className} target="_blank" rel="noopener noreferrer">{children}</a>
   }
-  return <Link to={to} className={className} onClick={onNavigate}>{children}</Link>
+  return <TransitionLink to={to} className={className} onClick={onNavigate}>{children}</TransitionLink>
 }
 
 // Destinos marcan activo. TEMPORAL: con to="#" se resuelve a la ruta actual para los que no tienen ruta aun.
 function TopLink({ to, label }) {
   if (to === '#') return <Link to={to} className={styles.link}>{label}</Link>
   return (
-    <NavLink to={to} className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ''}`}>
+    <TransitionNavLink to={to} className={({ isActive }) => `${styles.link} ${isActive ? styles.linkActive : ''}`}>
       {label}
-    </NavLink>
+    </TransitionNavLink>
   )
 }
 
@@ -61,10 +63,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
-  // Bloquea el scroll de la pagina mientras el drawer esta abierto
+  // Bloquea el scroll de la pagina mientras el drawer esta abierto via scrollLock. la pantalla de transicion tambien bloquea
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+    if (!menuOpen) return undefined
+    lockScroll()
+    return unlockScroll
   }, [menuOpen])
 
   // Su estado cambia con retardo
@@ -111,9 +114,9 @@ export default function Navbar() {
         <div className={styles.inner}>
           <div className={styles.left}>
             {/* Logo */}
-            <Link to="/" className={styles.logo} aria-label="Inicio">
+            <TransitionLink to="/" className={styles.logo} aria-label="Inicio">
               <img src={logo} alt="Logo" className={styles.logoIcon} />
-            </Link>
+            </TransitionLink>
           </div>
 
           {/* --- Links escritorio */}
@@ -142,9 +145,9 @@ export default function Navbar() {
         <div className={`${styles.layer} ${styles.layerMain}`}>
           <div className={styles.layerContent}>
             <div className={styles.drawerHeader}>
-              <Link to="/" className={styles.logo} aria-label="Inicio" onClick={() => setMenuOpen(false)}>
+              <TransitionLink to="/" className={styles.logo} aria-label="Inicio" onClick={() => setMenuOpen(false)}>
                 <img src={logo} alt="Logo" className={styles.drawerLogoIcon} />
-              </Link>
+              </TransitionLink>
             </div>
 
             <div className={styles.drawerNav}>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTransitionHold } from '../components/transition'
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
@@ -14,16 +15,18 @@ import styles from './Home.module.css'
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useTransitionHold(isLoading)
 
   useEffect(() => {
     let isMounted = true
 
-    getNextEvent().then((event) => {
-      if (isMounted) setFeaturedEvent(event)
-    })
-
-    getNextEvents().then((events) => {
-      if (isMounted) setUpcomingEvents(events.filter((e) => e.isVisible))
+    Promise.all([getNextEvent(), getNextEvents()]).then(([event, events]) => {
+      if (!isMounted) return
+      setFeaturedEvent(event)
+      setUpcomingEvents(events.filter((e) => e.isVisible))
+      setIsLoading(false)
     })
 
     return () => {
