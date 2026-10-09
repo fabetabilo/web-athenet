@@ -12,7 +12,7 @@
   --color-ink-translucent: rgba(8, 11, 20, 0.98);
   --color-cyan: #00C8FF;
   --color-red: #D82028;
-  --color-secondary: #3b82f6;
+  --color-secondary: #007AE5;
   --color-tertiary: #ffd700;
 
   --color-local: var(--bg-light);
@@ -55,8 +55,12 @@
   --radius-lg: 20px;
   --radius-full: 9999px; /* full curvo, pildoras */
 
+  /* Token de diagonales */
+  --skew-diagonal: -8deg;
+
   /* Espaciados */
   --spacing-xxsm: 0.3rem;
+  --spacing-xsm: 1rem;
   --spacing-sm: 1.5rem;
   --spacing-md: 2.5rem;
   --spacing-lg: 3rem;

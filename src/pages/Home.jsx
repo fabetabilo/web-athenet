@@ -52,7 +52,7 @@ export default function Home() {
               <div className={styles.bar} />
               <h2 className={styles.title}>Top Historias</h2>
             </div>
-            <Button variant="light" showArrow={true} href="#" className={styles.seeAll}>
+            <Button variant="light" showArrow={true} href="#">
               Ver Todo
             </Button>
           </div>

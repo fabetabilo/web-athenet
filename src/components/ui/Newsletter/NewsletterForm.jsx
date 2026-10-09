@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 import styles from './NewsletterForm.module.css';
-import { ArrowRight } from '../../icons';
+import Button from '../Button/Button';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -57,9 +57,9 @@ export default function NewsletterForm({ onSubmit, className = '' }) {
           aria-describedby={`${id}-legal`}
           aria-invalid={status === 'error' || undefined}
         />
-        <button type="submit" className={styles.submit} aria-label="Suscribirse">
-          <ArrowRight />
-        </button>
+        <Button type="submit" variant="solid" showArrow className={styles.submit}>
+          Suscribirme
+        </Button>
       </div>
 
       <div className={styles.legalSlot}>

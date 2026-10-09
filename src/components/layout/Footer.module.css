@@ -16,7 +16,6 @@
 
 .cta {
   padding-block: 0;
-  margin-bottom: 2rem;
 }
 
 .newsletter {
@@ -29,7 +28,7 @@
 .newsletterLead {
   max-width: 48ch;
   margin-inline: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
   font-size: var(--text-md);
   color: var(--text-primary);
   line-height: 1.6;

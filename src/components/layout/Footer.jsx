@@ -1,5 +1,4 @@
 import styles from './Footer.module.css';
-import Button from '../ui/Button/Button';
 import BoldBanner from '../../components/ui/Banner/BoldBanner'
 import NewsletterForm from '../ui/Newsletter/NewsletterForm';
 import { Instagram, Facebook, XTwitter, Youtube, Linkedin } from '../icons';
@@ -50,8 +49,6 @@ export default function Footer() {
               de Chile.
             </p>
           </div>
-
-          <Button variant="solid" showArrow>CONTÁCTANOS</Button>
 
           <div className={styles.infoRow}>
             <div className={styles.infoBlock}>

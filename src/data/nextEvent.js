@@ -4,14 +4,14 @@
  */
 export const nextEvent = {
   internalId: 'EVT-1',
-  title: 'Campeonato Sudamericano',
+  title: 'Campeonato Sudamericano 2026',
   description: 'Campeonato Sudamericano de Tenis de Mesa universitario.',
   description_opt: null,
   coverImage: 'https://images.unsplash.com/photo-1659303388053-e883fedaadac?w=900&h=700&fit=crop&auto=format',
   photos: [],
   type: 'MATCH',
   category: 'TENIS_MESA',
-  eventDate: '2026-09-24',
+  eventDate: '2026-10-24',
   status: 'PUBLISHED',
   isOfficial: true,
   organizationId: 1,

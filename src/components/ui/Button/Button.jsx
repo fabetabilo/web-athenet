@@ -35,10 +35,10 @@ export default function Button({ children, variant = 'light', showArrow = false,
   const combinedClasses = `${styles.base} ${variantClass} ${className}`.trim();
 
   const content = (
-    <>
+    <span className={styles.inner}>
       {children}
       {showArrow && <ArrowRight className={styles.arrow} style={{ width: '1rem', height: '1rem' }} />}
-    </>
+    </span>
   );
 
   if (to) {

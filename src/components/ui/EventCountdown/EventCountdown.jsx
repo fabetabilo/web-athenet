@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { MapPin } from '../../icons'
 import Button from '../Button/Button'
+import TeamChipList from '../TeamChip/TeamChipList'
 import styles from './EventCountdown.module.css'
 
 /**
@@ -46,42 +47,47 @@ export default function EventCountdown({ event }) {
 
   const units = [
     { value: timeLeft.days,    label: 'Días' },
-    { value: timeLeft.hours,   label: 'Horas' },
-    { value: timeLeft.minutes, label: 'Minutos' },
-    { value: timeLeft.seconds, label: 'Segundos' },
+    { value: timeLeft.hours,   label: 'Hrs' },
+    { value: timeLeft.minutes, label: 'Min' },
+    { value: timeLeft.seconds, label: 'Seg' },
   ]
 
   return (
     <section className={styles.countdown}>
       <div className={styles.inner}>
-        <div className={styles.info}>
+        <div className={styles.main}>
           <span className={styles.label}>Próxima Fecha</span>
+          {/* --- timer */}
+          <div className={styles.timer}>
+            {units.map((unit, i) => (
+              <div key={unit.label} className={styles.unit}>
+                <span className={styles.value}>
+                  {String(unit.value).padStart(2, '0')}
+                  {i < units.length - 1 && <span className={styles.sep} aria-hidden="true">:</span>}
+                </span>
+                <span className={styles.unitLabel}>
+                  {unit.label}
+                  <span className={styles.rule} aria-hidden="true" />
+                </span>
+              </div>
+            ))}
+          </div>
+
           <h2 className={styles.title}>{event.title}</h2>
-          {/* formattedDate viene pre-calculado desde normalizeEvent (timezone-safe) */}
-          <p className={styles.date}>{event.formattedDate}</p>
           <p className={styles.location}>
-            <MapPin size={32} strokeWidth={1} aria-hidden="true" />
+            <MapPin size={24} strokeWidth={1} aria-hidden="true" />
             {event.location}
+            {/* formattedDate viene pre-calculado desde normalizeEvent (timezone-safe) */}
+            <span className={styles.dateSep} aria-hidden="true">|</span>
+            <span className={styles.date}>{event.formattedDate}</span>
           </p>
+          <TeamChipList event={event} />
           <Button variant="accent" showArrow to={`/events/${event.id}`} style={{ marginTop: 'var(--spacing-sm)' }}>
             Ver Evento
           </Button>
         </div>
-        {/* --- timer */}
-        <div className={styles.timer}>
-          <span className={styles.timerLabel}>Faltan</span>
-          <div className={styles.boxes}>
-            {units.map((unit) => (
-              <div key={unit.label} className={styles.box}>
-                <span className={styles.value}>
-                  {String(unit.value).padStart(2, '0')}
-                </span>
-                <span className={styles.unit}>{unit.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
+        {/* columna derecha reservada: contenido PENDIENTE */}
+        <div className={styles.aside} aria-hidden="true" />
       </div>
     </section>
   )

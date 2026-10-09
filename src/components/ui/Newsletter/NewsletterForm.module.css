@@ -52,36 +52,7 @@
 }
 
 .submit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: color var(--duration-fast) ease;
-}
-
-.submit svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.submit:active {
-  color: var(--color-red);
-}
-
-.submit:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 4px;
-  border-radius: var(--radius-sm);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .submit:hover {
-    color: var(--color-red);
-  }
 }
 
 .legalSlot {

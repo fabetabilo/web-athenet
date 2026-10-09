@@ -21,6 +21,8 @@ const TEAM_B = {
 };
 
 export const MOCK_TEAMS = {
+  101: TEAM_A,
+  102: TEAM_B,
   903: TEAM_A,
   904: TEAM_B,
   905: TEAM_A,
