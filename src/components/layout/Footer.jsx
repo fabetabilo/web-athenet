@@ -1,5 +1,7 @@
 import styles from './Footer.module.css';
 import Button from '../ui/Button/Button';
+import BoldBanner from '../../components/ui/Banner/BoldBanner'
+import NewsletterForm from '../ui/Newsletter/NewsletterForm';
 import { Instagram, Facebook, XTwitter, Youtube, Linkedin } from '../icons';
 import brandIcon from '../../assets/icon/brand2.png';
 
@@ -32,6 +34,13 @@ const SOCIAL_LINKS = [
 export default function Footer() {
   return (
     <footer className={styles.footer}>
+      <BoldBanner outlineText="NO TE PIERDAS" solidText="NI UNA FECHA" variant="dark" className={styles.cta} />
+      <section className={styles.newsletter}>
+        <p className={styles.newsletterLead}>
+          Súmate a la comunidad y recibe eventos, competencias y resultados directo a tu correo.
+        </p>
+        <NewsletterForm />
+      </section>
       <div className={styles.container}>
         <div className={styles.brandCol}>
           <div className={styles.logoContainer}>

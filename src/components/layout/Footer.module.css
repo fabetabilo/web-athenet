@@ -14,6 +14,27 @@
   gap: 3rem;
 }
 
+.cta {
+  padding-block: 0;
+  margin-bottom: 2rem;
+}
+
+.newsletter {
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  margin-bottom: 5rem;
+  text-align: center;
+}
+
+.newsletterLead {
+  max-width: 48ch;
+  margin-inline: auto;
+  margin-bottom: 1rem;
+  font-size: var(--text-md);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
 /* BRAND COLUMN (IZQUIERDA) */
 .brandCol {
   display: flex;
