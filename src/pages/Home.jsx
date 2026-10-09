@@ -3,6 +3,7 @@ import { useTransitionHold } from '../components/transition'
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
+import MatchStrip from '../components/ui/MatchStrip/MatchStrip'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
 import InstCarousel from '../components/ui/Carousel/InstCarousel'
 import Button from '../components/ui/Button/Button'
@@ -10,11 +11,13 @@ import { heroSlides } from '../data/heroSlides'
 import { institutions } from '../data/institutions'
 import { newsCards } from '../data/newsCards.js'
 import { getNextEvent, getNextEvents } from '../service/eventsApi'
+import { getLatestResults } from '../service/competitionsApi'
 import styles from './Home.module.css'
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState([])
+  const [results, setResults] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   useTransitionHold(isLoading)
@@ -22,10 +25,11 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true
 
-    Promise.all([getNextEvent(), getNextEvents()]).then(([event, events]) => {
+    Promise.all([getNextEvent(), getNextEvents(), getLatestResults()]).then(([event, events, matches]) => {
       if (!isMounted) return
       setFeaturedEvent(event)
       setUpcomingEvents(events.filter((e) => e.isVisible))
+      setResults(matches)
       setIsLoading(false)
     })
 
@@ -40,6 +44,7 @@ export default function Home() {
   return (
     <>
       <Carousel slides={heroSlides} />
+      <MatchStrip matches={results} />
       <EventCountdown event={featuredEvent} />
       <EventsCarousel events={upcomingEvents} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />

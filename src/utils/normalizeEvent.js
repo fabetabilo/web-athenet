@@ -12,7 +12,7 @@
 // ---------------------------------------------------------------------------
 // Tablas de mapeo
 /** @type {Record<string, string>} */
-const CATEGORY_LABELS = {
+export const CATEGORY_LABELS = {
   FUTBOL:               'Fútbol',
   BASQUETBOL:           'Basquetbol',
   VOLEIBOL:             'Vóleibol',
@@ -66,7 +66,7 @@ const MONTH_NAMES_ES = [
  * @param {string} isoDate - Fecha en formato "YYYY-MM-DD"
  * @returns {string} Ej: "4 de octubre de 2026"
  */
-function formatEventDate(isoDate) {
+export function formatEventDate(isoDate) {
   const [year, month, day] = isoDate.split('-').map(Number)
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-CL', {

@@ -3,6 +3,7 @@ const BASE_URL = import.meta.env.BASE_URL;
 export const institutions = [
   {
     id: 1,
+    acronym: "UDAC",
     name: "Universidad de Aconcagua",
     campus: "",
     image: `${BASE_URL}img/udac.png`,
@@ -19,6 +20,7 @@ export const institutions = [
   },
   {
     id: 2,
+    acronym: "UTFM",
     name: "Universidad Técnica Felipe Márquez",
     campus: "Sede Valparaíso",
     image: `${BASE_URL}img/utfm.png`,
@@ -35,6 +37,7 @@ export const institutions = [
   },
   {
     id: 3,
+    acronym: "UPC",
     name: "Universidad de Playa Chica",
     campus: "",
     image: `${BASE_URL}img/upc.png`,
@@ -51,6 +54,7 @@ export const institutions = [
   },
   {
     id: 4,
+    acronym: "ITVM",
     name: "Instituto Tecnológico de Viña del Mar",
     campus: "",
     image: `${BASE_URL}img/itvm.png`,
@@ -67,6 +71,7 @@ export const institutions = [
   },
   {
     id: 5,
+    acronym: "UDPC",
     name: "Universidad de la Patagonia",
     campus: "Coyhaique",
     image: `${BASE_URL}img/udpc.png`,
@@ -83,6 +88,7 @@ export const institutions = [
   },
   {
     id: 6,
+    acronym: "PUAC",
     name: "Pontificia Universidad Andina de Chile",
     campus: "",
     image: `${BASE_URL}img/puac.png`,
@@ -99,6 +105,7 @@ export const institutions = [
   },
   {
     id: 7,
+    acronym: "UQ",
     name: "Universidad de Quilpué",
     campus: "",
     image: `${BASE_URL}img/uq.png`,
@@ -115,6 +122,7 @@ export const institutions = [
   },
   {
     id: 8,
+    acronym: "IBA",
     name: "Instituto Bellas Artes",
     campus: "Viña del Mar",
     image: `${BASE_URL}img/iba.png`,
@@ -130,3 +138,11 @@ export const institutions = [
     email: "deportes@iba.cl"
   }
 ];
+
+/** Sigla de una institucion por id; usada por normalizeMatch para el marcador. */
+export const getInstitutionAcronym = (id) =>
+  institutions.find((i) => i.id === id)?.acronym ?? '—'
+
+/** Escudo de una institucion por id; null porque alimenta el src de un <img>. */
+export const getInstitutionImage = (id) =>
+  institutions.find((i) => i.id === id)?.image ?? null
