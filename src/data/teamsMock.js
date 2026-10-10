@@ -10,12 +10,14 @@ const BASE_URL = import.meta.env.BASE_URL;
 
 const TEAM_A = {
   name: 'Man Blue',
+  acronym: 'UPC',
   institution: 'Universidad Playa Chica',
   logo: `${BASE_URL}img/upc-t.png`,
 };
 
 const TEAM_B = {
   name: 'Man Red',
+  acronym: 'UQ',
   institution: 'Universidad de Quilpué',
   logo: `${BASE_URL}img/uq-t.png`,
 };
@@ -30,13 +32,10 @@ export const MOCK_TEAMS = {
 };
 
 /**
- * Helper para obtener un equipo. Si no existe en el mock, 
- * retorna una versión por defecto para no romper la UI.
+ * Helper para obtener un equipo. Si no existe en el mock,
+ * alterna entre los dos de muestra segun la paridad del id: los mocks de eventos
+ * siempre enfrentan un id impar contra uno par, asi que el encuentro queda coherente.
  */
 export const getTeamData = (teamId) => {
-  return MOCK_TEAMS[teamId] || {
-    name: `Equipo Sede ${teamId}`,
-    institution: `Institución ${teamId}`,
-    logo: `${BASE_URL}img/upc-t.png`,
-  };
+  return MOCK_TEAMS[teamId] ?? (teamId % 2 === 1 ? TEAM_A : TEAM_B);
 };
