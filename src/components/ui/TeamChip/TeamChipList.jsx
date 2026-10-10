@@ -9,15 +9,15 @@ import styles from './TeamChip.module.css'
  * @param {import('../../../utils/normalizeEvent').NormalizedEvent} props.event - evento normalizado
  */
 export default function TeamChipList({ event }) {
-  // hasTeams exige ambos ids; filtrar tolera tambien un evento con uno solo.
-  const teamIds = [event?.teamOneId, event?.teamTwoId].filter((id) => id != null)
-  if (teamIds.length === 0) return null
+  // hasTeams exige ambos equipos; filtrar tolera tambien un evento con uno solo.
+  const teams = [event?.teamOne, event?.teamTwo].filter(Boolean)
+  if (teams.length === 0) return null
 
   return (
     <ul className={styles.list}>
-      {teamIds.map((id) => (
-        <li key={id}>
-          <TeamChip teamId={id} />
+      {teams.map((team) => (
+        <li key={team.id}>
+          <TeamChip team={team} />
         </li>
       ))}
     </ul>

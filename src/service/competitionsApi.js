@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { normalizeMatch, sortForStrip } from '../utils/normalizeMatch'
-import { competitionMatches as competitionMatchesMock } from '../data/competitionMock'
+import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
+import { resolveInstitution } from '../data/demo/institutionDirectory'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con fallback a mocks locales.
@@ -73,9 +74,13 @@ async function requestWithFallback(endpoint, fallbackData, normalizer, config = 
     }
 }
 
-/** Normalizador de lista compartido por los endpoints de coleccion. */
+/**
+ * Normalizador de lista compartido por los endpoints de coleccion.
+ * Inyecta el diccionario local: el dia que ms-competitions mande sigla y escudo,
+ * se borra el segundo argumento y normalizeMatch sigue correcto.
+ */
 const normalizeList = (rawList) =>
-    Array.isArray(rawList) ? rawList.map(normalizeMatch) : []
+    Array.isArray(rawList) ? rawList.map((m) => normalizeMatch(m, resolveInstitution)) : []
 
 
 // --- Funciones del Servicio -----------------------------------------------------

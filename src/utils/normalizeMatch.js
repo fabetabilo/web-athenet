@@ -6,7 +6,6 @@
  */
 
 import { CATEGORY_LABELS, formatEventDate } from './normalizeEvent'
-import { getInstitutionAcronym, getInstitutionImage } from '../data/institutions'
 
 // ---------------------------------------------------------------------------
 // Tablas de mapeo
@@ -89,15 +88,19 @@ function formatShortMatchDate(isoDate) {
   return `${day} ${SHORT_MONTH_NAMES_ES[month - 1]}`
 }
 
+/** Lado sin institucion resuelta: tambien es el default cuando nadie inyecta resolve. */
+const NO_INSTITUTION = { acronym: '—', image: null }
+
 /**
  * Arma un lado del marcador. La sigla y el escudo prefieren lo que mande el
- * backend y caen al mock local mientras ms-competitions no exista.
+ * backend y caen a lo que resuelva el llamador mientras ms-competitions no exista.
  */
-function normalizeSide(institutionId, acronym, score, image) {
+function normalizeSide(institutionId, acronym, score, image, resolve) {
+  const resolved = institutionId != null ? resolve(institutionId) : NO_INSTITUTION
   return {
     institutionId: institutionId ?? null,
-    acronym: acronym ?? getInstitutionAcronym(institutionId),
-    image: image ?? getInstitutionImage(institutionId),
+    acronym: acronym ?? resolved.acronym,
+    image: image ?? resolved.image,
     score: score ?? null,
   }
 }
@@ -105,7 +108,7 @@ function normalizeSide(institutionId, acronym, score, image) {
 /**
  * @typedef {Object} MatchSide
  * @property {number|null} institutionId
- * @property {string}      acronym       - sigla del backend o del mock local
+ * @property {string}      acronym       - sigla del backend o la resuelta por el llamador
  * @property {string|null} image         - URL del escudo; null si no hay
  * @property {number|null} score         - null mientras el encuentro no se juega
  */
@@ -136,9 +139,12 @@ function normalizeSide(institutionId, acronym, score, image) {
 
 /**
  * @param {Object} rawMatch
+ * @param {(id: number) => { acronym: string, image: string|null }} [resolve]
+ *        Resuelve sigla y escudo por id. Se inyecta para que este modulo no
+ *        dependa de datos de demo; el default deja el marcador sin resolver.
  * @returns {NormalizedMatch}
  */
-export function normalizeMatch(rawMatch) {
+export function normalizeMatch(rawMatch, resolve = () => NO_INSTITUTION) {
   const relativeDay = getRelativeDay(rawMatch.matchDate)
 
   return {
@@ -159,8 +165,8 @@ export function normalizeMatch(rawMatch) {
     isPlayed:    rawMatch.status === 'FINISHED',
     relativeDay,
     relativeDayLabel: relativeDay ? RELATIVE_DAY_LABELS[relativeDay] : null,
-    one: normalizeSide(rawMatch.institutionOneId, rawMatch.institutionOneAcronym, rawMatch.scoreOne, rawMatch.institutionOneImage),
-    two: normalizeSide(rawMatch.institutionTwoId, rawMatch.institutionTwoAcronym, rawMatch.scoreTwo, rawMatch.institutionTwoImage),
+    one: normalizeSide(rawMatch.institutionOneId, rawMatch.institutionOneAcronym, rawMatch.scoreOne, rawMatch.institutionOneImage, resolve),
+    two: normalizeSide(rawMatch.institutionTwoId, rawMatch.institutionTwoAcronym, rawMatch.scoreTwo, rawMatch.institutionTwoImage, resolve),
   }
 }
 

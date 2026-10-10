@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { normalizeEvent } from '../utils/normalizeEvent'
-import { nextEvents as nextEventsMock } from '../data/nextEvents'
-import { nextEvent as nextEventMock } from '../data/nextEvent'
-import { allEvents as allEventsMock } from '../data/allEvents'
+import { nextEvents as nextEventsMock } from '../data/demo/eventsNext'
+import { nextEvent as nextEventMock } from '../data/demo/eventFeatured'
+import { allEvents as allEventsMock } from '../data/demo/eventsAll'
+import { resolveTeam } from '../data/demo/teams'
 /**
  * @file eventsApi.js
  * Servicio de consumo para ms-events con fallback a mocks locales en caso de no haber llamada a apis reales
@@ -84,6 +85,14 @@ async function requestWithFallback(endpoint, fallbackData, normalizer, config = 
 }
 
 
+/**
+ * Normalizador con el diccionario de equipos ya inyectado.
+ * Nunca pasar normalizeEvent desnudo a .map: el indice del array llegaria como
+ * resolveTeam y los equipos se resolverian por 0, 1, 2... en vez de por su id.
+ */
+const normalize = (raw) => normalizeEvent(raw, resolveTeam)
+
+
 // --- Funciones del Servicio -----------------------------------------------------
 /**
  * Obtiene la lista de los proximos eventos (segun regla de Api).
@@ -95,7 +104,7 @@ export async function getNextEvents(config = {}) {
     return requestWithFallback(
         EVENT_ENDPOINTS.NEXT_EVENTS,
         nextEventsMock,
-        (rawList) => (Array.isArray(rawList) ? rawList.map(normalizeEvent) : []),
+        (rawList) => (Array.isArray(rawList) ? rawList.map(normalize) : []),
         config
     )
 }
@@ -110,7 +119,7 @@ export async function getNextEvent(config = {}) {
     return requestWithFallback(
         EVENT_ENDPOINTS.NEXT_EVENT,
         nextEventMock,
-        (rawObj) => (rawObj ? normalizeEvent(rawObj) : null),
+        (rawObj) => (rawObj ? normalize(rawObj) : null),
         config
     )
 }
@@ -126,7 +135,7 @@ export async function getAllEvents(config = {}) {
     return requestWithFallback(
         EVENT_ENDPOINTS.ALL_EVENTS,
         allEventsMock,
-        (rawList) => (Array.isArray(rawList) ? rawList.map(normalizeEvent) : []),
+        (rawList) => (Array.isArray(rawList) ? rawList.map(normalize) : []),
         config
     )
 }
@@ -145,7 +154,7 @@ export async function getEventById(id, config = {}) {
     return requestWithFallback(
         EVENT_ENDPOINTS.EVENT_BY_ID(id),
         fallbackRaw,
-        (rawObj) => (rawObj ? normalizeEvent(rawObj) : null),
+        (rawObj) => (rawObj ? normalize(rawObj) : null),
         config
     )
 }

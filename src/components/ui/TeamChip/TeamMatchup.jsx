@@ -1,15 +1,12 @@
-import { getTeamData } from '../../../data/teamsMock'
 import styles from './TeamChip.module.css'
 
 /**
  * Un lado del encuentro: escudo y sigla del equipo.
  *
  * @param {Object} props
- * @param {number|string} props.teamId - id del equipo
+ * @param {import('../../../utils/normalizeEvent').TeamRef} props.team - equipo resuelto
  */
-function Side({ teamId }) {
-  const team = getTeamData(teamId)
-
+function Side({ team }) {
   return (
     <span className={styles.side}>
       <span className={styles.avatar}>
@@ -29,17 +26,17 @@ function Side({ teamId }) {
  * @param {import('../../../utils/normalizeEvent').NormalizedEvent} props.event - evento normalizado
  */
 export default function TeamMatchup({ event }) {
-  // hasTeams exige ambos ids; filtrar tolera tambien un evento con uno solo.
-  const [one, two] = [event?.teamOneId, event?.teamTwoId].filter((id) => id != null)
-  if (one == null) return null
+  // hasTeams exige ambos equipos; filtrar tolera tambien un evento con uno solo.
+  const [one, two] = [event?.teamOne, event?.teamTwo].filter(Boolean)
+  if (!one) return null
 
   return (
     <span className={`${styles.matchup} ${styles.matchupLight}`}>
-      <Side teamId={one} />
-      {two != null && (
+      <Side team={one} />
+      {two && (
         <>
           <span className={styles.versus}>VS</span>
-          <Side teamId={two} />
+          <Side team={two} />
         </>
       )}
     </span>

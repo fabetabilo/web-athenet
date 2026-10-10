@@ -138,11 +138,3 @@ export const institutions = [
     email: "deportes@iba.cl"
   }
 ];
-
-/** Sigla de una institucion por id; usada por normalizeMatch para el marcador. */
-export const getInstitutionAcronym = (id) =>
-  institutions.find((i) => i.id === id)?.acronym ?? '—'
-
-/** Escudo de una institucion por id; null porque alimenta el src de un <img>. */
-export const getInstitutionImage = (id) =>
-  institutions.find((i) => i.id === id)?.image ?? null
