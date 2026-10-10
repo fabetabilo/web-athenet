@@ -1,0 +1,144 @@
+.form {
+  width: 100%;
+}
+
+.srLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 40rem;
+  margin-inline: auto;
+  /* compensa el line-height del input: el alto total del campo no cambia */
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition: border-color var(--duration-fast) ease;
+}
+
+.field:focus-within {
+  border-bottom-color: #fff;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;  /* el foco se ve en el borde inferior del campo */
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* el autofill de Chrome pinta un recuadro celeste ilegible sobre el fondo oscuro */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-primary);
+  transition: background-color 9999s ease;
+}
+
+.submit {
+  flex-shrink: 0;
+}
+
+.legalSlot {
+  position: relative;
+  margin-top: 1.25rem;
+}
+
+.legal {
+  max-width: 52ch;
+  margin-inline: auto;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.5rem);
+  /* visibility va con delay para no cortar el fade de salida */
+  transition:
+    opacity var(--duration-base) ease,
+    transform var(--duration-base) ease,
+    visibility 0s linear var(--duration-base);
+}
+
+.legalVisible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity var(--duration-base) ease,
+    transform var(--duration-base) ease,
+    visibility 0s;
+}
+
+.legal a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  transition: color var(--duration-fast) ease;
+}
+
+.legal a:active {
+  color: var(--color-red);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .legal a:hover {
+    color: var(--color-red);
+  }
+}
+
+/* en absoluto sobre el legal: no debe sumar altura al hueco */
+.status {
+  position: absolute;
+  inset: 0 0 auto 0;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duration-base) ease,
+    visibility 0s linear var(--duration-base);
+}
+
+.statusVisible {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--duration-base) ease,
+    visibility 0s;
+}
+
+.statusError {
+  color: var(--color-red);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legal,
+  .legalVisible {
+    transform: none;
+    transition: none;
+  }
+
+  .status,
+  .statusVisible {
+    transition: none;
+  }
+}

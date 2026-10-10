@@ -1,30 +1,41 @@
 import { useState, useEffect } from 'react'
+import { useTransitionHold } from '../components/transition'
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
+import MatchStrip from '../components/ui/MatchStrip/MatchStrip'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
 import InstCarousel from '../components/ui/Carousel/InstCarousel'
 import Button from '../components/ui/Button/Button'
-import { heroSlides } from '../data/heroSlides'
-import { institutions } from '../data/institutions'
-import { newsCards } from '../data/newsCards.js'
+import { heroSlides } from '../data/content/heroSlides'
+import { newsCards } from '../data/content/newsCards.js'
 import { getNextEvent, getNextEvents } from '../service/eventsApi'
+import { getLatestResults } from '../service/competitionsApi'
+import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState([])
+  const [results, setResults] = useState([])
+  const [institutions, setInstitutions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useTransitionHold(isLoading)
 
   useEffect(() => {
     let isMounted = true
 
-    getNextEvent().then((event) => {
-      if (isMounted) setFeaturedEvent(event)
-    })
-
-    getNextEvents().then((events) => {
-      if (isMounted) setUpcomingEvents(events.filter((e) => e.isVisible))
-    })
+    Promise.all([getNextEvent(), getNextEvents(), getLatestResults(), getInstitutions()]).then(
+      ([event, events, matches, insts]) => {
+        if (!isMounted) return
+        setFeaturedEvent(event)
+        setUpcomingEvents(events.filter((e) => e.isVisible))
+        setResults(matches)
+        setInstitutions(insts)
+        setIsLoading(false)
+      }
+    )
 
     return () => {
       isMounted = false
@@ -37,6 +48,7 @@ export default function Home() {
   return (
     <>
       <Carousel slides={heroSlides} />
+      <MatchStrip matches={results} />
       <EventCountdown event={featuredEvent} />
       <EventsCarousel events={upcomingEvents} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
@@ -49,7 +61,7 @@ export default function Home() {
               <div className={styles.bar} />
               <h2 className={styles.title}>Top Historias</h2>
             </div>
-            <Button variant="light" showArrow={true} href="#" className={styles.seeAll}>
+            <Button variant="light" showArrow={true} href="#">
               Ver Todo
             </Button>
           </div>

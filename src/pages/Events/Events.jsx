@@ -1,31 +1,29 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useTransitionNavigate, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
-import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
-import ButtonAction from '../../components/ui/Button/ButtonAction'
-import { OfficialIconH, ArrowRight } from '../../components/ui/icons'
+import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
+import TeamMatchup from '../../components/ui/TeamChip/TeamMatchup'
+import { OfficialIconH } from '../../components/icons'
 import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
 
-/**
- * Opciones de vista disponibles.
- */
-const VIEW_OPTIONS = [
-  { value: 'grid', label: 'GRID' },
-  { value: 'list', label: 'LISTA' },
-]
+// Todo: FILTROS. Filtro por categoria, por competencia (copa, torneo, etc) y otros.
 
 export default function Events() {
   const [publicEvents, setPublicEvents] = useState([])
   const [view, setView] = useState('grid')
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useTransitionNavigate()
+
+  useTransitionHold(isLoading)
 
   useEffect(() => {
     let isMounted = true
     getAllEvents().then((events) => {
       if (isMounted) {
         setPublicEvents(events.filter((e) => e.isVisible))
+        setIsLoading(false)
       }
     })
 
@@ -46,11 +44,28 @@ export default function Events() {
 
           {/* Toolbar: contador de eventos + toggle de vista */}
           <div className={styles.toolbar}>
-            <ViewToggle
-              options={VIEW_OPTIONS}
-              value={view}
-              onChange={setView}
-            />
+            <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
+              <label className={styles.viewOption}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="grid"
+                  checked={view === 'grid'}
+                  onChange={() => setView('grid')}
+                />
+                GRID
+              </label>
+              <label className={styles.viewOption}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="list"
+                  checked={view === 'list'}
+                  onChange={() => setView('list')}
+                />
+                LISTA
+              </label>
+            </div>
           </div>
 
           {/* Vista grid */}
@@ -63,46 +78,37 @@ export default function Events() {
           )}
           {/* Vista lista (tabla) */}
           {view === 'list' && (
-            <div className={styles.tableContainer}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>CATEGORÍA</th>
-                    <th>NOMBRE</th>
-                    <th>CIUDAD</th>
-                    <th>FECHA</th>
-                    <th>OFICIAL</th>
-                    <th>IR A EVENTO</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {publicEvents.map((event) => (
-                    <tr
-                      key={event.id}
-                      className={styles.clickableRow}
-                      onClick={() => navigate(`/events/${event.id}`)}
-                    >
-                      <td className={styles.categoryCell}>{event.categoryLabel}</td>
-                      <td className={styles.nameCell}>{event.title}</td>
-                      <td className={styles.cityCell}>{event.location || '-'}</td>
-                      <td className={styles.dateCell}>{event.formattedDate}</td>
-                      <td className={styles.badgeCell}>
-                        {event.isOfficial && (
-                          <OfficialIconH className={styles.officialBadge} />
-                        )}
-                      </td>
-                      <td className={styles.actionCell}>
-                        <ButtonAction
-                          icon={ArrowRight}
-                          aria-label={`Ver detalles de ${event.title}`}
-                          onClick={(e) => { e.stopPropagation(); navigate(`/events/${event.id}`); }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <Table minWidth="54rem" label="Listado de eventos">
+              <TableHead>
+                <TableRow>
+                  <TableHeadCell>CATEGORÍA</TableHeadCell>
+                  <TableHeadCell>EVENTO</TableHeadCell>
+                  <TableHeadCell>ENCUENTRO</TableHeadCell>
+                  <TableHeadCell>CIUDAD</TableHeadCell>
+                  <TableHeadCell>FECHA</TableHeadCell>
+                  {/** por ahora OFICIAL, mas adelante implementarlo como "ORGANIZA" para diferentes instituciones o entidades diferentes a Athenet */}
+                  <TableHeadCell align="center" width="7rem">OFICIAL</TableHeadCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {publicEvents.map((event) => (
+                  <TableRow key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
+                    <TableCell>{event.categoryLabel}</TableCell>
+                    <TableCell variant="strong">{event.title}</TableCell>
+                    <TableCell>
+                      {event.hasTeams ? <TeamMatchup event={event} /> : '-'}
+                    </TableCell>
+                    <TableCell>{event.location || '-'}</TableCell>
+                    <TableCell variant="muted">{event.formattedDate}</TableCell>
+                    <TableCell align="center">
+                      {event.isOfficial && (
+                        <OfficialIconH className={styles.officialBadge} />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </div>
       </section>

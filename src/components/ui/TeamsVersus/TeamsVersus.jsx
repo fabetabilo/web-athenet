@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './TeamsVersus.module.css';
-import { getTeamData } from '../../../data/teamsMock';
 
 /**
  * TeamsVersus
@@ -13,12 +12,11 @@ import { getTeamData } from '../../../data/teamsMock';
  */
 export default function TeamsVersus({ event }) {
   // Solo renderiza si tiene equipos
-  if (!event || !event.hasTeams || event.teamOneId == null || event.teamTwoId == null) {
+  if (!event || !event.hasTeams || !event.teamOne || !event.teamTwo) {
     return null;
   }
 
-  const teamOne = getTeamData(event.teamOneId);
-  const teamTwo = getTeamData(event.teamTwoId);
+  const { teamOne, teamTwo } = event;
 
   return (
     <div className={styles.versusContainer}>

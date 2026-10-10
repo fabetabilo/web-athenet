@@ -12,7 +12,7 @@
 // ---------------------------------------------------------------------------
 // Tablas de mapeo
 /** @type {Record<string, string>} */
-const CATEGORY_LABELS = {
+export const CATEGORY_LABELS = {
   FUTBOL:               'Fútbol',
   BASQUETBOL:           'Basquetbol',
   VOLEIBOL:             'Vóleibol',
@@ -66,7 +66,7 @@ const MONTH_NAMES_ES = [
  * @param {string} isoDate - Fecha en formato "YYYY-MM-DD"
  * @returns {string} Ej: "4 de octubre de 2026"
  */
-function formatEventDate(isoDate) {
+export function formatEventDate(isoDate) {
   const [year, month, day] = isoDate.split('-').map(Number)
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-CL', {
@@ -94,6 +94,15 @@ function splitDisplayDate(isoDate) {
 
 // ---------------------------------------------------------------------------
 // Función principal
+/**
+ * @typedef {Object} TeamRef
+ * @property {number|string} id
+ * @property {string|null} name
+ * @property {string} acronym
+ * @property {string|null} institution
+ * @property {string|null} logo
+ */
+
 /**
  * @typedef {Object} NormalizedEvent
  * Identificación
@@ -128,17 +137,23 @@ function splitDisplayDate(isoDate) {
  *                                          Otros tipos pueden tener equipos o no.
  * @property {number|null} teamOneId
  * @property {number|null} teamTwoId
+ * @property {TeamRef|null} teamOne  - equipo resuelto; null si el evento no lo trae
+ * @property {TeamRef|null} teamTwo
  * Misc
  * @property {string|null} location
  * @property {string|null} address
  * @property {number}      organizationId
  */
 
+/** Equipo sin resolver: el default cuando nadie inyecta resolveTeam. */
+const UNKNOWN_TEAM = (id) => ({ id, name: null, acronym: '—', institution: null, logo: null })
+
 /**
  * @param {Object} rawEvent
+ * @param {(id: number) => TeamRef} [resolveTeam] Resuelve nombre, sigla y escudo por id. Se inyecta para que ningun componente tenga que importar el diccionario de equipos.
  * @returns {NormalizedEvent}
  */
-export function normalizeEvent(rawEvent) {
+export function normalizeEvent(rawEvent, resolveTeam = UNKNOWN_TEAM) {
   const hasTeams =
     rawEvent.teamOneId != null &&
     rawEvent.teamTwoId != null
@@ -181,6 +196,8 @@ export function normalizeEvent(rawEvent) {
     hasTeams,
     teamOneId: rawEvent.teamOneId ?? null,
     teamTwoId: rawEvent.teamTwoId ?? null,
+    teamOne: rawEvent.teamOneId != null ? resolveTeam(rawEvent.teamOneId) : null,
+    teamTwo: rawEvent.teamTwoId != null ? resolveTeam(rawEvent.teamTwoId) : null,
     // Misc
     location:       rawEvent.location ?? null,
     address:        rawEvent.address ?? null,

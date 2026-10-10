@@ -1,18 +1,16 @@
 .countdown {
-  background: var(--color-navy);
-  padding: 3rem 0;
+  background: var(--color-ink);
+  padding: 5rem 0;
 }
 
 .inner {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.25rem;
-  display: flex;
-  flex-direction: column;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+  display: grid;
   gap: 2.5rem;
 }
 
-.info {
+.main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -29,22 +27,24 @@
 }
 
 .title {
-  font-family: var(--font-heading);
-  font-size: var(--heading-md);
+  font-family: var(--font-primary);
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  letter-spacing: .2px;
   font-weight: var(--font-heading-weight);
-  text-transform: uppercase;
   line-height: 1;
-  margin: 0;
+  margin-bottom: var(--spacing-xsm);
 }
 
 .date {
   font-family: var(--font-primary);
-  font-size: var(--text-md);
-  font-weight: var(--font-text-weight);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.dateSep {
+  margin-inline: 0.5rem;
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
 .location {
@@ -52,86 +52,68 @@
   align-items: center;
   gap: 0.4rem;
   font-family: var(--font-primary);
-  font-size: var(--text-md);
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xsm);
 }
 
 .timer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.timerLabel {
-  font-family: var(--font-primary);
-  font-size: var(--text-md);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--text-primary);
-}
-
-.boxes {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-cyan);
-  padding: 0.875rem 1.25rem;
-  min-width: 6rem;
-  /* border-radius: var(--radius-sm); */
-}
-
-.value {
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 800;
-  line-height: 1;
-  color: var(--text-dark);
+  align-items: flex-end;
+  width: 100%;
+  margin-block: 0.5rem var(--spacing-sm);
 }
 
 .unit {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  font-family: var(--font-primary);
+  font-size: clamp(3rem, 7vw, 4rem);
+  font-weight: var(--font-heading-weight);
+  line-height: 0.95;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums; /* el ancho no salta al cambiar de digito */
+}
+
+.sep {
+  margin-inline: 0.1em;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.unitLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding-right: 1rem;
+  margin-top: 0.5rem;
   font-family: var(--font-primary);
   font-size: var(--text-sm);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-dark);
-  margin-top: 0.25rem;
+  letter-spacing: 0.12em;
 }
 
-
-@media (min-width: 768px) {
-  .inner {
-    padding: 0 2rem;
-  }
-
-  .boxes {
-    gap: 0.5rem;
-  }
-
-  .box {
-    min-width: 7.5rem;
-  }
+.rule {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-cyan) 35%, transparent);
 }
 
 @media (min-width: 1024px) {
   .inner {
-    flex-direction: row;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     align-items: center;
-    justify-content: space-between;
     gap: 4rem;
-  }
-
-  .info {
-    max-width: 50%;
   }
 }

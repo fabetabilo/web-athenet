@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { TransitionLink, useTransitionHold } from '../../components/transition'
 import { useEffect, useState } from 'react'
-import { ArrowRight, Building2, ChevronLeft, MapPin, Users } from '../../components/ui/icons'
+import { ArrowRight, Building2, ChevronLeft, MapPin, Users } from '../../components/icons'
 import { getInstitutionById } from '../../service/institutionsApi'
 import styles from './InstitutionDetail.module.css'
 
@@ -8,6 +9,8 @@ export default function InstitutionDetail() {
   const { id } = useParams()
   const [institution, setInstitution] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  useTransitionHold(loading)
 
   useEffect(() => {
     let mounted = true
@@ -32,7 +35,7 @@ export default function InstitutionDetail() {
     return (
       <main className={styles.notFound}>
         <h1>Institución no encontrada</h1>
-        <Link to="/institutions">Volver a instituciones</Link>
+        <TransitionLink to="/institutions">Volver a instituciones</TransitionLink>
       </main>
     )
   }
@@ -48,9 +51,9 @@ export default function InstitutionDetail() {
     <main className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <Link to="/institutions" className={styles.backLink}>
+          <TransitionLink to="/institutions" className={styles.backLink}>
             <ChevronLeft aria-hidden="true" /> Todas las instituciones
-          </Link>
+          </TransitionLink>
           <div className={styles.heroContent}>
             <div>
               <span className={styles.eyebrow}>INSTITUCIÓN ATHENET</span>
@@ -88,7 +91,7 @@ export default function InstitutionDetail() {
             <span className={styles.liveDot}>{institution.active ? 'ACTIVA' : 'INACTIVA'}</span>
             <h2>La comunidad deportiva se mueve en {institution.city}.</h2>
             <p>{institution.sedes.length ? `${institution.sedes.length} sede${institution.sedes.length === 1 ? '' : 's'} registrada${institution.sedes.length === 1 ? '' : 's'} en el microservicio.` : 'Aun no hay sedes registradas.'}</p>
-            <Link to="/institutions" className={styles.actionLink}>Volver al listado <ArrowRight aria-hidden="true" /></Link>
+            <TransitionLink to="/institutions" className={styles.actionLink}>Volver al listado <ArrowRight aria-hidden="true" /></TransitionLink>
           </div>
         </article>
 

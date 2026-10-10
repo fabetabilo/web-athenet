@@ -60,5 +60,5 @@ Levanta el proyecto en tu entorno local:
 
 ##### Dependencias principales:
 - react-router-dom
-- lucide-react
+- react-icons
 - axios

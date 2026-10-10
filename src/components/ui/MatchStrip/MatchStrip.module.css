@@ -1,0 +1,252 @@
+.section {
+  background: var(--color-ink);
+  padding: var(--spacing-xsm) 0;
+  overflow: hidden;
+}
+
+.inner {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+}
+
+.panel {
+  background: var(--color-ink);
+  transform: skewX(var(--skew-diagonal));
+}
+
+/* --- cabecera: nombre de la competencia ---------------------------------- */
+.titleBar {
+  padding-bottom: 0.5rem var(--spacing-sm);
+}
+
+.title {
+  display: inline-block;
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  transform: skewX(calc(var(--skew-diagonal) * -1));
+}
+
+.bar {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.track {
+  display: flex;
+  align-items: stretch;
+  min-height: 5.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  flex-shrink: 0;
+  min-width: 16rem;
+  display: flex;
+  border-left: 1px solid var(--color-border);
+}
+
+/* el primer divisor caeria justo sobre el borde inclinado de la barra */
+.item:first-child {
+  border-left: none;
+}
+
+/* .item.ctaCell (0-2-0) le gana a .item (0-1-0) sin depender del orden de las
+   reglas: el boton se mantiene a su ancho natural, no al de una card. */
+.item.ctaCell {
+  min-width: auto;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--spacing-xsm) var(--spacing-md);
+  text-decoration: none;
+  transition: background-color var(--duration-fast) ease;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: -4px; /* hacia adentro: el borde de la celda es diagonal */
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.3rem;
+  font-family: var(--font-primary);
+  white-space: nowrap;
+  transform: skewX(calc(var(--skew-diagonal) * -1));
+}
+
+.headerTop,
+.headerBottom {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+/* sin esto la card finalizada pierde una linea y se descalza de las pendientes */
+.headerBottom:empty::after {
+  content: '\00a0';
+  font-size: var(--text-xs);
+}
+
+.phase {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.status {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.time {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.date {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(3.5rem, auto) minmax(1.5rem, 1fr);
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.3rem;
+}
+
+.crest {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--color-border);
+}
+
+.crestImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.acronym {
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.score {
+  justify-self: end;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- pills propias para estados del match ------------------------------------------------ */
+.pill {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pillToday {
+  background: var(--color-red);
+}
+
+.pillTomorrow {
+  background: var(--color-secondary);
+}
+
+.ctaCell {
+  align-items: center;
+  padding-inline: var(--spacing-sm);
+}
+
+.ctaInner {
+  transform: skewX(calc(var(--skew-diagonal) * -1));
+}
+
+/* dos clases: le gana al .base de Button sin depender del orden de los modulos */
+.ctaInner .ctaButton {
+  padding: 0.75rem 1.5rem;
+  font-size: var(--text-sm);
+}
+
+/* --- responsivo ----------------------------------------------------------- */
+@media (max-width: 640px) {
+  .track {
+    min-height: 5rem;
+  }
+
+  .titleBar,
+  .link {
+    padding-inline: var(--spacing-sm);
+  }
+
+  .item {
+    min-width: 10rem;
+  }
+
+  .teams {
+    grid-template-columns: 1.125rem minmax(3rem, auto) minmax(1.25rem, 1fr);
+    column-gap: 0.5rem;
+  }
+
+  .crest {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .acronym,
+  .score {
+    font-size: var(--text-sm);
+  }
+
+  .ctaCell {
+    padding-inline: var(--spacing-xsm);
+  }
+
+  .ctaInner .ctaButton {
+    padding: 0.625rem 1.125rem;
+  }
+}

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { institutions as institutionsMock } from '../data/institutions'
+import { institutions as institutionsMock } from '../data/demo/institutions'
 
 const BASE_URL = import.meta.env.VITE_INSTITUTIONS_API_URL || ''
 const FORCED_MOCK = import.meta.env.VITE_USE_INSTITUTION_MOCKS === 'true'
