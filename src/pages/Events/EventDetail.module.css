@@ -100,20 +100,6 @@
   text-overflow: ellipsis;
 }
 
-.pill {
-  background: var(--color-tertiary);
-  color: var(--text-dark);
-  font-family: var(--font-condensed);
-  font-size: var(--text-sm);
-  font-weight: 700;
-  padding: 0.25rem 1rem;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: inline-block;
-  white-space: nowrap;
-}
-
 
 @media (max-width: 768px) {
   .bannerFooter {

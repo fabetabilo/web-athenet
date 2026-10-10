@@ -2,19 +2,10 @@ import { useState, useEffect } from 'react'
 import { useTransitionNavigate, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
-import ViewToggle from '../../components/ui/ViewToggle/ViewToggle'
 import ButtonAction from '../../components/ui/Button/ButtonAction'
 import { OfficialIconH, ArrowRight } from '../../components/icons'
 import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
-
-/**
- * Opciones de vista disponibles.
- */
-const VIEW_OPTIONS = [
-  { value: 'grid', label: 'GRID' },
-  { value: 'list', label: 'LISTA' },
-]
 
 export default function Events() {
   const [publicEvents, setPublicEvents] = useState([])
@@ -50,11 +41,28 @@ export default function Events() {
 
           {/* Toolbar: contador de eventos + toggle de vista */}
           <div className={styles.toolbar}>
-            <ViewToggle
-              options={VIEW_OPTIONS}
-              value={view}
-              onChange={setView}
-            />
+            <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
+              <label className={styles.viewOption}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="grid"
+                  checked={view === 'grid'}
+                  onChange={() => setView('grid')}
+                />
+                GRID
+              </label>
+              <label className={styles.viewOption}>
+                <input
+                  type="radio"
+                  name="view"
+                  value="list"
+                  checked={view === 'list'}
+                  onChange={() => setView('list')}
+                />
+                LISTA
+              </label>
+            </div>
           </div>
 
           {/* Vista grid */}

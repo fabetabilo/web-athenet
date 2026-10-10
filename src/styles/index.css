@@ -13,7 +13,7 @@
   --color-cyan: #00C8FF;
   --color-red: #D82028;
   --color-secondary: #007AE5;
-  --color-tertiary: #ffd700;
+  --color-tertiary: #ff6810;
 
   --color-local: var(--bg-light);
   --color-visitor: var(--color-local);
@@ -26,6 +26,8 @@
   --text-dark-muted: #555555;
 
   --color-border: rgba(255, 255, 255, 0.07);
+
+  --color-scrim: rgba(0, 0, 0, 0.6);
 
   /* Typography */
   --font-heading: 'Barlow Semi Condensed', sans-serif;
@@ -47,7 +49,7 @@
   --text-lg: clamp(1.125rem, 3vw, 2.2rem);
 
   --heading-md: clamp(2rem, 4vw, 3rem);
-  --heading-sm: clamp(1.5rem, 4vw, 2.1rem);
+  --heading-sm: clamp(1.5rem, 3vw, 2.5rem);
 
   /* Bordes especificos reutilizables */
   --radius-sm: 8px;

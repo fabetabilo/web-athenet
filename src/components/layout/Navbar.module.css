@@ -73,7 +73,7 @@
   left: -8px;
   right: -8px;
   height: 4px;
-  background: var(--color-red);
+  background: var(--color-tertiary);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
@@ -288,7 +288,7 @@ Tambien es la zona clickable para cerrar */
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--color-scrim);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -362,7 +362,7 @@ Tambien es la zona clickable para cerrar */
 
 /* La capa de delante que porta el contenido */
 .layerMain {
-  background: var(--color-navy);
+  background: var(--color-ink);
   z-index: 5;
   --delay-open: calc(4 * var(--drawer-stagger));
   --delay-close: 0ms;

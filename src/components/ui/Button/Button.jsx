@@ -9,6 +9,12 @@ const VARIANTS = {
   solid: styles.solid,
 };
 
+// el tamano por defecto vive en .base; md solo lo sobreescribe
+const SIZES = {
+  lg: '',
+  md: styles.md,
+};
+
 /**
  * Componente Button reutilizable para la interfaz de usuario.
  * Renderiza dinámicamente una etiqueta `<a>` si se recibe la prop `href`, 
@@ -22,6 +28,9 @@ const VARIANTS = {
  *   - 'dark': Diseñado para usarse sobre fondos oscuros (renderiza bordes y texto claros).
  *   - 'accent': Variante llamativa que usa --color-cyan de fondo y texto negro, cambiando a fondo blanco en hover.
  *   - 'solid': Relleno blanco con texto negro, que se invierte a relleno negro con texto blanco en hover (borde siempre blanco).
+ * @param {'lg'|'md'} [props.size='lg'] - Escala del botón.
+ *   - 'lg': tamaño por defecto.
+ *   - 'md': version compacta (menos padding y tipografia mas chica).
  * @param {boolean} [props.showArrow=false] - Determina si se debe mostrar el ícono `ArrowRight` a la derecha del contenido.
  * @param {string} [props.to] - Ruta interna. Su presencia cambia el elemento raíz al link del router,
  *   que respeta el `basename` y pasa por la pantalla de transición. Usar siempre esto para rutas propias.
@@ -29,15 +38,16 @@ const VARIANTS = {
  *   no usarlo para rutas internas.
  * @param {string} [props.className] - Clases CSS adicionales para sobrescribir o extender estilos.
  */
-export default function Button({ children, variant = 'light', showArrow = false, to, href, className = '', ...props }) {
+export default function Button({ children, variant = 'light', size = 'lg', showArrow = false, to, href, className = '', ...props }) {
   const variantClass = VARIANTS[variant] ?? VARIANTS.light;
+  const sizeClass = SIZES[size] ?? SIZES.lg;
   // combina clases 
-  const combinedClasses = `${styles.base} ${variantClass} ${className}`.trim();
+  const combinedClasses = `${styles.base} ${variantClass} ${sizeClass} ${className}`.trim();
 
   const content = (
     <span className={styles.inner}>
       {children}
-      {showArrow && <ArrowRight className={styles.arrow} style={{ width: '1rem', height: '1rem' }} />}
+      {showArrow && <ArrowRight className={styles.arrow} />}
     </span>
   );
 

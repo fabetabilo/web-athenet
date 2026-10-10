@@ -9,13 +9,13 @@
 const BASE_URL = import.meta.env.BASE_URL;
 
 const TEAM_A = {
-  name: 'MAN BLUE',
+  name: 'Man Blue',
   institution: 'Universidad Playa Chica',
   logo: `${BASE_URL}img/upc-t.png`,
 };
 
 const TEAM_B = {
-  name: 'MAN RED',
+  name: 'Man Red',
   institution: 'Universidad de Quilpué',
   logo: `${BASE_URL}img/uq-t.png`,
 };
@@ -35,7 +35,7 @@ export const MOCK_TEAMS = {
  */
 export const getTeamData = (teamId) => {
   return MOCK_TEAMS[teamId] || {
-    name: `EQUIPO ${teamId}`,
+    name: `Equipo Sede ${teamId}`,
     institution: `Institución ${teamId}`,
     logo: `${BASE_URL}img/upc-t.png`,
   };

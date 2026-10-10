@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { TransitionLink, useTransitionHold } from '../../components/transition';
 import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/icons';
 import { getEventById } from '../../service/eventsApi';
+import Pill from '../../components/ui/Pill/Pill';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
 import styles from './EventDetail.module.css';
 
@@ -91,8 +92,7 @@ export default function EventDetail() {
               <span className={styles.itemText}>{event.formattedDate}</span>
             </div>
             <div className={styles.footerItem}>
-              
-              <div className={styles.pill}>{event.categoryLabel}</div>
+              <Pill>{event.categoryLabel}</Pill>
             </div>
           </div>
         </div>

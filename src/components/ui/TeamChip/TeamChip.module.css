@@ -49,9 +49,8 @@
   transition: color var(--duration-fast) ease;
   font-family: var(--font-primary);
   font-size: var(--text-base);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   white-space: nowrap;
 }
 

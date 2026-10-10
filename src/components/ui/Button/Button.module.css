@@ -9,7 +9,7 @@
   font-family: var(--font-primary);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -26,6 +26,24 @@
 
 .arrow {
   flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* tamano MD: version compacta del boton */
+.md {
+  padding: 0.625rem 1.5rem;
+  font-size: var(--text-base);
+  letter-spacing: 0.04em;
+}
+
+.md .inner {
+  gap: 0.5rem;
+}
+
+.md .arrow {
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 /* variante LIGHT para fondos claros */
@@ -124,8 +142,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .solid:hover {
-    background: var(--text-dark);
+    background: var(--color-ink);
     color: #fff;
-    border-color: #fff;
+    border-color: var(--color-ink)
   }
 }

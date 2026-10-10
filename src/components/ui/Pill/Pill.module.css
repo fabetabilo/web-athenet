@@ -1,0 +1,13 @@
+.base {
+  display: inline-block;
+  background: var(--color-tertiary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 0.25rem 1rem;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}

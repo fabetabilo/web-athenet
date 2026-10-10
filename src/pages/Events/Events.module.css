@@ -19,32 +19,31 @@
   margin-bottom: var(--spacing-md);
 }
 
+/* radios nativos: solo el espaciado que el reset global quita y el color sobre fondo claro */
+.viewToggle {
+  display: flex;
+  gap: 1rem;
+  color: var(--text-dark);
+  font-size: var(--text-base);
+}
+
+.viewOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
 /* ---- Vista Grid ---- */
+/* Una sola columna: las EventCard son banners a ancho completo. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 2rem;
-}
-
-/*
-  Fuerza las EventCards a ocupar el 100% de la celda.
-  EventCard usa width: var(--card-width) del contexto del carrusel;
-  aquí lo sobreescribimos sin modificar el componente.
-*/
-.grid>* {
-  width: 100%;
-}
-
-
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 600px) {
   .grid {
-    grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
 
