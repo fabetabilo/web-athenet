@@ -1,8 +1,9 @@
 import { MapPin, OfficialIconH } from '../../icons'
 import Button from '../Button/Button'
+import Countdown from '../Countdown/Countdown'
 import Pill from '../Pill/Pill'
 import TeamChipList from '../TeamChip/TeamChipList'
-import styles from './Event.module.css'
+import styles from './EventCard.module.css'
 
 /**
  * EventCard
@@ -10,8 +11,9 @@ import styles from './Event.module.css'
  *
  * @param {import('../../../utils/normalizeEvent').NormalizedEvent} event - Evento ya normalizado
  * @param {boolean} isPrincipal - Si es la card activa/principal del carrusel
+ * @param {boolean} showCountdown - Muestra la cuenta regresiva junto al boton (no se usa en el carrusel del home)
  */
-export default function EventCard({ event, isPrincipal = false }) {
+export default function EventCard({ event, isPrincipal = false, showCountdown = false }) {
   return (
     <article className={`${styles.card} ${isPrincipal ? styles.principalCard : ''}`}>
       <img src={event.image} alt={event.title} className={styles.cardImage} />
@@ -41,16 +43,20 @@ export default function EventCard({ event, isPrincipal = false }) {
           <TeamChipList event={event} />
         </div>
 
-        <Button
-          variant="solid"
-          size="md"
-          showArrow
-          to={`/events/${event.id}`}
-          className={styles.cardAction}
-          aria-label={`Ver detalles de ${event.title}`}
-        >
-          Más Información
-        </Button>
+        <div className={styles.cardFooter}>
+          <Button
+            variant="solid"
+            size="md"
+            showArrow
+            to={`/events/${event.id}`}
+            className={styles.cardAction}
+            aria-label={`Ver detalles de ${event.title}`}
+          >
+            Más Información
+          </Button>
+
+          {showCountdown && <Countdown date={event.eventDate} size="sm" />}
+        </div>
       </div>
     </article>
   )

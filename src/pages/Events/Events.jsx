@@ -72,7 +72,7 @@ export default function Events() {
           {view === 'grid' && (
             <div className={styles.grid}>
               {publicEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} showCountdown />
               ))}
             </div>
           )}
