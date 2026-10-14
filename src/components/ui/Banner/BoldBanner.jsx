@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './BoldBanner.module.css'
 
 const VARIANTS = {

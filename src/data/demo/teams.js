@@ -2,8 +2,8 @@
  * Mock de equipos
  * 
  * Diccionario temporal estatico para resolver el nombre, emblema y color de un equipo a partir
- * de su ID. Se inyecta en normalizeEvent: ningun componente lo importa. Se utilizan 2 equipos de muestra con logos de placeholder, 
- * los cuales deben ser reemplazados por los reales.
+ * de su ID. Solo resuelve eventos mock; los reales se resuelven con ms-institution (ver eventsApi).
+ * Se utilizan 2 equipos de muestra con logos de placeholder.
  */
 
 const BASE_URL = import.meta.env.BASE_URL;

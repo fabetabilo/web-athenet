@@ -13,7 +13,9 @@ export default function TeamChip({ team }) {
   return (
     <TransitionLink to={`/teams/${team.id}`} className={styles.chip}>
       <span className={styles.avatar}>
-        <img src={team.logo} alt="" className={styles.logo} />
+        {team.logo
+          ? <img src={team.logo} alt="" className={styles.logo} />
+          : <span className={styles.initial} aria-hidden="true">{team.acronym.charAt(0)}</span>}
       </span>
       <span className={styles.name}>{team.name ?? team.acronym}</span>
       <ArrowRight className={styles.arrow} aria-hidden="true" />

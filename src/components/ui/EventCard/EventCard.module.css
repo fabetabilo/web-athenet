@@ -106,7 +106,14 @@
   display: contents;
 }
 
-.cardAction {
+/* boton a la izquierda, contador (opcional) a la derecha */
+.cardFooter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  width: 100%;
   margin-top: var(--spacing-xsm);
 }
 
@@ -118,5 +125,10 @@
 
   .cardContent {
     max-width: none;
+  }
+
+  /* el contador baja bajo el boton y queda alineado a la izquierda */
+  .cardFooter {
+    justify-content: flex-start;
   }
 }
