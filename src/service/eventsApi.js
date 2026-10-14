@@ -4,6 +4,7 @@ import { nextEvents as nextEventsMock } from '../data/demo/eventsNext'
 import { nextEvent as nextEventMock } from '../data/demo/eventFeatured'
 import { allEvents as allEventsMock } from '../data/demo/eventsAll'
 import { resolveTeam } from '../data/demo/teams'
+import { resolveSport } from '../data/demo/sports'
 /**
  * @file eventsApi.js
  * Servicio de consumo para ms-events con fallback a mocks locales en caso de no haber llamada a apis reales
@@ -86,11 +87,11 @@ async function requestWithFallback(endpoint, fallbackData, normalizer, config = 
 
 
 /**
- * Normalizador con el diccionario de equipos ya inyectado.
+ * Normalizador con los diccionarios de equipos y deportes ya inyectados.
  * Nunca pasar normalizeEvent desnudo a .map: el indice del array llegaria como
- * resolveTeam y los equipos se resolverian por 0, 1, 2... en vez de por su id.
+ * segundo argumento en lugar de los resolvers.
  */
-const normalize = (raw) => normalizeEvent(raw, resolveTeam)
+const normalize = (raw) => normalizeEvent(raw, { resolveTeam, resolveSport })
 
 
 // --- Funciones del Servicio -----------------------------------------------------

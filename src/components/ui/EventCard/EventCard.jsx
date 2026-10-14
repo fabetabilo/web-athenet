@@ -20,7 +20,7 @@ export default function EventCard({ event, isPrincipal = false, showCountdown = 
 
       <div className={styles.cardContent}>
         <div className={styles.cardTop}>
-          <Pill>{event.categoryLabel}</Pill>
+          {event.sportLabel && <Pill>{event.sportLabel}</Pill>}
           {event.isOfficial && (
             <OfficialIconH className={styles.officialBadgeImg} aria-label="Evento oficial verificado" />
           )}
@@ -55,7 +55,7 @@ export default function EventCard({ event, isPrincipal = false, showCountdown = 
             Más Información
           </Button>
 
-          {showCountdown && <Countdown date={event.eventDate} size="sm" />}
+          {showCountdown && <Countdown date={event.startsAt} size="sm" />}
         </div>
       </div>
     </article>

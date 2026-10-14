@@ -18,7 +18,7 @@ export default function EventCountdown({ event }) {
       <div className={styles.inner}>
         <div className={styles.main}>
           <span className={styles.label}>Próxima Fecha</span>
-          <Countdown date={event.eventDate} size="lg" />
+          <Countdown date={event.startsAt} size="lg" />
 
           <h2 className={styles.title}>{event.title}</h2>
           <p className={styles.location}>

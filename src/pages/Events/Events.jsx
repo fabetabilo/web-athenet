@@ -81,7 +81,7 @@ export default function Events() {
             <Table minWidth="54rem" label="Listado de eventos">
               <TableHead>
                 <TableRow>
-                  <TableHeadCell>CATEGORÍA</TableHeadCell>
+                  <TableHeadCell>DEPORTE</TableHeadCell>
                   <TableHeadCell>EVENTO</TableHeadCell>
                   <TableHeadCell>ENCUENTRO</TableHeadCell>
                   <TableHeadCell>CIUDAD</TableHeadCell>
@@ -93,7 +93,7 @@ export default function Events() {
               <TableBody>
                 {publicEvents.map((event) => (
                   <TableRow key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
-                    <TableCell>{event.categoryLabel}</TableCell>
+                    <TableCell>{event.sportLabel || '-'}</TableCell>
                     <TableCell variant="strong">{event.title}</TableCell>
                     <TableCell>
                       {event.hasTeams ? <TeamMatchup event={event} /> : '-'}

@@ -2,13 +2,19 @@ import { useState, useEffect } from 'react'
 import styles from './Countdown.module.css'
 
 /**
- * Calcula el tiempo restante hacia una fecha ISO "YYYY-MM-DD".
- * Se usa `isoDate + 'T00:00:00'`
- * @param {string} isoDate - Fecha en formato "YYYY-MM-DD"
+ * Arma la fecha en hora local por componentes: el backend no envia zona horaria.
+ * @param {string} dateTime - "YYYY-MM-DDTHH:mm"
  */
-function getTimeLeft(isoDate) {
-  const target = new Date(isoDate + 'T00:00:00')
-  const diff = target - Date.now()
+function parseLocalDateTime(dateTime) {
+  const [datePart, timePart = '00:00'] = dateTime.split('T')
+  const [year, month, day] = datePart.split('-').map(Number)
+  const [hours, minutes] = timePart.split(':').map(Number)
+  return new Date(year, month - 1, day, hours || 0, minutes || 0)
+}
+
+/** @param {string} dateTime - "YYYY-MM-DDTHH:mm" */
+function getTimeLeft(dateTime) {
+  const diff = parseLocalDateTime(dateTime) - Date.now()
   if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
   return {
     days:    Math.floor(diff / 86400000),
@@ -23,7 +29,7 @@ function getTimeLeft(isoDate) {
  * la sección EventCountdown y cards de evento.
  *
  * @param {Object} props
- * @param {string} props.date - Fecha objetivo en formato ISO "YYYY-MM-DD"
+ * @param {string} props.date - Fecha y hora objetivo, "YYYY-MM-DDTHH:mm" (la hora es opcional)
  * @param {'sm'|'lg'} [props.size] - 'lg' para la sección, 'sm' para cards
  * @param {string} [props.className]
  */

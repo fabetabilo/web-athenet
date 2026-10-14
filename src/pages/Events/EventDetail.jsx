@@ -91,9 +91,11 @@ export default function EventDetail() {
               {/* Fecha: migrada a formattedDate (ISO normalizado, timezone-safe) */}
               <span className={styles.itemText}>{event.formattedDate}</span>
             </div>
-            <div className={styles.footerItem}>
-              <Pill>{event.categoryLabel}</Pill>
-            </div>
+            {event.sportLabel && (
+              <div className={styles.footerItem}>
+                <Pill>{event.sportLabel}</Pill>
+              </div>
+            )}
           </div>
         </div>
       </div>
