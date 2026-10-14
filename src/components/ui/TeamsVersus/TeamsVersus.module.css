@@ -33,6 +33,20 @@
   margin-bottom: 0.75rem;
 }
 
+.teamLogoFallback {
+  display: grid;
+  place-items: center;
+  width: clamp(60px, 15vw, 120px);
+  height: clamp(60px, 15vw, 120px);
+  margin-bottom: 0.75rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  color: var(--text-dark);
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-sm), 3vw, var(--text-lg));
+  font-weight: var(--font-heading-weight);
+}
+
 .teamName {
   font-family: var(--font-heading);
   font-size: var(--text-lg);

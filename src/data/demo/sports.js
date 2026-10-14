@@ -1,8 +1,8 @@
 /**
  * Mock del catalogo de deportes (Deporte de ms-institution).
  *
- * ms-events solo entrega sportId; este diccionario lo resuelve a nombre y se
- * inyecta en normalizeEvent, igual que el de equipos.
+ * Solo resuelve el sportId de eventos mock; sus IDs no corresponden a los reales.
+ * Los eventos reales se resuelven con ms-institution (ver eventsApi).
  */
 export const MOCK_SPORTS = {
   1: 'Fútbol',

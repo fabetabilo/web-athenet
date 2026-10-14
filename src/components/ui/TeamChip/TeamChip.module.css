@@ -44,6 +44,14 @@
   object-fit: contain;
 }
 
+.initial {
+  color: var(--chip-accent);
+  font-family: var(--font-primary);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1;
+}
+
 .name {
   color: var(--chip-accent);
   transition: color var(--duration-fast) ease;

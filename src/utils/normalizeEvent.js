@@ -152,7 +152,7 @@ function splitDisplayDate(isoDate) {
  * @property {number|null} organizerTeamId
  */
 
-/** Equipo sin resolver: el default cuando nadie inyecta resolveTeam. */
+/** Equipo sin resolver: sin resolver inyectado o id ausente en el catalogo. */
 const UNKNOWN_TEAM = (id) => ({ id, name: null, acronym: '—', institution: null, logo: null })
 
 /** Recorta "HH:mm:ss" a "HH:mm"; null si no viene. */
@@ -161,12 +161,13 @@ const toHourMinute = (time) => (time ? String(time).slice(0, 5) : null)
 /**
  * @param {Object} rawEvent
  * @param {Object} [resolvers] Se inyectan para que ningun componente tenga que importar los diccionarios.
- * @param {(id: number) => TeamRef} [resolvers.resolveTeam] Resuelve nombre, sigla y escudo por id.
- * @param {(id: number) => string|null} [resolvers.resolveSport] Resuelve el nombre del deporte por id.
+ * @param {(id: number) => TeamRef|undefined} [resolvers.resolveTeam] Resuelve nombre, sigla y escudo por id.
+ * @param {(id: number) => string|undefined} [resolvers.resolveSport] Resuelve el nombre del deporte por id.
  * @returns {NormalizedEvent}
  */
-export function normalizeEvent(rawEvent, { resolveTeam = UNKNOWN_TEAM, resolveSport = () => null } = {}) {
+export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSport = () => null } = {}) {
   const startTime = toHourMinute(rawEvent.startTime)
+  const toTeam = (id) => (id != null ? resolveTeam(id) ?? UNKNOWN_TEAM(id) : null)
 
   const hasTeams =
     rawEvent.teamOneId != null &&
@@ -203,7 +204,7 @@ export function normalizeEvent(rawEvent, { resolveTeam = UNKNOWN_TEAM, resolveSp
     type:       rawEvent.type,
     typeLabel:  TYPE_LABELS[rawEvent.type] ?? rawEvent.type,
     sportId:    rawEvent.sportId ?? null,
-    sportLabel: rawEvent.sportId != null ? resolveSport(rawEvent.sportId) : null,
+    sportLabel: rawEvent.sportId != null ? resolveSport(rawEvent.sportId) ?? null : null,
     // Estado
     status:      rawEvent.status,
     statusLabel: STATUS_LABELS[rawEvent.status] ?? rawEvent.status,
@@ -214,8 +215,8 @@ export function normalizeEvent(rawEvent, { resolveTeam = UNKNOWN_TEAM, resolveSp
     hasTeams,
     teamOneId: rawEvent.teamOneId ?? null,
     teamTwoId: rawEvent.teamTwoId ?? null,
-    teamOne: rawEvent.teamOneId != null ? resolveTeam(rawEvent.teamOneId) : null,
-    teamTwo: rawEvent.teamTwoId != null ? resolveTeam(rawEvent.teamTwoId) : null,
+    teamOne: toTeam(rawEvent.teamOneId),
+    teamTwo: toTeam(rawEvent.teamTwoId),
     // Misc
     location:       rawEvent.location ?? null,
     address:        rawEvent.address ?? null,

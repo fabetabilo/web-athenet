@@ -10,7 +10,9 @@ function Side({ team }) {
   return (
     <span className={styles.side}>
       <span className={styles.avatar}>
-        <img src={team.logo} alt="" className={styles.logo} />
+        {team.logo
+          ? <img src={team.logo} alt="" className={styles.logo} />
+          : <span className={styles.initial} aria-hidden="true">{team.acronym.charAt(0)}</span>}
       </span>
       <span className={styles.acronym}>{team.acronym}</span>
     </span>
