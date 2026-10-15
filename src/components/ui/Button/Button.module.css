@@ -30,6 +30,11 @@
   height: 1rem;
 }
 
+.base:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 /* tamano MD: version compacta del boton */
 .md {
   padding: 0.625rem 1.5rem;

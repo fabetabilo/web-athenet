@@ -1,41 +1,78 @@
 import { useId, useState } from 'react';
 import styles from './NewsletterForm.module.css';
 import Button from '../Button/Button';
+import { useTurnstile } from '../Turnstile/useTurnstile';
+import { subscribe } from '../../../service/notificationsApi';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const ERROR_MESSAGES = {
+  invalid: 'Revisa el correo: no parece una dirección válida.',
+  captcha: 'No pudimos verificar que no eres un bot. Intenta de nuevo.',
+  rate: 'Demasiados intentos. Espera unos minutos y vuelve a probar.',
+  unavailable: 'El servicio no está disponible ahora. Intenta más tarde.',
+};
+
+const STATUS_MESSAGES = {
+  loading: 'Enviando…',
+  ok: 'Revisa tu correo para confirmar la suscripción.',
+};
+
 /**
- * Formulario de suscripcion al correo: input
+ * Formulario de suscripcion al correo, protegido con Turnstile.
  * Al escribir el primer caracter despliega los terminos; el hueco de esos
  * terminos esta siempre reservado, asi el contenido de abajo no se mueve.
+ * El exito solo indica que el backend recibio la solicitud: la suscripcion
+ * queda pendiente hasta que se confirme desde el correo.
  *
  * @param {Object} props
- * @param {(email: string) => void} [props.onSubmit] - Se invoca con el correo ya validado.
  * @param {string} [props.className] - Clases adicionales para el formulario.
  */
-export default function NewsletterForm({ onSubmit, className = '' }) {
+export default function NewsletterForm({ className = '' }) {
   const id = useId();
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('idle'); // idle | ok | error
+  const [status, setStatus] = useState('idle'); // idle | loading | ok | error
+  const [errorKind, setErrorKind] = useState(null);
+  const { containerRef, prepare, getToken, reset } = useTurnstile();
 
-  const showLegal = email.length > 0 && status !== 'ok';
+  const isLoading = status === 'loading';
+  const showLegal = email.length > 0 && status === 'idle';
+  const statusMessage = status === 'error'
+    ? ERROR_MESSAGES[errorKind] ?? ERROR_MESSAGES.unavailable
+    : STATUS_MESSAGES[status];
+
+  const fail = (kind) => {
+    setErrorKind(kind);
+    setStatus('error');
+  };
 
   const handleChange = (event) => {
     setEmail(event.target.value);
     setStatus('idle');
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (isLoading) return;
 
-    if (!EMAIL_PATTERN.test(email.trim())) {
-      setStatus('error');
+    const value = email.trim();
+    if (!EMAIL_PATTERN.test(value)) {
+      fail('invalid');
       return;
     }
 
-    onSubmit?.(email.trim());
-    setStatus('ok');
-    setEmail('');
+    setStatus('loading');
+    try {
+      const turnstileToken = await getToken();
+      await subscribe({ email: value, turnstileToken });
+      setStatus('ok');
+      setEmail('');
+    } catch (error) {
+      // los errores de Turnstile no traen kind; los del servicio si
+      fail(error.kind ?? 'captcha');
+    } finally {
+      reset();
+    }
   };
 
   return (
@@ -52,12 +89,21 @@ export default function NewsletterForm({ onSubmit, className = '' }) {
           name="email"
           value={email}
           onChange={handleChange}
+          onFocus={prepare}
+          readOnly={isLoading}
           placeholder="Ingresa tu correo"
           autoComplete="email"
           aria-describedby={`${id}-legal`}
-          aria-invalid={status === 'error' || undefined}
+          aria-invalid={(status === 'error' && errorKind === 'invalid') || undefined}
         />
-        <Button type="submit" variant="solid" showArrow className={styles.submit}>
+        <Button
+          type="submit"
+          variant="solid"
+          showArrow
+          className={styles.submit}
+          disabled={isLoading}
+          aria-busy={isLoading || undefined}
+        >
           Suscribirme
         </Button>
       </div>
@@ -77,10 +123,11 @@ export default function NewsletterForm({ onSubmit, className = '' }) {
           role="status"
           aria-live="polite"
         >
-          {status === 'ok' && '¡Listo! Te escribiremos pronto.'}
-          {status === 'error' && 'Revisa el correo: no parece una dirección válida.'}
+          {statusMessage}
         </p>
       </div>
+
+      <div ref={containerRef} className={styles.captcha} />
     </form>
   );
 }
