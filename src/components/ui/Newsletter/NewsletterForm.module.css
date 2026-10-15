@@ -142,3 +142,9 @@
     transition: none;
   }
 }
+
+/* Turnstile interaction-only: solo ocupa espacio si Cloudflare pide un desafio */
+.captcha {
+  display: flex;
+  justify-content: center;
+}
