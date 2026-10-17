@@ -10,6 +10,7 @@ import Events from './pages/Events/Events'
 import EventDetail from './pages/Events/EventDetail'
 import Institutions from './pages/Institutions/Institutions'
 import InstitutionDetail from './pages/Institutions/InstitutionDetail'
+import Rankings from './pages/Rankings/Rankings'
 import ConfirmSubscription from './pages/Subscription/ConfirmSubscription'
 
 function AppShell() {
@@ -45,6 +46,7 @@ function AppShell() {
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/institutions" element={<Institutions />} />
           <Route path="/institutions/:id" element={<InstitutionDetail />} />
+          <Route path="/rankings" element={<Rankings />} />
           <Route path="/suscripcion/confirmar" element={<ConfirmSubscription />} />
         </Routes>
       </main>

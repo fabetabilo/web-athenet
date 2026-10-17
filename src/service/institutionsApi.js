@@ -113,6 +113,21 @@ export async function getSportsById() {
   return (await loadCatalog()).sportsById
 }
 
+/**
+ * Instituciones reales indexadas por id (String), con nombre, sigla y logo.
+ * Rechaza si ms-institution no esta disponible.
+ * @returns {Promise<Map<string, { id: number, name: string, acronym: string, logo: string|null }>>}
+ */
+export async function getInstitutionsById() {
+  const { institutions } = await loadCatalog()
+  return new Map(institutions.map((institution) => [String(institution.id), {
+    id: institution.id,
+    name: institution.nombre,
+    acronym: institution.sigla,
+    logo: institution.imagenUrl || null,
+  }]))
+}
+
 // --- Instituciones -------------------------------------------------------------
 
 function normalizeFallbackInstitution(institution) {

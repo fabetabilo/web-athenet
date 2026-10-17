@@ -1,0 +1,264 @@
+.page {
+  min-height: 100vh;
+}
+
+.content {
+  background: var(--bg-light);
+  padding: var(--spacing-md) 0 4rem;
+}
+
+.container {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.updated {
+  color: var(--text-dark-muted);
+  font-size: var(--text-base);
+}
+
+.updated time {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Filtro de deporte: mismo lenguaje que Pill (mayusculas, esquinas rectas) */
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterBtn {
+  padding: 0.25rem 1rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.filterBtnActive {
+  border-color: var(--color-tertiary);
+  background: var(--color-tertiary);
+  color: var(--text-primary);
+}
+
+.filterBtn:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .filterBtn:not(.filterBtnActive):hover {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+  }
+}
+
+.busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Cabecera y celdas alineadas al mismo padding horizontal */
+.table th {
+  padding-inline: 0.75rem;
+}
+
+.rank {
+  color: var(--color-tertiary);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.entity {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.teamName {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.institutionName {
+  font-size: var(--text-base);
+}
+
+.points {
+  font-size: 1.125rem;
+}
+
+.record {
+  color: var(--text-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Avatares ---- */
+.avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--bg-light);
+  box-shadow: 0 0 0 1px var(--color-border-light);
+}
+
+.avatar_lg { width: 2.5rem; height: 2.5rem; }
+.avatar_md { width: 2rem; height: 2rem; }
+.avatar_xs { width: 1.25rem; height: 1.25rem; }
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.avatarInitial {
+  color: var(--text-dark-muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---- Ultimo partido: dos equipos apilados, ganador en negrita ---- */
+.match {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 14rem;
+  max-width: 18rem;
+}
+
+.matchSide {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.matchName {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.winner {
+  font-weight: 700;
+}
+
+.loser {
+  color: var(--text-dark-muted);
+}
+
+.score {
+  display: grid;
+  place-items: center;
+  min-width: 1.75rem;
+  height: 1.5rem;
+  padding-inline: 0.35rem;
+  background: var(--bg-light-alt);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  color: var(--text-dark-muted);
+  font-size: var(--text-base);
+}
+
+/* ---- Desplegable de competencias ---- */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.toggle {
+  color: var(--color-tertiary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.rowOpen {
+  background: var(--color-cyan-muted);
+}
+
+.table .detailCell {
+  padding: 1.25rem 1.5rem 1.5rem;
+  background: rgba(8, 11, 20, 0.03);
+}
+
+.detailTitle {
+  margin-bottom: 0.75rem;
+  color: var(--text-dark-muted);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.compList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.compCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-light);
+  border: 1px solid var(--color-border-light);
+}
+
+.compText {
+  display: grid;
+  min-width: 0;
+}
+
+.compName {
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: var(--text-base);
+}
+
+.compDate {
+  color: var(--text-dark-muted);
+  font-size: var(--text-sm);
+}
+
+.panelMessage {
+  color: var(--text-dark-muted);
+  font-size: var(--text-base);
+}
+
