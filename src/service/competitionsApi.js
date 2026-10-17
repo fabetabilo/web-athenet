@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { normalizeMatch, sortForStrip } from '../utils/normalizeMatch'
+import { normalizeCompetitionList } from '../utils/normalizeCompetition'
+import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
 import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
 import { resolveInstitution } from '../data/demo/institutionDirectory'
 /**
@@ -26,6 +28,7 @@ const competitionsClient = axios.create({
 
 // endpoints de api competencias
 export const COMPETITION_ENDPOINTS = {
+    COMPETITIONS: '/competitions',
     LATEST_RESULTS: '/competitions/results/latest',
     COMPETITION_MATCHES: (id) => `/competitions/${id}/matches`,
 }
@@ -114,5 +117,23 @@ export async function getCompetitionMatches(id, config = {}) {
         fallbackRaw,
         normalizeList,
         config
+    )
+}
+
+export const TEAM_COMPETITIONS_LIMIT = 5
+
+/**
+ * Ultimas competencias en las que participo un equipo, mas reciente primero.
+ *
+ * @param {number|string} teamId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition[]>}
+ */
+export async function getTeamCompetitions(teamId, config = {}) {
+    return requestWithFallback(
+        COMPETITION_ENDPOINTS.COMPETITIONS,
+        getMockTeamCompetitions(teamId),
+        normalizeCompetitionList,
+        { ...config, params: { teamId, limit: TEAM_COMPETITIONS_LIMIT } }
     )
 }

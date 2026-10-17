@@ -10,7 +10,7 @@ const MENU_DELAY = 70
 
 const NAV_LINKS = [
   { label: 'Eventos', to: '/events' },
-  { label: 'Rankings', to: '#' },
+  { label: 'Rankings', to: '/rankings' },
   { label: 'Instituciones', to: '/institutions' },
   { label: 'Noticias', to: '#' },
   { label: 'Equipos', to: '#' },
