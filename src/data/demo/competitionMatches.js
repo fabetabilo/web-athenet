@@ -1,180 +1,69 @@
 /**
- * Mock de la competencia y sus encuentros.
+ * Mock de la llave de una copa: 15 partidos de octavos a final.
  *
- * Shape crudo alineado con el modelo que expondria ms-competitions.
+ * Shape crudo alineado con GET /api/public/competitions/{id}/fixture temporalmente.
+ * Los lados traen sigla y escudo inline para que el fallback se vea bien sin
+ * ms-institution; normalizeMatch prefiere el crudo sobre el resolver.
  */
+import { resolveInstitution } from './institutionDirectory'
+
 const COMPETITION = {
-  competitionId: 1,
-  competitionName: 'Torneo Interuniversitario FÚTBOL 2026',
+  id: 1,
+  name: 'Copa Instituciones de Chile 2026',
+  season: '2026',
+  sportId: 5,
+  competitionImg: null,
 }
 
-/** Atajo para no repetir los campos comunes de la competencia en cada fila. */
-const match = (data) => ({ ...COMPETITION, ...data })
+/** Lado del marcador. score null hasta que el delegado carga el resultado. */
+const side = (institutionId, teamId, score = null) => {
+  const { acronym, image } = resolveInstitution(institutionId)
+  return {
+    teamId,
+    institutionId,
+    name: `${acronym} Fútbol`,
+    acronym,
+    logoUrl: image,
+    score,
+  }
+}
+
+/** home y away en null son los que la ronda anterior todavia no define. */
+const match = (id, round, position, date, time, status, home = null, away = null) => ({
+  id,
+  competition: COMPETITION,
+  round,
+  position,
+  date,
+  time,
+  location: 'Santiago, Chile',
+  address: 'Av. España 8',
+  status,
+  home,
+  away,
+})
 
 export const competitionMatches = [
-  // --- 16avos (llave de 32) ---
-  match({
-    internalId: 'MTC-1',
-    phase: 'ROUND_OF_32',
-    category: 'FUTBOL',
-    matchDate: '2026-08-08',
-    matchTime: '15:00',
-    status: 'FINISHED',
-    institutionOneId: 1,
-    institutionTwoId: 4,
-    scoreOne: 3,
-    scoreTwo: 1,
-  }),
-  match({
-    internalId: 'MTC-2',
-    phase: 'ROUND_OF_32',
-    category: 'FUTBOL',
-    matchDate: '2026-08-08',
-    matchTime: '19:30',
-    status: 'FINISHED',
-    institutionOneId: 6,
-    institutionTwoId: 8,
-    scoreOne: 2,
-    scoreTwo: 1,
-  }),
-  match({
-    internalId: 'MTC-3',
-    phase: 'ROUND_OF_32',
-    category: 'FUTBOL',
-    matchDate: '2026-08-09',
-    matchTime: '11:00',
-    status: 'FINISHED',
-    institutionOneId: 2,
-    institutionTwoId: 5,
-    scoreOne: 3,
-    scoreTwo: 0,
-  }),
+  // --- Octavos jugados ---
+  match(1, 'ROUND_OF_16', 1, '2026-10-11', '15:00', 'FINISHED', side(1, 201, 3), side(4, 202, 1)),
+  match(2, 'ROUND_OF_16', 2, '2026-10-11', '19:30', 'FINISHED', side(6, 203, 2), side(8, 204, 1)),
+  match(3, 'ROUND_OF_16', 3, '2026-10-12', '11:00', 'FINISHED', side(2, 205, 3), side(5, 206, 0)),
+  match(4, 'ROUND_OF_16', 4, '2026-10-12', '16:00', 'FINISHED', side(3, 207, 1), side(7, 208, 2)),
 
-  // --- Octavos (llave de 16) ---
-  match({
-    internalId: 'MTC-4',
-    phase: 'ROUND_OF_16',
-    category: 'FUTBOL',
-    matchDate: '2026-08-22',
-    matchTime: '16:00',
-    status: 'FINISHED',
-    institutionOneId: 1,
-    institutionTwoId: 7,
-    scoreOne: 2,
-    scoreTwo: 2,
-  }),
-  match({
-    internalId: 'MTC-5',
-    phase: 'ROUND_OF_16',
-    category: 'FUTBOL',
-    matchDate: '2026-08-22',
-    matchTime: '20:00',
-    status: 'FINISHED',
-    institutionOneId: 3,
-    institutionTwoId: 6,
-    scoreOne: 1,
-    scoreTwo: 2,
-  }),
-  match({
-    internalId: 'MTC-6',
-    phase: 'ROUND_OF_16',
-    category: 'FUTBOL',
-    matchDate: '2026-08-23',
-    matchTime: '12:30',
-    status: 'FINISHED',
-    institutionOneId: 2,
-    institutionTwoId: 8,
-    scoreOne: 2,
-    scoreTwo: 1,
-  }),
+  // --- Octavos por jugar ---
+  match(5, 'ROUND_OF_16', 5, '2026-10-20', '11:00', 'SCHEDULED', side(8, 209), side(1, 210)),
+  match(6, 'ROUND_OF_16', 6, '2026-10-20', '16:00', 'SCHEDULED', side(7, 211), side(2, 212)),
+  match(7, 'ROUND_OF_16', 7, '2026-10-21', '11:00', 'SCHEDULED', side(4, 213), side(6, 214)),
+  match(8, 'ROUND_OF_16', 8, '2026-10-21', '16:00', 'SCHEDULED', side(5, 215), side(3, 216)),
 
-  // --- Cuartos (llave de 8) ---
-  match({
-    internalId: 'MTC-7',
-    phase: 'ROUND_OF_8',
-    category: 'FUTBOL',
-    matchDate: '2026-09-12',
-    matchTime: '17:00',
-    status: 'FINISHED',
-    institutionOneId: 1,
-    institutionTwoId: 3,
-    scoreOne: 1,
-    scoreTwo: 0,
-  }),
-  match({
-    internalId: 'MTC-8',
-    phase: 'ROUND_OF_8',
-    category: 'FUTBOL',
-    matchDate: '2026-09-12',
-    matchTime: '19:00',
-    status: 'FINISHED',
-    institutionOneId: 2,
-    institutionTwoId: 6,
-    scoreOne: 2,
-    scoreTwo: 1,
-  }),
-  match({
-    internalId: 'MTC-9',
-    phase: 'ROUND_OF_8',
-    category: 'FUTBOL',
-    matchDate: '2026-09-13',
-    matchTime: '10:30',
-    status: 'FINISHED',
-    institutionOneId: 4,
-    institutionTwoId: 7,
-    scoreOne: 2,
-    scoreTwo: 1,
-  }),
+  // --- Cuartos: el primero ya tiene al ganador de octavos 1, falta su rival ---
+  match(9, 'QUARTER_FINAL', 1, '2026-10-27', '16:00', 'SCHEDULED', side(1, 201)),
+  match(10, 'QUARTER_FINAL', 2, '2026-10-27', '19:00', 'SCHEDULED'),
+  match(11, 'QUARTER_FINAL', 3, '2026-10-28', '16:00', 'SCHEDULED'),
+  match(12, 'QUARTER_FINAL', 4, '2026-10-28', '19:00', 'SCHEDULED'),
 
-  // --- Semifinal ---
-  match({
-    internalId: 'MTC-10',
-    phase: 'SEMI_FINAL',
-    category: 'FUTBOL',
-    matchDate: '2026-10-03',
-    matchTime: '18:00',
-    status: 'FINISHED',
-    institutionOneId: 1,
-    institutionTwoId: 6,
-    scoreOne: 2,
-    scoreTwo: 1,
-  }),
-  match({
-    internalId: 'MTC-11',
-    phase: 'SEMI_FINAL',
-    category: 'FUTBOL',
-    matchDate: '2026-10-09',
-    matchTime: '19:30',
-    status: 'SCHEDULED',
-    institutionOneId: 4,
-    institutionTwoId: 5,
-    scoreOne: null,
-    scoreTwo: null,
-  }),
-
-  // --- Final ---
-  match({
-    internalId: 'MTC-13',
-    phase: 'FINAL',
-    category: 'FUTBOL',
-    matchDate: '2026-10-10',
-    matchTime: '17:30',
-    status: 'SCHEDULED',
-    institutionOneId: 6,
-    institutionTwoId: 2,
-    scoreOne: null,
-    scoreTwo: null,
-  }),
-  match({
-    internalId: 'MTC-12',
-    phase: 'FINAL',
-    category: 'FUTBOL',
-    matchDate: '2026-10-25',
-    matchTime: '16:00',
-    status: 'SCHEDULED',
-    institutionOneId: 1,
-    institutionTwoId: 4,
-    scoreOne: null,
-    scoreTwo: null,
-  }),
+  // --- Semifinales y final ---
+  match(13, 'SEMI_FINAL', 1, '2026-11-04', '16:00', 'SCHEDULED'),
+  match(14, 'SEMI_FINAL', 2, '2026-11-04', '19:00', 'SCHEDULED'),
+  match(15, 'FINAL', 1, '2026-11-11', '18:00', 'SCHEDULED'),
 ]

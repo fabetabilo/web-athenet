@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { normalizeMatch, sortForStrip } from '../utils/normalizeMatch'
+import { normalizeMatch } from '../utils/normalizeMatch'
 import { normalizeCompetitionList } from '../utils/normalizeCompetition'
+import { getInstitutionsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
 import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
-import { resolveInstitution } from '../data/demo/institutionDirectory'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con fallback a mocks locales.
@@ -11,6 +11,10 @@ import { resolveInstitution } from '../data/demo/institutionDirectory'
  * Mismas reglas que eventsApi.js:
  * 1. El fallback se activa ante fallos de red, status no-ok o ausencia de URL.
  * 2. Todo resultado pasa obligatoriamente por normalizeMatch antes del render.
+ *
+ * Este servicio tambien compone: ms-competitions manda el id de institucion y
+ * ms-institution la sigla y el escudo. Es la union que hara un BFF publico, y
+ * el dia que exista se cae sola (normalizeMatch ya prefiere lo que trae el crudo).
  */
 
 
@@ -29,8 +33,7 @@ const competitionsClient = axios.create({
 // endpoints de api competencias
 export const COMPETITION_ENDPOINTS = {
     COMPETITIONS: '/competitions',
-    LATEST_RESULTS: '/competitions/results/latest',
-    COMPETITION_MATCHES: (id) => `/competitions/${id}/matches`,
+    COMPETITION_FIXTURE: (id) => `/competitions/${id}/fixture`,
 }
 
 
@@ -77,45 +80,54 @@ async function requestWithFallback(endpoint, fallbackData, normalizer, config = 
     }
 }
 
+/** Institucion que no se pudo resolver: el marcador queda con la sigla neutra. */
+const NO_INSTITUTION = { acronym: '—', image: null }
+
 /**
- * Normalizador de lista compartido por los endpoints de coleccion.
- * Inyecta el diccionario local: el dia que ms-competitions mande sigla y escudo,
- * se borra el segundo argumento y normalizeMatch sigue correcto.
+ * Resuelve sigla y escudo por id de institucion contra ms-institution.
+ *
+ * getInstitutionsById rechaza si ese servicio no responde, y el Promise.all del
+ * Home no tiene catch: sin este try un fallo dejaria colgada la transicion de ruta.
+ *
+ * @returns {Promise<(id: number) => { acronym: string, image: string|null }>}
  */
-const normalizeList = (rawList) =>
-    Array.isArray(rawList) ? rawList.map((m) => normalizeMatch(m, resolveInstitution)) : []
+async function loadInstitutionResolver() {
+    try {
+        const institutionsById = await getInstitutionsById()
+        return (id) => {
+            const found = institutionsById.get(String(id))
+            return found ? { acronym: found.acronym, image: found.logo } : NO_INSTITUTION
+        }
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.warn(`[competitionsApi] Sin siglas de ms-institution: ${error.message}`)
+        }
+        return () => NO_INSTITUTION
+    }
+}
+
+/** Normalizador de lista con el resolver ya cargado. */
+const normalizeList = (rawList, resolve) =>
+    Array.isArray(rawList) ? rawList.map((m) => normalizeMatch(m, resolve)) : []
 
 
 // --- Funciones del Servicio -----------------------------------------------------
 /**
- * Obtiene los ultimos resultados para la barra de marcadores del home.
- *
- * @param {import('axios').AxiosRequestConfig} [config]
- * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch[]>}
- */
-export async function getLatestResults(config = {}) {
-    return requestWithFallback(
-        COMPETITION_ENDPOINTS.LATEST_RESULTS,
-        competitionMatchesMock,
-        (rawList) => sortForStrip(normalizeList(rawList)),
-        config
-    )
-}
-
-/**
- * Obtiene todos los encuentros de una competencia, de 16avos a final.
+ * Todos los partidos de una competencia, de octavos a final y en orden de cuadro.
+ * Las rondas que la llave todavia no define llegan con los lados vacios.
  *
  * @param {number} id - id de la competencia
  * @param {import('axios').AxiosRequestConfig} [config]
  * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch[]>}
  */
 export async function getCompetitionMatches(id, config = {}) {
-    const fallbackRaw = competitionMatchesMock.filter((m) => m.competitionId === id)
+    const fallbackRaw = competitionMatchesMock.filter((m) => m.competition.id === id)
+    const resolve = await loadInstitutionResolver()
 
     return requestWithFallback(
-        COMPETITION_ENDPOINTS.COMPETITION_MATCHES(id),
+        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(id),
         fallbackRaw,
-        normalizeList,
+        (rawList) => normalizeList(rawList, resolve),
         config
     )
 }
