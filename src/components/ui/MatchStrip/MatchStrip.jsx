@@ -1,5 +1,6 @@
 import { TransitionLink } from '../../transition'
 import Button from '../Button/Button'
+import Pill from '../Pill/Pill'
 import styles from './MatchStrip.module.css'
 
 /**
@@ -24,7 +25,7 @@ function TeamRow({ side }) {
 
 /**
  * Barra de resultados de una competencia.
- * 
+ *
  * NOTA: CONSIDERAR con fecha 10-09-2026, este componente solo es capaz de renderizar competencias que requieran de un scoreboard
  * sencillo de dos digitos: 3 - 0, 4 - 1. No soporta scoreboards de tenis de mesa, tenis, u otras.
  *
@@ -55,11 +56,15 @@ export default function MatchStrip({ matches = [] }) {
                   ? `${styles.status} ${styles.pill} ${relativeDay === 'TODAY' ? styles.pillToday : styles.pillTomorrow}`
                   : styles.status
 
-                const label = [
-                  `${match.phaseLabel} de ${match.categoryLabel}`,
-                  match.isPlayed
+                const teamsText = match.isPending
+                  ? 'Equipos por definir'
+                  : match.isPlayed
                     ? `${match.one.acronym} ${match.one.score ?? '-'}, ${match.two.acronym} ${match.two.score ?? '-'}`
-                    : `${match.one.acronym} contra ${match.two.acronym}`,
+                    : `${match.one.acronym} contra ${match.two.acronym}`
+
+                const label = [
+                  `${match.phaseLabel} de ${competitionName}`,
+                  teamsText,
                   match.formattedTime && !match.isPlayed ? `${statusText} a las ${match.formattedTime}` : statusText,
                 ].join('. ')
 
@@ -76,13 +81,18 @@ export default function MatchStrip({ matches = [] }) {
                           {!match.isPlayed && (
                             <>
                               {match.formattedTime && <span className={styles.time}>{match.formattedTime}</span>}
-                              <span className={styles.date}>{match.shortDate}</span>
+                              {match.shortDate && <span className={styles.date}>{match.shortDate}</span>}
                             </>
                           )}
                         </span>
                         <span className={styles.teams}>
                           <TeamRow side={match.one} />
                           <TeamRow side={match.two} />
+                          {match.isPending && (
+                            <span className={styles.pendingOverlay}>
+                              <Pill className={styles.pendingPill}>Por definir</Pill>
+                            </span>
+                          )}
                         </span>
                       </span>
                     </TransitionLink>

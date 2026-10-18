@@ -141,6 +141,7 @@
 }
 
 .teams {
+  position: relative;
   display: grid;
   grid-template-columns: 1.25rem minmax(3.5rem, auto) minmax(1.5rem, 1fr);
   align-items: center;
@@ -178,6 +179,21 @@
   font-weight: 700;
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
+}
+
+/* --- equipos por definir -------------------------------------------------- */
+/* Absoluta sobre el marcador: tapa las filas vacias sin mover ningun bloque. */
+.pendingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* la card angosta no da para el padding por defecto del Pill */
+.pendingPill {
+  font-size: var(--text-xs);
+  padding: 0.2rem 0.6rem;
 }
 
 /* --- pills propias para estados del match ------------------------------------------------ */

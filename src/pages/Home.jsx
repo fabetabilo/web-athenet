@@ -10,9 +10,12 @@ import Button from '../components/ui/Button/Button'
 import { heroSlides } from '../data/content/heroSlides'
 import { newsCards } from '../data/content/newsCards.js'
 import { getNextEvent, getNextEvents } from '../service/eventsApi'
-import { getLatestResults } from '../service/competitionsApi'
+import { getCompetitionMatches } from '../service/competitionsApi'
 import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
+
+// Competencia que muestra el strip. Elegir "la mas proxima" es trabajo del backend.
+const HOME_COMPETITION_ID = 1
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
@@ -26,7 +29,12 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true
 
-    Promise.all([getNextEvent(), getNextEvents(), getLatestResults(), getInstitutions()]).then(
+    Promise.all([
+      getNextEvent(),
+      getNextEvents(),
+      getCompetitionMatches(HOME_COMPETITION_ID),
+      getInstitutions(),
+    ]).then(
       ([event, events, matches, insts]) => {
         if (!isMounted) return
         setFeaturedEvent(event)
