@@ -37,6 +37,7 @@ jobs:
           VITE_USE_EVENT_MOCKS: ${{ secrets.VITE_USE_EVENT_MOCKS }}
           VITE_INSTITUTIONS_API_URL: ${{ secrets.VITE_INSTITUTIONS_API_URL }}
           VITE_USE_INSTITUTION_MOCKS: ${{ secrets.VITE_USE_INSTITUTION_MOCKS }}
+          VITE_RANKING_API_URL: ${{ secrets.VITE_RANKING_API_URL }}
           VITE_NOTIFICATIONS_API_URL: ${{ secrets.VITE_NOTIFICATIONS_API_URL }}
           VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
         run: npm run build
