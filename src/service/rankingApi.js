@@ -29,8 +29,8 @@ export const RANKING_ENDPOINTS = {
 
 /** Deportes con ranking en la web; `names` son los nombres posibles en el catalogo. */
 export const RANKING_SPORTS = [
-  { key: 'futbol', label: 'Fútbol', names: ['futbol'] },
-  { key: 'basquetbol', label: 'Básquetbol', names: ['basquetbol', 'basquet', 'baloncesto'] },
+  { key: 'futbol', names: ['futbol', 'futbol sala', 'futsal'] },
+  { key: 'basquetbol', names: ['basquetbol', 'basquet', 'baloncesto'] },
 ]
 
 function warnFallback(reason) {
@@ -82,9 +82,10 @@ async function getCatalog(useMock) {
 export async function getRankingSports() {
   const { sportsById } = await getCatalog(IS_MOCK_MODE)
 
-  return RANKING_SPORTS.flatMap(({ key, label, names }) => {
+  // La etiqueta es el nombre real del catalogo (p. ej. "Fútbol Sala").
+  return RANKING_SPORTS.flatMap(({ key, names }) => {
     const entry = [...sportsById].find(([, name]) => names.includes(simplify(name)))
-    return entry ? [{ id: entry[0], key, label }] : []
+    return entry ? [{ id: entry[0], key, label: entry[1] }] : []
   })
 }
 
