@@ -1,39 +1,35 @@
 /* --- Navbar */
 .navbar {
   position: fixed;
-  top: 1.25rem;
+  top: 0;
   left: 0;
   right: 0;
   width: 100%;
   margin: 0 auto;
-  max-width: 85rem;
-  z-index: 50;
-  background: rgba(8, 11, 20, 0.95);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  /* Use 2.5rem instead of var(--radius-full) to prevent the "giant circle" effect when height expands */
-  border-radius: 2.5rem;
-  transition: all 0.4s ease;
+  max-width: 100%;
+  z-index: var(--z-navbar);
+  transition: background-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
 }
 
 .scrolled {
-  top: 0;
-  left: 0;
-  right: 0;
-  max-width: 100%;
-  border-radius: 0;
-  background: rgba(8, 11, 20, 0.98);
-  box-shadow: 0 1px 0 var(--color-border);
+  background: var(--color-ink-translucent);
+  backdrop-filter: blur(12px);
 }
 
 .inner {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 4rem;
+  height: var(--navbar-height);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 /* Logo */
@@ -45,121 +41,476 @@
 }
 
 .logoIcon {
-  height: clamp(36px, 4vw, 56px);
+  height: clamp(16px, 4vw, 20px);
   width: auto;
+  transition: opacity 0.2s;
 }
 
 /* Desktop links */
 .links {
   display: none;
   align-items: center;
-  gap: 1.75rem;
+  gap: clamp(1.75rem, 2vw, 3.5rem);
 }
 
 .link {
-  font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  position: relative;   /* ancla del subrayado de activo */
+  font-family: var(--font-secondary);
+  font-size: var(--text-md);
+  font-weight: 450;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.link:active {
+/* Link de pagina activa: solo en el topbar anclado bajo el texto */
+.linkActive::after {
+  content: '';
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: -8px;
+  right: -8px;
+  height: 4px;
+  background: var(--color-tertiary);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.link:active,
+.iconBtn:active,
+.drawerMainLink:active,
+.drawerAsideLink:active,
+.drawerLegalLink:active {
   color: var(--text-primary);
 }
 
-.link:focus-visible {
+.link:focus-visible,
+.iconBtn:focus-visible,
+.drawerMainLink:focus-visible,
+.drawerAsideLink:focus-visible,
+.drawerLegalLink:focus-visible {
   color: var(--text-primary);
   outline: 2px solid var(--color-cyan);
   outline-offset: 4px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .link:hover {
-    color: var(--text-primary);
+  .link:hover,
+  .iconBtn:hover,
+  .drawerMainLink:hover,
+  .drawerAsideLink:hover,
+  .drawerLegalLink:hover {
+    color: var(--text-muted);
+  }
+  .logo:hover .logoIcon {
+    opacity: var(--text-muted-alpha);
   }
 }
 
-/* Desktop CTA */
 .cta {
   display: none;
   align-items: center;
   gap: 1rem;
+  pointer-events: auto;
 }
 
-/* Mobile hamburger */
-.hamburger {
+/* Base comun de todo boton de icono: menu, buscador y cerrar. El color lo heredan los svg via currentColor igual que links */
+.iconBtn {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--icon-btn-size);
+  height: var(--icon-btn-size);
   cursor: pointer;
   background: none;
   border: none;
+  color: var(--text-primary);
+  transition: color 0.2s;
 }
 
-.hamburgerLine {
-  display: block;
-  width: 1.5rem;
-  height: 2px;
-  background: var(--text-primary);
-  transition: transform 0.2s, opacity 0.2s;
+.searchIcon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-/* Mobile menu */
-.mobileMenu {
+.topControls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  z-index: var(--z-drawer-top);
+  pointer-events: none;   /* solo los botones recuperan los clicks */
+}
+
+.topControlsInner {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuBtn {
+  position: relative;
+  pointer-events: auto;   /* el contenedor no captura clicks */
+}
+
+/* --- Icono del menu --- */
+.burger {
+  --bar-h: 1.5px;
+  --bar-gap: 6px;
+  --sweep-stagger: 80ms;
+  position: relative;
+  width: 2rem;
+  height: 1rem;
   overflow: hidden;
-  max-height: 0;
-  background: rgba(8, 11, 20, 0.98);
-  border-top: none;
-  transition: max-height 0.4s ease;
 }
 
-.mobileMenuOpen {
-  max-height: 100vh;
-  height: 100vh;
-  border-top: 1px solid var(--color-border);
-  overflow-y: auto;
+/* La posicion vertical va por top y nunca por transform: el transform queda libre para la X */
+.bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - var(--bar-h) / 2 - var(--bar-offset));
+  height: var(--bar-h);
+  transition:
+    top var(--duration-fast) ease var(--duration-fast),   /* al cerrar: separar DESPUES de desrotar */
+    transform var(--duration-fast) ease;
+}
+.barTop {
+  --bar-offset: calc(var(--bar-gap) / 2);
+}
+.barBottom {
+  --bar-offset: calc(var(--bar-gap) / -2);
+}
+.barFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
 }
 
-.mobileMenuInner {
-  padding: 2rem 1.25rem;
+/* Hover: sale por la derecha, se recoloca fuera de la caja por la izquierda y vuelve a su sitio.
+   El salto del 48% al 49% no se ve porque en ambos extremos la barra esta fuera del recorte. */
+@keyframes burgerSweep {
+  0% {
+    transform: translateX(0);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.9, 0.3);
+  }
+
+  48% {
+    transform: translateX(150%);
+  }
+
+  49% {
+    transform: translateX(-150%);
+    animation-timing-function: cubic-bezier(0.1, 0.7, 0.4, 1);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* La clase la pone el hover desde JS y se retira sola al acabar: la secuencia nunca se corta a medias */
+.menuBtnSweep:not(.menuBtnOpen) .barFill {
+  animation: burgerSweep var(--duration-slow) both;
+}
+
+.menuBtnSweep:not(.menuBtnOpen) .barBottom .barFill {
+  animation-delay: var(--sweep-stagger);
+}
+
+/* Abierto: las barras se juntan en el centro y despues rotan. Al cerrar el orden se invierte
+solo, porque el retardo contrario vive en la regla base de .bar */
+.menuBtnOpen .bar {
+  top: calc(50% - var(--bar-h) / 2);
+  transition:
+    top var(--duration-fast) ease,
+    transform var(--duration-fast) ease var(--duration-fast);   /* al abrir: rota DESPUES de juntar */
+}
+
+.menuBtnOpen .barTop {
+  transform: rotate(45deg);
+}
+
+.menuBtnOpen .barBottom {
+  transform: rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuBtnSweep .barFill {
+    animation: none;
+  }
+
+  .bar {
+    transition: none;
+  }
+}
+
+.menuLabel {
+  position: absolute;
+  left: 100%;
+  margin-left: 0.25rem;
+  white-space: nowrap;
+  font-family: var(--font-secondary);
+  font-size: var(--text-md);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  display: none;   /* solo desktop */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-0.75rem);
+  transition:
+    opacity var(--duration-base) ease,
+    transform var(--duration-base) ease,
+    visibility 0s linear var(--duration-base);
+}
+
+.menuBtnOpen .menuLabel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition:
+    opacity var(--duration-base) ease var(--drawer-stagger),
+    transform var(--duration-base) ease var(--drawer-stagger),
+    visibility 0s linear var(--drawer-stagger);
+}
+
+/* Scrim: oscurece la pagina mientras el panel se desliza. Comparte duracion con el drawer para que ambos se muevan a la vez.
+Tambien es la zona clickable para cerrar */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: var(--color-scrim);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-base) ease, visibility var(--duration-base);
+}
+
+.scrimOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Drawer: acordeon de capas que bajan desde arriba de forma escalonada. El contenedor no pinta nada, solo define la caja y espera a que la ultima
+  capa termine de salir antes de ocultarse. */
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  visibility: hidden;
+  transition: visibility 0s linear var(--drawer-settle);
+}
+
+.drawerOpen {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Cada capa recorre lo mismo: solo cambian color, apilado y retardo --delay-close vive en base, asi que al quitar .drawerOpen el
+   orden de salida se invierte solo, sin tocar JS. */
+.layer {
+  position: absolute;
+  inset: 0;
+  transform: translateY(-100%);
+  transition: transform var(--duration-base) ease;
+  transition-delay: var(--delay-close);
+}
+
+.drawerOpen .layer {
+  transform: translateY(0);
+  transition-delay: var(--delay-open);
+}
+
+/*--- CAPAS: 1 a 5 */
+.layerFirst {
+  background: var(--bg-light-alt);
+  z-index: 1;
+  --delay-open: 0ms;
+  --delay-close: calc(4 * var(--drawer-stagger));
+}
+
+.layerSecond {
+  background: var(--color-red);
+  z-index: 2;
+  --delay-open: calc(1.5 * var(--drawer-stagger));
+  --delay-close: calc(3 * var(--drawer-stagger));
+}
+
+.layerThird {
+  background: var(--color-navy);
+  z-index: 3;
+  --delay-open: calc(3 * var(--drawer-stagger));
+  --delay-close: calc(2 * var(--drawer-stagger));
+}
+
+/* Acento de marca que entra en el ultimo medio stagger antes del panel */
+.layerFourth {
+  background: var(--color-ink);
+  z-index: 4;
+  --delay-open: calc(3.5 * var(--drawer-stagger));
+  --delay-close: var(--drawer-stagger);
+}
+
+/* La capa de delante que porta el contenido */
+.layerMain {
+  background: var(--color-ink);
+  z-index: 5;
+  --delay-open: calc(4 * var(--drawer-stagger));
+  --delay-close: 0ms;
+  bottom: 1.25rem; /* <- borde decorativo que queda */
+  overflow: hidden;
+}
+
+/* cancela el movimiento del panel, de modo que el contenido se queda quieto en su sitio y es el borde inferior del panel
+el que lo va descubriendo. Hereda los retardos de .layerMain */
+.layerContent {
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform var(--duration-base) ease;
+  transition-delay: var(--delay-close);
+}
+
+.drawerOpen .layerContent {
+  transform: translateY(0);
+  transition-delay: var(--delay-open);
+}
+
+.drawerHeader {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+  min-height: var(--navbar-height);
+  flex-shrink: 0;
+  display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.drawerLogoIcon {
+  height: clamp(24px, 3vw, 34px);
+  width: auto;
+}
+
+.drawerNav {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+  padding-block: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.drawerMain,
+.drawerAside,
+.drawerGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerAside {
   gap: 2rem;
 }
 
-.mobileLink {
-  font-size: var(--text-lg);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.drawerMainLink {
+  font-family: var(--font-secondary);
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.drawerAsideLink {
+  font-family: var(--font-secondary);
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.drawerLegalLink {
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);
   color: var(--text-secondary);
   text-decoration: none;
+  transition: color 0.2s;
 }
 
 /* BREAKPOINT */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .inner {
-    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .left {
+    flex: 0 0 auto;
+    justify-self: start;
+    justify-content: flex-start;
+    padding-left: calc(var(--icon-btn-size) + 1.25rem);   /* hueco que dejo el boton de menu */
   }
 
   .links {
     display: flex;
+    justify-self: center;
   }
 
   .cta {
     display: flex;
   }
 
-  .hamburger {
-    display: none;
+  .drawer {
+    bottom: auto;
+    height: auto;
+    padding-bottom: 1.25rem;
   }
 
-  .mobileMenu {
-    display: none;
+  .layerMain {
+    position: relative;
+    inset: auto;
+  }
+
+  .layerContent {
+    height: auto;
+  }
+
+  .menuLabel {
+    display: block;
+  }
+
+  .drawerNav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .drawerAside {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .drawerGroup {
+    gap: var(--spacing-xxsm);
+  }
+
+  .drawerMain {
+    margin-left: 4rem;
+    grid-column: 2;
+    grid-row: 1;
   }
 }

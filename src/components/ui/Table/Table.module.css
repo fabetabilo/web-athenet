@@ -1,0 +1,77 @@
+.scroller {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.scroller:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.table {
+  --table-min-width: 48rem;
+  width: 100%;
+  min-width: var(--table-min-width);
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-primary);
+  color: var(--text-dark);
+}
+
+.headCell {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--text-dark-muted);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.row {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+/* --row-accent lo pinta la fila en hover; el fallback deja a cada variante su color de reposo */
+.cell {
+  padding: 1rem 0.75rem;
+  vertical-align: middle;
+  font-size: var(--text-md);
+  letter-spacing: .2px;
+  color: var(--row-accent, var(--text-dark));
+}
+
+.strong {
+  font-weight: var(--font-text-strong-weight);
+}
+
+.muted {
+  color: var(--row-accent, var(--text-dark-muted));
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: -2px;
+}
+
+/* sin transitiona a proposito */
+@media (hover: hover) and (pointer: fine) {
+  .clickable:hover {
+    --row-accent: var(--color-secondary);
+    background: var(--color-cyan-muted);
+  }
+}

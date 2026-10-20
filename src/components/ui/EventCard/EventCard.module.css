@@ -1,0 +1,134 @@
+.card {
+  position: relative;
+  width: var(--card-width, 100%);
+  flex-shrink: 0;
+  min-height: clamp(27rem, 26vw, 30rem);
+  display: flex;
+  align-items: flex-end;
+  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  background: var(--color-ink);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* card principal isPrincipal (activa): más ancha */
+.principalCard {
+  width: var(--principal-width, 100%);
+}
+
+.cardImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+/* mismo zoom que las cards de Top Historias */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .cardImage {
+    transform: scale(1.05);
+  }
+}
+
+/* mismo velo que el drawer del navbar: oscurece parejo para que el texto se lea */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+  pointer-events: none;
+}
+
+/* badge horizontal: se alinea a la altura de la pill */
+.officialBadgeImg {
+  height: 1.75rem;
+  width: auto;
+  max-width: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 100ch;
+  padding: clamp(1.5rem, 3vw, 3rem);
+}
+
+.cardDate {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.dateSep {
+  margin-inline: 0.5rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* mismo tratamiento tipografico que EventCountdown */
+.cardTitle {
+  font-family: var(--font-primary);
+  font-size: var(--heading-sm);
+  letter-spacing: .2px;
+  font-weight: var(--font-heading-weight);
+  line-height: 1;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cardLocation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.teamsSlot {
+  display: contents;
+}
+
+/* boton a la izquierda, contador (opcional) a la derecha */
+.cardFooter {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  width: 100%;
+  margin-top: var(--spacing-xsm);
+}
+
+/* en pantallas angostas el texto ocupa todo el ancho */
+@media (max-width: 600px) {
+  .card {
+    align-items: flex-end;
+  }
+
+  .cardContent {
+    max-width: none;
+  }
+
+  /* el contador baja bajo el boton y queda alineado a la izquierda */
+  .cardFooter {
+    justify-content: flex-start;
+  }
+}

@@ -50,8 +50,18 @@ Levanta el proyecto en tu entorno local:
    Variables disponibles en `.env`:
    | Variable | Descripción | Valor por defecto |
    | :--- | :--- | :--- |
-   | `VITE_EVENTS_API_URL` | URL base del microservicio `ms-events` (Public Controller). Si se omite, se usan mocks. | `http://localhost:8080/api/public` |
-   | `VITE_USE_EVENT_MOCKS` | Forzar el uso de mocks locales ignorando llamadas de red (`true` \| `false`). | `false` |
+   | `VITE_EVENTS_API_URL` | URL base de `ms-events` (Public Controller). Si se omite, se usan mocks. | `http://localhost:8081/api/public` |
+   | `VITE_INSTITUTIONS_API_URL` | URL base de `ms-institution` (solo GET públicos). Fuente de instituciones, sedes, equipos y deportes; también resuelve los equipos y el deporte de los eventos reales. Si se omite, se usan mocks. | `https://na279sqez3.execute-api.us-east-1.amazonaws.com/api/v1` |
+   | `VITE_COMPETITIONS_API_URL` | URL base de `ms-competitions`. Si se omite, `MatchStrip` usa mocks. | _(vacía)_ |
+| `VITE_NOTIFICATIONS_API_URL` | URL base del servicio de suscripciones de `ms-notifications`. Sin mocks: si se omite, el newsletter muestra error. Ver [docs/dev/turnstile.md](docs/dev/turnstile.md). | _(vacía)_ |
+| `VITE_TURNSTILE_SITE_KEY` | Site key pública de Cloudflare Turnstile para el newsletter. | `1x00000000000000000000AA` (prueba) |
+   | `VITE_USE_EVENT_MOCKS` | Fuerza los mocks de eventos sin llamadas de red (`true` \| `false`). | `false` |
+   | `VITE_USE_INSTITUTION_MOCKS` | Fuerza los mocks de instituciones sin llamadas de red (`true` \| `false`). | `false` |
+   | `VITE_USE_COMPETITION_MOCKS` | Fuerza los mocks de competencias sin llamadas de red (`true` \| `false`). | `false` |
+
+   > Los eventos reales solo se resuelven con el catálogo real de `ms-institution`, nunca con mocks: si ese servicio no responde, se muestran sin equipos ni deporte.
+   >
+   > Para apuntar a microservicios locales sin tocar `.env`, crea un `.env.local` (tiene prioridad y está en `.gitignore`).
 
 4. **Inicia el servidor de desarrollo:**
    ```bash
@@ -60,5 +70,5 @@ Levanta el proyecto en tu entorno local:
 
 ##### Dependencias principales:
 - react-router-dom
-- lucide-react
+- react-icons
 - axios

@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './PageBanner.module.css';
 
 const PageBanner = ({ title, backgroundImage }) => {

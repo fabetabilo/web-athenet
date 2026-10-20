@@ -1,30 +1,42 @@
 /* --- Fuentes globales */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 
 /* --- Variables CSS */
 :root {
   --bg-light: #fff;
-  --color-navy: #080B14;
+  --bg-light-alt: #e9e9e9;
+  --color-navy: #052344;
   --color-dark: #0A0D1A;
+  --color-ink: #080b14;
+  --color-ink-translucent: rgba(8, 11, 20, 0.98);
   --color-cyan: #00C8FF;
-  --color-secondary: #3b82f6;
-  --color-tertiary: #ffd700;
+  --color-cyan-muted: #d9f2f9;
+  --color-red: #D82028;
+  --color-secondary: #007AE5;
+  --color-tertiary: #ff6810;
 
   --color-local: var(--bg-light);
   --color-visitor: var(--color-local);
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.65);
+  --text-muted-alpha: 0.65;   /* util: para pintar por opacidad lo que no es texto */
+  --text-muted: rgba(255, 255, 255, var(--text-muted-alpha));
   --text-dark: #111111;
   --text-dark-muted: #555555;
 
   --color-border: rgba(255, 255, 255, 0.07);
+  --color-border-light: rgba(8, 11, 20, 0.08);   /* borde sobre fondos claros */
+
+  --color-scrim: rgba(0, 0, 0, 0.6);
 
   /* Typography */
   --font-heading: 'Barlow Semi Condensed', sans-serif;
   --font-primary: 'Barlow', sans-serif;
+  --font-secondary: "Google Sans", sans-serif;
   --font-condensed: 'Barlow Condensed', sans-serif;
+
   --font-heading-weight: 800;
   --font-subheading-weight: 800;
   --font-text-strong-weight: 600;
@@ -39,7 +51,7 @@
   --text-lg: clamp(1.125rem, 3vw, 2.2rem);
 
   --heading-md: clamp(2rem, 4vw, 3rem);
-  --heading-sm: clamp(1.5rem, 4vw, 2.1rem);
+  --heading-sm: clamp(1.5rem, 3vw, 2.5rem);
 
   /* Bordes especificos reutilizables */
   --radius-sm: 8px;
@@ -47,10 +59,48 @@
   --radius-lg: 20px;
   --radius-full: 9999px; /* full curvo, pildoras */
 
+  /* Token de diagonales */
+  --skew-diagonal: -8deg;
+
   /* Espaciados */
+  --spacing-xxsm: 0.3rem;
+  --spacing-xsm: 1rem;
   --spacing-sm: 1.5rem;
   --spacing-md: 2.5rem;
   --spacing-lg: 3rem;
+
+  /* --- Layout: UNICA fuente de verdad del ancho de la app ---------------
+     --layout-max-width es fluido: parte en 80rem (1280px de viewport),
+     crece con el viewport y topa en 92rem a partir de 1920px.
+     No usar literales de ancho en los .module.css: usar estos tokens. */
+  --layout-max-width: clamp(80rem, 56rem + 30vw, 92rem);
+  --layout-gutter: clamp(1.25rem, 3vw, 2rem);
+
+  /* Alto de la barra: lo comparten el navbar y la cabecera del drawer */
+  --navbar-height: 5rem;
+
+  /* --- Jerarquia de capas ----------------------------------------------- */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-navbar: 200;
+  --z-overlay: 300;
+  --z-drawer: 400;
+  --z-drawer-top: 450;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* Duraciones de transicion */
+  --duration-fast: 0.2s;
+  --duration-base: 0.4s;
+  --duration-slow: 0.5s;
+  --duration-slower: 0.8s;
+
+  /* Drawer acordeon */
+  --drawer-stagger: 70ms;   /* desfase entre capas */
+  --drawer-settle: calc(var(--duration-base) + 4 * var(--drawer-stagger));
+  
+  --icon-btn-size: 2.5rem;
 }
 
 /* reset */
@@ -111,3 +161,14 @@ button {
   font: inherit;
   padding: 0;
 }
+
+/* --- Layout -----------------------------------------------------------
+   Container canonico. Usar esta clase en markup nuevo, o replicar el
+   patron en un .module.css cuando el wrapper necesite props extra. */
+.layout-container {
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
+}
+
+/* --- Mobile considera mobile-tablet a 640px y 1024px respectivamente */
+

@@ -12,7 +12,7 @@
 // ---------------------------------------------------------------------------
 // Tablas de mapeo
 /** @type {Record<string, string>} */
-const CATEGORY_LABELS = {
+export const CATEGORY_LABELS = {
   FUTBOL:               'Fútbol',
   BASQUETBOL:           'Basquetbol',
   VOLEIBOL:             'Vóleibol',
@@ -66,7 +66,7 @@ const MONTH_NAMES_ES = [
  * @param {string} isoDate - Fecha en formato "YYYY-MM-DD"
  * @returns {string} Ej: "4 de octubre de 2026"
  */
-function formatEventDate(isoDate) {
+export function formatEventDate(isoDate) {
   const [year, month, day] = isoDate.split('-').map(Number)
   const date = new Date(year, month - 1, day)
   return date.toLocaleDateString('es-CL', {
@@ -95,6 +95,15 @@ function splitDisplayDate(isoDate) {
 // ---------------------------------------------------------------------------
 // Función principal
 /**
+ * @typedef {Object} TeamRef
+ * @property {number|string} id
+ * @property {string|null} name
+ * @property {string} acronym
+ * @property {string|null} institution
+ * @property {string|null} logo
+ */
+
+/**
  * @typedef {Object} NormalizedEvent
  * Identificación
  * @property {string}      id             - internalId del backend (usado en rutas y lookups)
@@ -111,11 +120,15 @@ function splitDisplayDate(isoDate) {
  * @property {string}      displayDay     - número de día como string (ej. "4"), para layout de card
  * @property {string}      displayMonth   - nombre del mes en español (ej. "Octubre"), para layout de card
  * @property {string}      displayYear    - año como string (ej. "2026"), para layout de card
+ * @property {string|null} startTime      - "HH:mm" local
+ * @property {string|null} endDate        - ISO "YYYY-MM-DD"
+ * @property {string|null} endTime        - "HH:mm" local
+ * @property {string}      startsAt       - "YYYY-MM-DDTHH:mm" local, objetivo del countdown
  * Clasificación
  * @property {string}      type           - enum original: MATCH | MEETING | TRACKDAY | OTHER
  * @property {string}      typeLabel      - label legible en español
- * @property {string}      category       - enum original: FUTBOL | BASQUETBOL | ...
- * @property {string}      categoryLabel  - label legible en español
+ * @property {number|null} sportId        - id del deporte en ms-institution
+ * @property {string|null} sportLabel     - nombre resuelto; null si no se pudo resolver
  * Estado
  * @property {string}      status         - enum original: DRAFT | PUBLISHED | CANCELLED
  * @property {string}      statusLabel    - label legible en español
@@ -128,17 +141,34 @@ function splitDisplayDate(isoDate) {
  *                                          Otros tipos pueden tener equipos o no.
  * @property {number|null} teamOneId
  * @property {number|null} teamTwoId
+ * @property {TeamRef|null} teamOne  - equipo resuelto; null si el evento no lo trae
+ * @property {TeamRef|null} teamTwo
  * Misc
  * @property {string|null} location
  * @property {string|null} address
- * @property {number}      organizationId
+ * Organizador (eventos que no son partido)
+ * @property {number|null} organizerInstitutionId
+ * @property {number|null} organizerCampusId
+ * @property {number|null} organizerTeamId
  */
+
+/** Equipo sin resolver: sin resolver inyectado o id ausente en el catalogo. */
+const UNKNOWN_TEAM = (id) => ({ id, name: null, acronym: '—', institution: null, logo: null })
+
+/** Recorta "HH:mm:ss" a "HH:mm"; null si no viene. */
+const toHourMinute = (time) => (time ? String(time).slice(0, 5) : null)
 
 /**
  * @param {Object} rawEvent
+ * @param {Object} [resolvers] Se inyectan para que ningun componente tenga que importar los diccionarios.
+ * @param {(id: number) => TeamRef|undefined} [resolvers.resolveTeam] Resuelve nombre, sigla y escudo por id.
+ * @param {(id: number) => string|undefined} [resolvers.resolveSport] Resuelve el nombre del deporte por id.
  * @returns {NormalizedEvent}
  */
-export function normalizeEvent(rawEvent) {
+export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSport = () => null } = {}) {
+  const startTime = toHourMinute(rawEvent.startTime)
+  const toTeam = (id) => (id != null ? resolveTeam(id) ?? UNKNOWN_TEAM(id) : null)
+
   const hasTeams =
     rawEvent.teamOneId != null &&
     rawEvent.teamTwoId != null
@@ -166,11 +196,15 @@ export function normalizeEvent(rawEvent) {
     eventDate:     rawEvent.eventDate,
     formattedDate: formatEventDate(rawEvent.eventDate),
     ...splitDisplayDate(rawEvent.eventDate),
+    startTime,
+    endDate:  rawEvent.endDate ?? null,
+    endTime:  toHourMinute(rawEvent.endTime),
+    startsAt: `${rawEvent.eventDate}T${startTime ?? '00:00'}`,
     // Clasificación
-    type:          rawEvent.type,
-    typeLabel:     TYPE_LABELS[rawEvent.type]     ?? rawEvent.type,
-    category:      rawEvent.category,
-    categoryLabel: CATEGORY_LABELS[rawEvent.category] ?? rawEvent.category,
+    type:       rawEvent.type,
+    typeLabel:  TYPE_LABELS[rawEvent.type] ?? rawEvent.type,
+    sportId:    rawEvent.sportId ?? null,
+    sportLabel: rawEvent.sportId != null ? resolveSport(rawEvent.sportId) ?? null : null,
     // Estado
     status:      rawEvent.status,
     statusLabel: STATUS_LABELS[rawEvent.status] ?? rawEvent.status,
@@ -181,9 +215,14 @@ export function normalizeEvent(rawEvent) {
     hasTeams,
     teamOneId: rawEvent.teamOneId ?? null,
     teamTwoId: rawEvent.teamTwoId ?? null,
+    teamOne: toTeam(rawEvent.teamOneId),
+    teamTwo: toTeam(rawEvent.teamTwoId),
     // Misc
     location:       rawEvent.location ?? null,
     address:        rawEvent.address ?? null,
-    organizationId: rawEvent.organizationId,
+    // Organizador
+    organizerInstitutionId: rawEvent.organizerInstitutionId ?? null,
+    organizerCampusId:      rawEvent.organizerCampusId ?? null,
+    organizerTeamId:        rawEvent.organizerTeamId ?? null,
   }
 }

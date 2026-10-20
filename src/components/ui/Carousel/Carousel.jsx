@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { ArrowRight, ChevronLeft, ChevronRight } from '../icons'
+import { ChevronLeft, ChevronRight } from '../../icons'
+import Button from '../Button/Button'
 import styles from './Carousel.module.css'
 
 export default function Carousel({ slides = [] }) {
@@ -41,10 +42,9 @@ export default function Carousel({ slides = [] }) {
                 <span className={styles.category}>{slide.category}</span>
                 <h1 className={styles.title}>{slide.title}</h1>
                 <p className={styles.subtitle}>{slide.subtitle}</p>
-                <a href="#" className={styles.ctaBtn}>
+                <Button variant="accent" showArrow href="#">
                   {slide.cta}
-                  <ArrowRight style={{ width: '1rem', height: '1rem' }} />
-                </a>
+                </Button>
               </div>
             </div>
           </div>

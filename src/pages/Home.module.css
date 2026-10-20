@@ -4,9 +4,8 @@
   padding-bottom: var(--spacing-md);
 }
 .inner {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  margin-inline: auto;
 }
 
 /* header */
@@ -207,7 +206,6 @@
 
 /* Responsive */
 @media (min-width: 768px) {
-  .inner { padding: 0 2rem; }
   .featuredBody { padding: 2rem; }
   .featuredTitle { font-size: 1.5rem; }
 }

@@ -1,5 +1,5 @@
 import styles from './InstCarousel.module.css';
-import { Link } from 'react-router-dom';
+import { TransitionLink } from '../../transition';
 
 export default function InstCarousel({ institutions = [] }) {
   if (!institutions || institutions.length === 0) {
@@ -15,7 +15,7 @@ export default function InstCarousel({ institutions = [] }) {
         <div className={styles.carouselContainer}>
           <div className={styles.carouselTrack}>
             {items.map((inst, index) => (
-              <Link
+              <TransitionLink
                 to={`/institutions/${inst.id}`}
                 key={`inst-${inst.id}-${index}`} 
                 className={styles.cardLink}
@@ -29,7 +29,7 @@ export default function InstCarousel({ institutions = [] }) {
                     {inst.campus && <p className={styles.instCampus}>{inst.campus}</p>}
                   </div>
                 </div>
-              </Link>
+              </TransitionLink>
             ))}
           </div>
         </div>

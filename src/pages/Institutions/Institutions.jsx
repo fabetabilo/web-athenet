@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TransitionLink, useTransitionHold } from '../../components/transition'
 import { useEffect, useState } from 'react'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import { getInstitutions } from '../../service/institutionsApi'
@@ -7,6 +7,8 @@ import styles from './Institutions.module.css'
 export default function Institutions() {
   const [institutions, setInstitutions] = useState([])
   const [loading, setLoading] = useState(true)
+
+  useTransitionHold(loading)
 
   useEffect(() => {
     let mounted = true
@@ -50,7 +52,7 @@ export default function Institutions() {
 
           <div className={styles.grid}>
             {institutions.map((institution) => (
-              <Link
+              <TransitionLink
                 key={institution.id}
                 to={`/institutions/${institution.id}`}
                 className={styles.card}
@@ -67,7 +69,7 @@ export default function Institutions() {
                   <h3>{institution.name}</h3>
                   <span className={styles.viewLink}>Ver institución <span aria-hidden="true">→</span></span>
                 </div>
-              </Link>
+              </TransitionLink>
             ))}
           </div>
         </div>

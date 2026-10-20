@@ -1,6 +1,11 @@
-import React from 'react';
 import styles from './TeamsVersus.module.css';
-import { getTeamData } from '../../../data/teamsMock';
+
+function TeamLogo({ team }) {
+  if (team.logo) {
+    return <img src={team.logo} alt={`Logo de ${team.name}`} className={styles.teamLogo} />;
+  }
+  return <span className={styles.teamLogoFallback} aria-hidden="true">{team.acronym}</span>;
+}
 
 /**
  * TeamsVersus
@@ -13,18 +18,17 @@ import { getTeamData } from '../../../data/teamsMock';
  */
 export default function TeamsVersus({ event }) {
   // Solo renderiza si tiene equipos
-  if (!event || !event.hasTeams || event.teamOneId == null || event.teamTwoId == null) {
+  if (!event || !event.hasTeams || !event.teamOne || !event.teamTwo) {
     return null;
   }
 
-  const teamOne = getTeamData(event.teamOneId);
-  const teamTwo = getTeamData(event.teamTwoId);
+  const { teamOne, teamTwo } = event;
 
   return (
     <div className={styles.versusContainer}>
       <div className={styles.versusContent}>
         <div className={styles.teamSide}>
-          <img src={teamOne.logo} alt={`Logo de ${teamOne.name}`} className={styles.teamLogo} />
+          <TeamLogo team={teamOne} />
           <h3 className={styles.teamName}>{teamOne.name}</h3>
           {teamOne.institution && <p className={styles.teamInstitution}>{teamOne.institution}</p>}
         </div>
@@ -36,7 +40,7 @@ export default function TeamsVersus({ event }) {
         </div>
 
         <div className={styles.teamSide}>
-          <img src={teamTwo.logo} alt={`Logo de ${teamTwo.name}`} className={styles.teamLogo} />
+          <TeamLogo team={teamTwo} />
           <h3 className={styles.teamName}>{teamTwo.name}</h3>
           {teamTwo.institution && <p className={styles.teamInstitution}>{teamTwo.institution}</p>}
         </div>
