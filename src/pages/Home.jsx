@@ -15,7 +15,7 @@ import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
 
 // Competencia que muestra el strip. Elegir "la mas proxima" es trabajo del backend.
-const HOME_COMPETITION_ID = 1
+const HOME_COMPETITION_ID = 2
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
