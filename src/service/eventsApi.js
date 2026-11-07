@@ -37,7 +37,7 @@ const eventsClient = axios.create({
 export const EVENT_ENDPOINTS = {
     NEXT_EVENTS: '/events/next',
     NEXT_EVENT: '/events/featured',
-    ALL_EVENTS: '/events',
+    ALL_EVENTS: '/events/all-next',
     EVENT_BY_ID: (id) => `/events/${id}`,
 }
 

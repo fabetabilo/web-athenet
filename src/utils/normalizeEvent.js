@@ -9,6 +9,8 @@
  * @returns {NormalizedEvent} Objeto listo para consumo en componentes
  */
 
+import { parseLocalDateTime } from './dateTime'
+
 // ---------------------------------------------------------------------------
 // Tablas de mapeo
 /** @type {Record<string, string>} */
@@ -124,6 +126,7 @@ function splitDisplayDate(isoDate) {
  * @property {string|null} endDate        - ISO "YYYY-MM-DD"
  * @property {string|null} endTime        - "HH:mm" local
  * @property {string}      startsAt       - "YYYY-MM-DDTHH:mm" local, objetivo del countdown
+ * @property {boolean}     hasStarted     - true si startsAt ya pasó al momento de normalizar
  * Clasificación
  * @property {string}      type           - enum original: MATCH | MEETING | TRACKDAY | OTHER
  * @property {string}      typeLabel      - label legible en español
@@ -167,6 +170,7 @@ const toHourMinute = (time) => (time ? String(time).slice(0, 5) : null)
  */
 export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSport = () => null } = {}) {
   const startTime = toHourMinute(rawEvent.startTime)
+  const startsAt = `${rawEvent.eventDate}T${startTime ?? '00:00'}`
   const toTeam = (id) => (id != null ? resolveTeam(id) ?? UNKNOWN_TEAM(id) : null)
 
   const hasTeams =
@@ -199,7 +203,10 @@ export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSpor
     startTime,
     endDate:  rawEvent.endDate ?? null,
     endTime:  toHourMinute(rawEvent.endTime),
-    startsAt: `${rawEvent.eventDate}T${startTime ?? '00:00'}`,
+    startsAt,
+    // Ya empezo. Se calcula aqui, al traer los datos, y no en el render: leer el
+    // reloj durante el render rompe las reglas de pureza de React.
+    hasStarted: parseLocalDateTime(startsAt).getTime() <= Date.now(),
     // Clasificación
     type:       rawEvent.type,
     typeLabel:  TYPE_LABELS[rawEvent.type] ?? rawEvent.type,
