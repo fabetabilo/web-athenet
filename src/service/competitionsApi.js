@@ -34,6 +34,7 @@ const competitionsClient = axios.create({
 export const COMPETITION_ENDPOINTS = {
     COMPETITIONS: '/competitions',
     COMPETITION_FIXTURE: (id) => `/competitions/${id}/fixture`,
+    CURRENT_FIXTURE: '/competitions/current/fixture',
 }
 
 
@@ -113,20 +114,21 @@ const normalizeList = (rawList, resolve) =>
 
 // --- Funciones del Servicio -----------------------------------------------------
 /**
- * Todos los partidos de una competencia, de octavos a final y en orden de cuadro.
+ * Todos los partidos de la competencia vigente, de octavos a final y en orden de cuadro.
  * Las rondas que la llave todavia no define llegan con los lados vacios.
  *
- * @param {number} id - id de la competencia
+ * Cual es la competencia vigente lo decide el backend: la que esta en curso o, si no hay
+ * ninguna, la ultima que termino. Por eso aqui no entra ningun id.
+ *
  * @param {import('axios').AxiosRequestConfig} [config]
  * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch[]>}
  */
-export async function getCompetitionMatches(id, config = {}) {
-    const fallbackRaw = competitionMatchesMock.filter((m) => m.competition.id === id)
+export async function getCurrentCompetitionMatches(config = {}) {
     const resolve = await loadInstitutionResolver()
 
     return requestWithFallback(
-        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(id),
-        fallbackRaw,
+        COMPETITION_ENDPOINTS.CURRENT_FIXTURE,
+        competitionMatchesMock,
         (rawList) => normalizeList(rawList, resolve),
         config
     )
