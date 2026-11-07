@@ -55,7 +55,12 @@ export default function EventCard({ event, isPrincipal = false, showCountdown = 
             Más Información
           </Button>
 
-          {showCountdown && <Countdown date={event.startsAt} size="sm" />}
+          {showCountdown && (
+            <div className={styles.countdownSlot}>
+              {event.hasStarted && <Pill size="lg" variant="red">En curso</Pill>}
+              <Countdown date={event.startsAt} size="sm" />
+            </div>
+          )}
         </div>
       </div>
     </article>

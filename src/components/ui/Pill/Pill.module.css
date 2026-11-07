@@ -11,3 +11,12 @@
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
+
+.red {
+  background: var(--color-red);
+}
+
+.lg {
+  font-size: var(--text-md);
+  padding: 0.4rem 1.25rem;
+}
