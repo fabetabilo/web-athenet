@@ -3,7 +3,7 @@ import { createApiClient } from './apiClient'
 import { getTeamsById, getSportsById } from './institutionsApi'
 import { nextEvents as nextEventsMock } from '../data/demo/eventsNext'
 import { nextEvent as nextEventMock } from '../data/demo/eventFeatured'
-import { allEvents as allEventsMock } from '../data/demo/eventsAll'
+import { allEvents as allEventsMock, notFinishedEvents as notFinishedEventsMock } from '../data/demo/eventsAll'
 import { resolveTeam as resolveMockTeam } from '../data/demo/teams'
 import { resolveSport as resolveMockSport } from '../data/demo/sports'
 /**
@@ -109,7 +109,7 @@ export async function getNextEvent(config = {}) {
  * @returns {Promise<import('../utils/normalizeEvent').NormalizedEvent[]>}
  */
 export async function getAllEvents(config = {}) {
-    return requestEvents(EVENT_ENDPOINTS.ALL_EVENTS, allEventsMock, toList, config)
+    return requestEvents(EVENT_ENDPOINTS.ALL_EVENTS, notFinishedEventsMock, toList, config)
 }
 
 /**

@@ -1,44 +1,50 @@
-/**
- * Mock de equipos
- * 
- * Diccionario temporal estatico para resolver el nombre, emblema y color de un equipo a partir
- * de su ID. Solo resuelve eventos mock; los reales se resuelven con ms-institution (ver eventsApi).
- * Se utilizan 2 equipos de muestra con logos de placeholder.
- */
+import { institutions } from './institutions'
 
-const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.BASE_URL
 
-const TEAM_A = {
-  name: 'Man Blue',
-  acronym: 'UPC',
-  institution: 'Universidad Playa Chica',
-  logo: `${BASE_URL}img/upc-t.png`,
-};
+export const FOOTBALL_TEAMS = {
+  101: { name: 'Halcones UDAC', institutionId: 1, logo: `${BASE_URL}img/udac.png` },
+  102: { name: 'Marea UPC', institutionId: 3, logo: `${BASE_URL}img/upc.png` },
+  103: { name: 'Pumas UDPC', institutionId: 5, logo: `${BASE_URL}img/udpc.png` },
+  104: { name: 'Cóndores PUAC', institutionId: 6, logo: `${BASE_URL}img/puac.png` },
+  105: { name: 'Tiburones UQ', institutionId: 7, logo: `${BASE_URL}img/uq.png` },
+  106: { name: 'Navegantes ITVM', institutionId: 4, logo: `${BASE_URL}img/itvm.png` },
+  107: { name: 'Titanes UTFM', institutionId: 2, logo: `${BASE_URL}img/utfm.png` },
+  108: { name: 'Leones IBA', institutionId: 8, logo: `${BASE_URL}img/iba.png` },
+  109: { name: 'Zorros UDAC', institutionId: 1, logo: `${BASE_URL}img/udac.png` },
+  110: { name: 'Delfines UPC', institutionId: 3, logo: `${BASE_URL}img/upc.png` },
+  111: { name: 'Lobos UDPC', institutionId: 5, logo: `${BASE_URL}img/udpc.png` },
+  112: { name: 'Volcanes PUAC', institutionId: 6, logo: `${BASE_URL}img/puac.png` },
+  113: { name: 'Gaviotas UQ', institutionId: 7, logo: `${BASE_URL}img/uq.png` },
+  114: { name: 'Anclas ITVM', institutionId: 4, logo: `${BASE_URL}img/itvm.png` },
+  115: { name: 'Mineros UTFM', institutionId: 2, logo: `${BASE_URL}img/utfm.png` },
+  116: { name: 'Pinceles IBA', institutionId: 8, logo: `${BASE_URL}img/iba.png` },
+}
 
-const TEAM_B = {
-  name: 'Man Red',
-  acronym: 'UQ',
-  institution: 'Universidad de Quilpué',
-  logo: `${BASE_URL}img/uq-t.png`,
-};
+export const BASKETBALL_TEAMS = {
+  201: { name: 'Águilas UDAC', institutionId: 1, logo: `${BASE_URL}img/udac.png` },
+  202: { name: 'Olas UPC', institutionId: 3, logo: `${BASE_URL}img/upc.png` },
+  203: { name: 'Glaciares UDPC', institutionId: 5, logo: `${BASE_URL}img/udpc.png` },
+  204: { name: 'Andinos PUAC', institutionId: 6, logo: `${BASE_URL}img/puac.png` },
+  205: { name: 'Rayos UQ', institutionId: 7, logo: `${BASE_URL}img/uq.png` },
+  206: { name: 'Faros ITVM', institutionId: 4, logo: `${BASE_URL}img/itvm.png` },
+  207: { name: 'Forjadores UTFM', institutionId: 2, logo: `${BASE_URL}img/utfm.png` },
+  208: { name: 'Artistas IBA', institutionId: 8, logo: `${BASE_URL}img/iba.png` },
+}
 
-export const MOCK_TEAMS = {
-  101: TEAM_A,
-  102: TEAM_B,
-  903: TEAM_A,
-  904: TEAM_B,
-  905: TEAM_A,
-  906: TEAM_B,
-};
+export const DEMO_TEAMS = { ...FOOTBALL_TEAMS, ...BASKETBALL_TEAMS }
 
-/**
- * Resuelve un equipo por id. Si no existe en el mock, alterna entre los dos de
- * muestra segun la paridad del id: los mocks de eventos siempre enfrentan un id
- * impar contra uno par, asi que el encuentro queda coherente.
- *
- * Incluye el id en la salida porque TeamChip construye la ruta /teams/:id.
- */
-export const resolveTeam = (teamId) => ({
-  id: teamId,
-  ...(MOCK_TEAMS[teamId] ?? (teamId % 2 === 1 ? TEAM_A : TEAM_B)),
-});
+const institutionById = new Map(institutions.map((institution) => [institution.id, institution]))
+
+/** @returns {import('../../utils/normalizeEvent').TeamRef} */
+export const resolveTeam = (teamId) => {
+  const team = DEMO_TEAMS[teamId]
+  const institution = institutionById.get(team?.institutionId)
+  return {
+    id: teamId,
+    name: team?.name ?? null,
+    acronym: institution?.acronym ?? '—',
+    institution: institution?.name ?? null,
+    logo: team?.logo ?? institution?.image ?? null,
+  }
+}

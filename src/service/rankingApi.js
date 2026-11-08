@@ -1,7 +1,8 @@
 import { normalizeRanking } from '../utils/normalizeRanking'
 import { createApiClient } from './apiClient'
 import { getInstitutionsById, getSportsById, getTeamsById } from './institutionsApi'
-import { MOCK_RANKING_BY_SPORT, MOCK_RANKING_TEAMS } from '../data/demo/rankingHistorico'
+import { MOCK_RANKING_BY_SPORT } from '../data/demo/rankingHistorico'
+import { DEMO_TEAMS } from '../data/demo/teams'
 import { institutions as institutionsMock } from '../data/demo/institutions'
 import { MOCK_SPORTS } from '../data/demo/sports'
 
@@ -44,7 +45,7 @@ function buildMockCatalog() {
     logo: institution.image,
   }]))
 
-  const teamsById = new Map(Object.entries(MOCK_RANKING_TEAMS).map(([id, team]) => [id, {
+  const teamsById = new Map(Object.entries(DEMO_TEAMS).map(([id, team]) => [id, {
     name: team.name,
     logo: team.logo ?? institutionsById.get(String(team.institutionId))?.logo ?? null,
   }]))
