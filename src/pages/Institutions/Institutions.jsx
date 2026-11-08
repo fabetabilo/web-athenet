@@ -7,18 +7,26 @@ import styles from './Institutions.module.css'
 export default function Institutions() {
   const [institutions, setInstitutions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
 
   useTransitionHold(loading)
 
   useEffect(() => {
     let mounted = true
 
-    getInstitutions().then((data) => {
-      if (mounted) {
-        setInstitutions(data)
-        setLoading(false)
-      }
-    })
+    getInstitutions()
+      .then((data) => {
+        if (mounted) {
+          setInstitutions(data)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (mounted) {
+          setLoadFailed(true)
+          setLoading(false)
+        }
+      })
 
     return () => {
       mounted = false
@@ -46,7 +54,11 @@ export default function Institutions() {
 
           {loading && <p className={styles.status}>Cargando instituciones...</p>}
 
-          {!loading && institutions.length === 0 && (
+          {!loading && loadFailed && (
+            <p className={styles.status}>No se pudieron cargar las instituciones.</p>
+          )}
+
+          {!loading && !loadFailed && institutions.length === 0 && (
             <p className={styles.status}>No hay instituciones disponibles.</p>
           )}
 

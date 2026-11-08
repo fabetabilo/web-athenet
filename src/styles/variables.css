@@ -1,0 +1,177 @@
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-ink: #080b14;
+  --color-ink-soft: #0A0D1A;
+  --color-ink-deep: #030303;
+  --color-navy: #052344;
+  --color-cyan: #00C8FF;
+  --color-cyan-muted: #d9f2f9;
+  --color-red: #D82028;
+  --color-blue: #007AE5;
+  --color-orange: #ff6810;
+  --color-gray-900: #111111;
+  --color-gray-600: #555555;
+  --color-gray-100: #e9e9e9;
+  --color-slate-100: #f1f4f5;
+  --color-slate-50: #f3f6f8;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  --font-heading: 'Barlow Semi Condensed', sans-serif;
+  --font-primary: 'Barlow', sans-serif;
+  --font-secondary: "Google Sans", sans-serif;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --text-xs: 0.7rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 1rem;
+  --text-lead: 1.125rem;
+  --text-body: clamp(1.1rem, 1.1vw, 1.5rem);
+  --text-lg: clamp(1.125rem, 3vw, 2.2rem);
+
+  --title-sm: 1.25rem;
+  --title-md: 1.5rem;
+  --title-lg: 1.75rem;
+
+  --heading-sm: clamp(1.5rem, 3vw, 2.5rem);
+  --heading-md: clamp(2rem, 4vw, 3rem);
+
+  --display-xs: clamp(2.5rem, 4vw, 3rem);
+  --display-sm: clamp(2.5rem, 4vw, 3.3rem);
+  --display-md: clamp(3rem, 7vw, 4rem);
+  --display-lg: clamp(3rem, 6vw, 5rem);
+  --display-xl: clamp(3rem, 7vw, 6.5rem);
+
+  --leading-display: 0.95;
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  --tracking-title: 0.2px;
+  --tracking-display: 1px;
+  --tracking-snug: 0.04em;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.08em;
+  --tracking-widest: 0.15em;
+
+  --radius-none: 0;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 10px 30px color-mix(in srgb, var(--color-black) 20%, transparent);
+  --shadow-card-hover: 0 10px 25px color-mix(in srgb, var(--color-black) 8%, transparent);
+  --shadow-raised: 0 1rem 2rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-floating: 0 1.5rem 3rem color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-badge: 0 4px 6px color-mix(in srgb, var(--color-black) 20%, transparent);
+  --text-shadow-banner: 2px 2px 8px color-mix(in srgb, var(--color-black) 70%, transparent);
+  --text-shadow-banner-soft: 2px 2px 8px color-mix(in srgb, var(--color-black) 50%, transparent);
+
+  --duration-fast: 0.2s;
+  --duration-base: 0.4s;
+  --duration-slow: 0.5s;
+  --duration-carousel: 0.6s;
+  --duration-slower: 0.8s;
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --drawer-stagger: 70ms;
+  --drawer-settle: calc(var(--duration-base) + 4 * var(--drawer-stagger));
+
+  --skew-diagonal: -8deg;
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-navbar: 200;
+  --z-overlay: 300;
+  --z-drawer: 400;
+  --z-drawer-top: 450;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  --icon-xs: 0.875rem;
+  --icon-sm: 1rem;
+  --icon-md: 1.25rem;
+  --icon-lg: 1.5rem;
+
+  --icon-btn-size: 2.5rem;
+  --control-size-lg: 2.75rem;
+  --control-size-xl: 3rem;
+
+  --avatar-xs: 1.25rem;
+  --avatar-sm: 1.75rem;
+  --avatar-md: 2rem;
+  --avatar-lg: 2.5rem;
+
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  --text-muted-alpha: 0.65;
+
+  --layout-max-width: clamp(80rem, 56rem + 30vw, 92rem);
+  --layout-gutter: clamp(1.25rem, 3vw, 2rem);
+  --layout-container: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  --navbar-height: 5rem;
+}
+
+:root {
+  --surface-page: var(--color-ink-soft);
+  --bg-light: var(--color-white);
+  --bg-light-alt: var(--color-gray-100);
+
+  --color-link: var(--color-blue);
+  --color-highlight: var(--color-orange);
+  --color-ink-translucent: color-mix(in srgb, var(--color-ink) 98%, transparent);
+  --color-scrim: color-mix(in srgb, var(--color-black) 60%, transparent);
+
+  --text-primary: var(--color-white);
+  --text-secondary: color-mix(in srgb, var(--color-white) 70%, transparent);
+  --text-muted: rgba(255, 255, 255, var(--text-muted-alpha));
+  --text-dark: var(--color-gray-900);
+  --text-dark-muted: var(--color-gray-600);
+
+  --color-border: color-mix(in srgb, var(--color-white) 7%, transparent);
+  --color-border-strong: color-mix(in srgb, var(--color-white) 20%, transparent);
+  --color-border-light: color-mix(in srgb, var(--color-ink) 10%, transparent);
+
+  --font-heading-weight: var(--font-weight-bold);
+  --font-text-strong-weight: var(--font-weight-semibold);
+  --font-text-weight: var(--font-weight-regular);
+
+  --section-pad-sm: var(--space-10);
+  --section-pad-md: var(--space-12);
+  --section-pad-lg: var(--space-16);
+  --section-pad-xl: var(--space-20);
+
+  --card-pad-sm: var(--space-4);
+  --card-pad-md: var(--space-6);
+  --card-pad-lg: var(--space-8);
+
+  --grid-gap-sm: var(--space-3);
+  --grid-gap-md: var(--space-4);
+  --grid-gap-lg: var(--space-6);
+  --grid-gap-xl: var(--space-8);
+}

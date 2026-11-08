@@ -1,28 +1,8 @@
 /**
- * Mock del ranking historico (ms-ranking) y de los equipos que lo componen.
+ * Mock del ranking historico (ms-ranking), con los equipos de teams.js.
  * Mismo formato que GET /deportes/{id}/ranking-historico; se indexa por clave de deporte.
  */
-
-const BASE_URL = import.meta.env.BASE_URL
-
-export const MOCK_RANKING_TEAMS = {
-  101: { name: 'Halcones UDAC', institutionId: 1 },
-  102: { name: 'Marea UPC', institutionId: 3, logo: `${BASE_URL}img/upc-t.png` },
-  103: { name: 'Pumas UDPC', institutionId: 5 },
-  104: { name: 'Cóndores PUAC', institutionId: 6 },
-  105: { name: 'Tiburones UQ', institutionId: 7, logo: `${BASE_URL}img/uq-t.png` },
-  106: { name: 'Navegantes ITVM', institutionId: 4 },
-  107: { name: 'Titanes UTFM', institutionId: 2 },
-  108: { name: 'Leones IBA', institutionId: 8 },
-  201: { name: 'Águilas UDAC', institutionId: 1 },
-  202: { name: 'Olas UPC', institutionId: 3, logo: `${BASE_URL}img/upc-t.png` },
-  203: { name: 'Glaciares UDPC', institutionId: 5 },
-  204: { name: 'Andinos PUAC', institutionId: 6 },
-  205: { name: 'Rayos UQ', institutionId: 7, logo: `${BASE_URL}img/uq-t.png` },
-  206: { name: 'Faros ITVM', institutionId: 4 },
-  207: { name: 'Forjadores UTFM', institutionId: 2 },
-  208: { name: 'Artistas IBA', institutionId: 8 },
-}
+import { DEMO_TEAMS } from './teams'
 
 // [equipoId, ganados, empatados, perdidos, puntosFavor, puntosContra]
 const FUTBOL_STATS = [
@@ -74,7 +54,7 @@ function buildRows(stats, lastMatches, points) {
       const last = lastByTeam.get(id)
       return {
         equipoId: id,
-        institucionId: MOCK_RANKING_TEAMS[id].institutionId,
+        institucionId: DEMO_TEAMS[id].institutionId,
         pj: pg + pe + pp,
         pg,
         pe,
@@ -86,9 +66,9 @@ function buildRows(stats, lastMatches, points) {
         ultimoEncuentro: last && {
           competenciaId: 1,
           equipoLocalId: last[0],
-          institucionLocalId: MOCK_RANKING_TEAMS[last[0]].institutionId,
+          institucionLocalId: DEMO_TEAMS[last[0]].institutionId,
           equipoVisitaId: last[1],
-          institucionVisitaId: MOCK_RANKING_TEAMS[last[1]].institutionId,
+          institucionVisitaId: DEMO_TEAMS[last[1]].institutionId,
           puntajeLocal: last[2],
           puntajeVisita: last[3],
           fecha: last[4],

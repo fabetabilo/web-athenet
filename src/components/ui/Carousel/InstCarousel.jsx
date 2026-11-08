@@ -11,7 +11,7 @@ export default function InstCarousel({ institutions = [] }) {
 
   return (
     <div className={styles.carouselWrapper}>
-      <section className={styles.carouselSection} style={{ '--carousel-speed': '40s' }}>
+      <section className={styles.carouselSection}>
         <div className={styles.carouselContainer}>
           <div className={styles.carouselTrack}>
             {items.map((inst, index) => (

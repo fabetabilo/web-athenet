@@ -9,18 +9,26 @@ export default function InstitutionDetail() {
   const { id } = useParams()
   const [institution, setInstitution] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
 
   useTransitionHold(loading)
 
   useEffect(() => {
     let mounted = true
 
-    getInstitutionById(id).then((data) => {
-      if (mounted) {
-        setInstitution(data)
-        setLoading(false)
-      }
-    })
+    getInstitutionById(id)
+      .then((data) => {
+        if (mounted) {
+          setInstitution(data)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (mounted) {
+          setLoadFailed(true)
+          setLoading(false)
+        }
+      })
 
     return () => {
       mounted = false
@@ -29,6 +37,15 @@ export default function InstitutionDetail() {
 
   if (loading) {
     return <main className={styles.notFound}><h1>Cargando institución...</h1></main>
+  }
+
+  if (loadFailed) {
+    return (
+      <main className={styles.notFound}>
+        <h1>No se pudo cargar la institución.</h1>
+        <TransitionLink to="/institutions">Volver a instituciones</TransitionLink>
+      </main>
+    )
   }
 
   if (!institution) {

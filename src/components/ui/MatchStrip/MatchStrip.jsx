@@ -23,6 +23,12 @@ function TeamRow({ side }) {
   )
 }
 
+/** Orden de tres: 1- lo que viene, 2- lo jugado y 3- al final lo que la llave aun no define */
+function groupOrder(match) {
+  if (match.isPending) return 2
+  return match.isPlayed ? 1 : 0
+}
+
 /**
  * Barra de resultados de una competencia.
  *
@@ -36,6 +42,8 @@ export default function MatchStrip({ matches = [] }) {
   if (matches.length === 0) return null
   // La barra muestra una competencia a la vez, asi que basta con la del primero.
   const competitionName = matches[0].competitionName
+  // dentro de cada orden de grupo se conserva el orden de la llave
+  const orderedMatches = [...matches].sort((a, b) => groupOrder(a) - groupOrder(b))
 
   return (
     <section className={styles.section}>
@@ -49,7 +57,7 @@ export default function MatchStrip({ matches = [] }) {
 
           <div className={styles.bar}>
             <ul className={styles.track}>
-              {matches.map((match) => {
+              {orderedMatches.map((match) => {
                 const relativeDay = match.isPlayed ? null : match.relativeDay
                 const statusText = relativeDay ? match.relativeDayLabel : match.statusLabel
                 const statusClassName = relativeDay

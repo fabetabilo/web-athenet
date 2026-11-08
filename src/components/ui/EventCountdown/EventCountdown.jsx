@@ -29,7 +29,7 @@ export default function EventCountdown({ event }) {
             <span className={styles.date}>{event.formattedDate}</span>
           </p>
           <TeamChipList event={event} />
-          <Button variant="solid" showArrow to={`/events/${event.id}`} style={{ marginTop: 'var(--spacing-sm)' }}>
+          <Button variant="solid" showArrow to={`/events/${event.id}`} className={styles.cta}>
             Ver Evento
           </Button>
         </div>

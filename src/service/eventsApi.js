@@ -1,17 +1,17 @@
-import axios from 'axios'
 import { normalizeEvent } from '../utils/normalizeEvent'
+import { createApiClient } from './apiClient'
 import { getTeamsById, getSportsById } from './institutionsApi'
 import { nextEvents as nextEventsMock } from '../data/demo/eventsNext'
 import { nextEvent as nextEventMock } from '../data/demo/eventFeatured'
-import { allEvents as allEventsMock } from '../data/demo/eventsAll'
+import { allEvents as allEventsMock, notFinishedEvents as notFinishedEventsMock } from '../data/demo/eventsAll'
 import { resolveTeam as resolveMockTeam } from '../data/demo/teams'
 import { resolveSport as resolveMockSport } from '../data/demo/sports'
 /**
  * @file eventsApi.js
- * Servicio de consumo para ms-events con fallback a mocks locales en caso de no haber llamada a apis reales
+ * Servicio de consumo para ms-events con mocks locales para el modo demo
  *
- * 1. el Fallback se activa UNICAMENTE ante fallos de red o respuestas HTTP con status no-ok.
- * 2. Todo resultado (real o fallback) pasa obligatoriamente por normalizeEvent antes de entregarse al render
+ * 1. Solo hay mocks sin URL configurada o en modo demo; con URL, un fallo se propaga a la vista.
+ * 2. Todo resultado (real o mock) pasa obligatoriamente por normalizeEvent antes de entregarse al render
  * 3. Los DTOs entre endpoints pueden diferir por diseño; el servicio y el normalizador
  *    son tolerantes a la presencia/ausencia de campos opcionales.
  *
@@ -22,15 +22,11 @@ import { resolveSport as resolveMockSport } from '../data/demo/sports'
 
 
 // --- Configuracion de cliente Axios ------------------------------------------------
-const BASE_URL = import.meta.env.VITE_EVENTS_API_URL || ''
-const FORCED_MOCK = import.meta.env.VITE_USE_EVENT_MOCKS === 'true'
-
-const eventsClient = axios.create({
-    baseURL: BASE_URL,
+const { request, warn } = createApiClient({
+    service: 'eventsApi',
+    baseUrl: import.meta.env.VITE_EVENTS_API_URL || '',
+    urlVar: 'VITE_EVENTS_API_URL',
     timeout: 5000,
-    headers: {
-        Accept: 'application/json',
-    },
 })
 
 // endpoints de api eventos
@@ -41,50 +37,6 @@ export const EVENT_ENDPOINTS = {
     EVENT_BY_ID: (id) => `/events/${id}`,
 }
 
-
-
-/**
- * Ejecuta una petición HTTP con Axios contra api-events con fallback reactivo.
- *
- * Decision temporal: <---------------!!!!
- * Esto porque el dia que se quiera levantar el frontend por si solo por X razon, el frontend se encarga de mostrar
- * datos y todo lo necesario para ser una demo.
- *
- * @template TRaw
- * @param {string} endpoint - Path relativo del recurso
- * @param {TRaw} fallbackData - Dataset mock crudo en caso de fallo
- * @param {import('axios').AxiosRequestConfig} [config] - Configuración adicional de Axios
- * @returns {Promise<{ data: TRaw, source: 'api' | 'mock' }>}
- */
-async function fetchWithFallback(endpoint, fallbackData, config = {}) {
-    // bypass preventivo si se fuerza mock o si no existe URL configurada en el entorno
-    if (FORCED_MOCK || !BASE_URL) {
-        if (import.meta.env.DEV) {
-            console.warn(
-                `[eventsApi] Usando mock fallback para "${endpoint}" (${FORCED_MOCK ? 'VITE_USE_EVENT_MOCKS=true' : 'VITE_EVENTS_API_URL no definida'
-                })`
-            )
-        }
-        return { data: fallbackData, source: 'mock' }
-    }
-
-    // --- Intento de llamada HTTP con Axios ------------
-    try {
-        const response = await eventsClient.get(endpoint, config)
-        return { data: response.data, source: 'api' }
-    } catch (error) {
-        // en caso  de error de red o status no ok se activa el fallback
-        if (import.meta.env.DEV) {
-            const reason = error.response
-                ? `HTTP ${error.response.status} (${error.response.statusText || 'Error de servidor'})`
-                : error.code === 'ECONNABORTED'
-                    ? 'Timeout de conexión (5000ms)'
-                    : error.message || 'Error de red'
-            console.warn(`[eventsApi] Fallback mock activado para "${endpoint}". Motivo: ${reason}`)
-        }
-        return { data: fallbackData, source: 'mock' }
-    }
-}
 
 
 const MOCK_RESOLVERS = { resolveTeam: resolveMockTeam, resolveSport: resolveMockSport }
@@ -103,9 +55,7 @@ async function getResolvers(source) {
             resolveSport: (id) => sportsById.get(String(id)),
         }
     } catch (error) {
-        if (import.meta.env.DEV) {
-            console.warn(`[eventsApi] Equipos y deportes sin resolver: ${error.message}`)
-        }
+        warn(`Equipos y deportes sin resolver: ${error.message}`)
         return {}
     }
 }
@@ -115,13 +65,13 @@ async function getResolvers(source) {
  *
  * @template TRaw, TNorm
  * @param {string} endpoint
- * @param {TRaw} fallbackData
+ * @param {TRaw} mockData
  * @param {(raw: TRaw, normalize: (rawEvent: Object) => import('../utils/normalizeEvent').NormalizedEvent) => TNorm} toResult
  * @param {import('axios').AxiosRequestConfig} [config]
  * @returns {Promise<TNorm>}
  */
-async function requestEvents(endpoint, fallbackData, toResult, config) {
-    const { data, source } = await fetchWithFallback(endpoint, fallbackData, config)
+async function requestEvents(endpoint, mockData, toResult, config) {
+    const { data, source } = await request(endpoint, mockData, config)
     const resolvers = await getResolvers(source)
     return toResult(data, (rawEvent) => normalizeEvent(rawEvent, resolvers))
 }
@@ -159,18 +109,18 @@ export async function getNextEvent(config = {}) {
  * @returns {Promise<import('../utils/normalizeEvent').NormalizedEvent[]>}
  */
 export async function getAllEvents(config = {}) {
-    return requestEvents(EVENT_ENDPOINTS.ALL_EVENTS, allEventsMock, toList, config)
+    return requestEvents(EVENT_ENDPOINTS.ALL_EVENTS, notFinishedEventsMock, toList, config)
 }
 
 /**
  * Obtiene el detalle de un evento por su internalId.
- * Si falla la API real, busca en el mock general (allEventsMock) para fallback.
+ * En modo mock lo busca en el mock general (allEventsMock).
  *
  * @param {string} id - internalId del evento
  * @param {import('axios').AxiosRequestConfig} [config]
  * @returns {Promise<import('../utils/normalizeEvent').NormalizedEvent | null>}
  */
 export async function getEventById(id, config = {}) {
-    const fallbackRaw = allEventsMock.find((e) => e.internalId === id) ?? null
-    return requestEvents(EVENT_ENDPOINTS.EVENT_BY_ID(id), fallbackRaw, toSingle, config)
+    const mockRaw = allEventsMock.find((e) => e.internalId === id) ?? null
+    return requestEvents(EVENT_ENDPOINTS.EVENT_BY_ID(id), mockRaw, toSingle, config)
 }

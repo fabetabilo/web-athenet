@@ -1,16 +1,16 @@
 /* estilos base compartidos para los botones UI */
 .base {
   background: transparent;
-  border-radius: 0;
+  border-radius: var(--radius-none);
   /* el corte diagonal vive aqui; el contenido se contra-inclina en .inner */
   transform: skewX(var(--skew-diagonal));
   padding: 0.875rem 2.25rem;
   font-size: var(--text-md);
   font-family: var(--font-primary);
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  letter-spacing: var(--tracking-wide);
+  transition: background-color var(--duration-fast) ease, color var(--duration-fast) ease, border-color var(--duration-fast) ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,14 +20,14 @@
 .inner {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   transform: skewX(calc(var(--skew-diagonal) * -1));
 }
 
 .arrow {
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
 }
 
 .base:disabled {
@@ -37,67 +37,67 @@
 
 /* tamano MD: version compacta del boton */
 .md {
-  padding: 0.625rem 1.5rem;
+  padding: 0.625rem var(--space-6);
   font-size: var(--text-base);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-snug);
 }
 
 .md .inner {
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .md .arrow {
-  width: 0.875rem;
-  height: 0.875rem;
+  width: var(--icon-xs);
+  height: var(--icon-xs);
 }
 
 /* variante LIGHT para fondos claros */
 .light {
-  border: 1px solid #080B14;
-  color: #080B14;
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink);
 }
 
 .light:active {
-  background: #080B14;
-  color: #fff;
-  border-color: #080B14;
+  background: var(--color-ink);
+  color: var(--color-white);
+  border-color: var(--color-ink);
 }
 
 .light:focus-visible {
-  outline: 2px solid #080B14;
+  outline: var(--focus-ring-width) solid var(--color-ink);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .light:hover {
-    background: #080B14;
-    color: #fff;
-    border-color: #080B14;
+    background: var(--color-ink);
+    color: var(--color-white);
+    border-color: var(--color-ink);
   }
 }
 
 /* variante DARK para fondos oscuros */
 .dark {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-white);
 }
 
 .dark:active {
-  background: #fff;
-  color: #080B14;
-  border-color: #fff;
+  background: var(--color-white);
+  color: var(--color-ink);
+  border-color: var(--color-white);
 }
 
 .dark:focus-visible {
-  outline: 2px solid #fff;
+  outline: var(--focus-ring-width) solid var(--color-white);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .dark:hover {
-    background: #fff;
-    color: #080B14;
-    border-color: #fff;
+    background: var(--color-white);
+    color: var(--color-ink);
+    border-color: var(--color-white);
   }
 }
 
@@ -109,46 +109,46 @@
 }
 
 .accent:active {
-  background: #fff;
+  background: var(--color-white);
   color: var(--text-dark);
-  border-color: #fff;
+  border-color: var(--color-white);
 }
 
 .accent:focus-visible {
-  outline: 2px solid var(--color-cyan);
+  outline: var(--focus-ring-width) solid var(--color-cyan);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .accent:hover {
-    background: #fff;
+    background: var(--color-white);
     color: var(--text-dark);
-    border-color: #fff;
+    border-color: var(--color-white);
   }
 }
 
 /* variante SOLID: relleno blanco que se invierte a negro en hover */
 .solid {
-  background: #fff;
-  border: 1px solid #fff;
+  background: var(--color-white);
+  border: 1px solid var(--color-white);
   color: var(--text-dark);
 }
 
 .solid:active {
   background: var(--text-dark);
-  color: #fff;
-  border-color: #fff;
+  color: var(--color-white);
+  border-color: var(--color-white);
 }
 
 .solid:focus-visible {
-  outline: 2px solid #fff;
+  outline: var(--focus-ring-width) solid var(--color-white);
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .solid:hover {
     background: var(--color-ink);
-    color: #fff;
+    color: var(--color-white);
     border-color: var(--color-ink)
   }
 }

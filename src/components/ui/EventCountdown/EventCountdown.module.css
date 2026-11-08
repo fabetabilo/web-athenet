@@ -1,50 +1,50 @@
 .countdown {
   background: var(--color-ink);
-  padding: 5rem 0;
+  padding: var(--section-pad-xl) 0;
 }
 
 .inner {
-  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  width: var(--layout-container);
   margin-inline: auto;
   display: grid;
-  gap: 2.5rem;
+  gap: var(--space-10);
 }
 
 .main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .label {
   font-family: var(--font-primary);
   font-size: var(--text-md);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-widest);
   color: var(--color-cyan);
 }
 
 .title {
   font-family: var(--font-primary);
-  font-size: clamp(2.5rem, 4vw, 3rem);
-  letter-spacing: .2px;
+  font-size: var(--display-xs);
+  letter-spacing: var(--tracking-title);
   font-weight: var(--font-heading-weight);
-  line-height: 1;
-  margin-bottom: var(--spacing-xsm);
+  line-height: var(--leading-none);
+  margin-bottom: var(--space-4);
 }
 
 .date {
   font-family: var(--font-primary);
   font-size: var(--text-body);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .dateSep {
-  margin-inline: 0.5rem;
+  margin-inline: var(--space-2);
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
 }
 
 .location {
@@ -53,15 +53,19 @@
   gap: 0.4rem;
   font-family: var(--font-primary);
   font-size: var(--text-body);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
-  margin-bottom: var(--spacing-xsm);
+  margin-bottom: var(--space-4);
 }
 
 @media (min-width: 1024px) {
   .inner {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     align-items: center;
-    gap: 4rem;
+    gap: var(--space-16);
   }
+}
+
+.cta {
+  margin-top: var(--space-6);
 }

@@ -1,26 +1,24 @@
-import axios from 'axios'
 import { normalizeRanking } from '../utils/normalizeRanking'
+import { createApiClient } from './apiClient'
 import { getInstitutionsById, getSportsById, getTeamsById } from './institutionsApi'
-import { MOCK_RANKING_BY_SPORT, MOCK_RANKING_TEAMS } from '../data/demo/rankingHistorico'
+import { MOCK_RANKING_BY_SPORT } from '../data/demo/rankingHistorico'
+import { DEMO_TEAMS } from '../data/demo/teams'
 import { institutions as institutionsMock } from '../data/demo/institutions'
 import { MOCK_SPORTS } from '../data/demo/sports'
 
 /**
  * @file rankingApi.js
- * Servicio de lectura para ms-ranking (GET publicos) con fallback a mocks locales.
+ * Servicio de lectura para ms-ranking (GET publicos) con mocks locales para el modo demo.
  *
  * ms-ranking solo entrega ids: nombres y logos se resuelven con el catalogo de
- * ms-institution. Si ranking cae o no hay URL, ranking y catalogo pasan juntos a mock.
+ * ms-institution. En modo mock, ranking y catalogo pasan juntos a mock.
  */
 
-const BASE_URL = import.meta.env.VITE_RANKING_API_URL || ''
-const FORCED_MOCK = import.meta.env.VITE_USE_RANKING_MOCKS === 'true'
-const IS_MOCK_MODE = FORCED_MOCK || !BASE_URL
-
-const rankingClient = axios.create({
-  baseURL: BASE_URL,
+const { mockMode, mockModeReason, request, warn } = createApiClient({
+  service: 'rankingApi',
+  baseUrl: import.meta.env.VITE_RANKING_API_URL || '',
+  urlVar: 'VITE_RANKING_API_URL',
   timeout: 7000,
-  headers: { Accept: 'application/json' },
 })
 
 export const RANKING_ENDPOINTS = {
@@ -33,10 +31,8 @@ export const RANKING_SPORTS = [
   { key: 'basquetbol', names: ['basquetbol', 'basquet', 'baloncesto'] },
 ]
 
-function warnFallback(reason) {
-  if (import.meta.env.DEV) {
-    console.warn(`[rankingApi] Usando datos locales: ${reason}`)
-  }
+function warnMocks(reason) {
+  warn(`Usando datos locales: ${reason}`)
 }
 
 const simplify = (text) => String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
@@ -49,7 +45,7 @@ function buildMockCatalog() {
     logo: institution.image,
   }]))
 
-  const teamsById = new Map(Object.entries(MOCK_RANKING_TEAMS).map(([id, team]) => [id, {
+  const teamsById = new Map(Object.entries(DEMO_TEAMS).map(([id, team]) => [id, {
     name: team.name,
     logo: team.logo ?? institutionsById.get(String(team.institutionId))?.logo ?? null,
   }]))
@@ -59,20 +55,15 @@ function buildMockCatalog() {
   return { teamsById, institutionsById, sportsById }
 }
 
-async function getCatalog(useMock) {
-  if (!useMock) {
-    try {
-      const [teamsById, institutionsById, sportsById] = await Promise.all([
-        getTeamsById(),
-        getInstitutionsById(),
-        getSportsById(),
-      ])
-      return { teamsById, institutionsById, sportsById }
-    } catch (error) {
-      warnFallback(error.message)
-    }
-  }
-  return buildMockCatalog()
+async function getCatalog() {
+  if (mockMode) return buildMockCatalog()
+
+  const [teamsById, institutionsById, sportsById] = await Promise.all([
+    getTeamsById(),
+    getInstitutionsById(),
+    getSportsById(),
+  ])
+  return { teamsById, institutionsById, sportsById }
 }
 
 /**
@@ -80,7 +71,8 @@ async function getCatalog(useMock) {
  * @returns {Promise<Array<{ id: string, key: string, label: string }>>}
  */
 export async function getRankingSports() {
-  const { sportsById } = await getCatalog(IS_MOCK_MODE)
+  if (mockMode) warnMocks(mockModeReason)
+  const { sportsById } = await getCatalog()
 
   // La etiqueta es el nombre real del catalogo (p. ej. "Fútbol Sala").
   return RANKING_SPORTS.flatMap(({ key, names }) => {
@@ -95,20 +87,10 @@ export async function getRankingSports() {
  * @returns {Promise<import('../utils/normalizeRanking').NormalizedRankingRow[]>}
  */
 export async function getRankingHistorico(sport) {
-  let raw
-  let useMock = IS_MOCK_MODE
+  const { data } = await request(
+    RANKING_ENDPOINTS.HISTORIC(sport.id),
+    MOCK_RANKING_BY_SPORT[sport.key] ?? []
+  )
 
-  if (!useMock) {
-    try {
-      const response = await rankingClient.get(RANKING_ENDPOINTS.HISTORIC(sport.id))
-      raw = response.data
-    } catch (error) {
-      warnFallback(error.message)
-      useMock = true
-    }
-  }
-
-  if (useMock) raw = MOCK_RANKING_BY_SPORT[sport.key] ?? []
-
-  return normalizeRanking(raw, await getCatalog(useMock))
+  return normalizeRanking(data, await getCatalog())
 }

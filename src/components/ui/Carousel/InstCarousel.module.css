@@ -1,13 +1,14 @@
 .carouselWrapper {
   background-color: var(--bg-light);
-  padding-block: var(--spacing-md);
+  padding-block: var(--section-pad-sm);
 }
 
 .carouselSection {
+  --carousel-speed: 40s;
   background-color: var(--bg-light);
   width: 100%;
   overflow: hidden;
-  padding: 1.5rem 0;
+  padding: var(--space-6) 0;
   position: relative;
 }
 
@@ -18,11 +19,11 @@
 
 .carouselTrack {
   display: flex;
-  gap: 1.5rem;
-  padding-right: 1.5rem;
+  gap: var(--grid-gap-lg);
+  padding-right: var(--grid-gap-lg);
   /* Espaciado igual al gap antes de que repita la animacion */
   width: max-content;
-  animation: scroll var(--carousel-speed, 35s) linear infinite;
+  animation: scroll var(--carousel-speed) linear infinite;
 }
 
 /* Pausar animación al hacer hover EXACTAMENTE en el contenedor de las tarjetas */
@@ -58,34 +59,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 1rem 1rem;
+  padding: var(--card-pad-sm) var(--card-pad-sm);
   text-align: center;
   border: 1px solid transparent; /* para el efecto hover ->> */
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.3s var(--ease-out-quart);
 }
 
 .cardLink:active .card {
   border-color: var(--color-cyan);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .cardLink:focus-visible .card {
   border-color: var(--color-cyan);
-  outline: 2px solid var(--color-cyan);
+  outline: var(--focus-ring-width) solid var(--color-cyan);
   outline-offset: 4px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .cardLink:hover .card {
     border-color: var(--color-cyan);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-card-hover);
   }
 }
 
 .logoWrapper {
   width: 120px;
   height: 90px;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,30 +109,30 @@
 
 .instName {
   font-family: var(--font-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-navy);
   font-size: var(--text-sm);
-  line-height: 1.15;
+  line-height: var(--leading-tight);
   margin: 0;
 }
 
 /* CLASE OPCIONAL especifica: asi que los valores viven aqui */
 .instCampus {
   font-family: var(--font-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--text-dark);
   opacity: 0.6;
   font-size: 0.65rem;
   text-transform: uppercase;
   margin-top: 0.4rem;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-wide);
 }
 
 @media (max-width: 768px) {
   .card {
     width: 200px;
     height: 190px;
-    padding: 1rem;
+    padding: var(--card-pad-sm);
   }
 
   .logoWrapper {

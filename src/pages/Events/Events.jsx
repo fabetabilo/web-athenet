@@ -14,18 +14,26 @@ export default function Events() {
   const [publicEvents, setPublicEvents] = useState([])
   const [view, setView] = useState('grid')
   const [isLoading, setIsLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
   const navigate = useTransitionNavigate()
 
   useTransitionHold(isLoading)
 
   useEffect(() => {
     let isMounted = true
-    getAllEvents().then((events) => {
-      if (isMounted) {
-        setPublicEvents(events.filter((e) => e.isVisible))
-        setIsLoading(false)
-      }
-    })
+    getAllEvents()
+      .then((events) => {
+        if (isMounted) {
+          setPublicEvents(events.filter((e) => e.isVisible))
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLoadFailed(true)
+          setIsLoading(false)
+        }
+      })
 
     return () => {
       isMounted = false
@@ -67,6 +75,8 @@ export default function Events() {
               </label>
             </div>
           </div>
+
+          {loadFailed && <p className={styles.status}>No se pudieron cargar los eventos.</p>}
 
           {/* Vista grid */}
           {view === 'grid' && (
