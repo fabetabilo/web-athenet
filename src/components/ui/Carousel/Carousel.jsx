@@ -57,7 +57,7 @@ export default function Carousel({ slides = [] }) {
         onClick={() => goTo((current - 1 + slides.length) % slides.length)}
         aria-label="Anterior"
       >
-        <ChevronLeft style={{ width: '1rem', height: '1rem' }} />
+        <ChevronLeft className={styles.arrowIcon} />
       </button>
 
       {/* flecha next */}
@@ -66,7 +66,7 @@ export default function Carousel({ slides = [] }) {
         onClick={() => goTo((current + 1) % slides.length)}
         aria-label="Siguiente"
       >
-        <ChevronRight style={{ width: '1rem', height: '1rem' }} />
+        <ChevronRight className={styles.arrowIcon} />
       </button>
 
       {/* dots (indicador de slides) */}

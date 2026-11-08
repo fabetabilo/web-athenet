@@ -51,7 +51,7 @@ export default function EventDetail() {
       <div className={styles.page}>
         <div className={styles.notFound}>
           <h2>Evento no encontrado</h2>
-          <TransitionLink to="/events" style={{ color: 'var(--color-cyan)', marginTop: '1rem', display: 'inline-block' }}>
+          <TransitionLink to="/events" className={styles.notFoundLink}>
             Volver a eventos
           </TransitionLink>
         </div>
@@ -66,8 +66,8 @@ export default function EventDetail() {
         <div className={styles.contentWrapper}>
           <div className={styles.titleWrapper}>
             <div>
-              <TransitionLink to="/events" style={{ display: 'inline-flex', alignItems: 'center', color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: 'var(--text-sm)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                <ChevronLeft style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
+              <TransitionLink to="/events" className={styles.backLink}>
+                <ChevronLeft className={styles.backLinkIcon} />
                 Todos los eventos
               </TransitionLink>
               <h1 className={styles.title}>
@@ -78,7 +78,7 @@ export default function EventDetail() {
 
           <div className={styles.bannerFooter}>
             {event.isOfficial && (
-              <div className={styles.footerItem} style={{ padding: 0 }}>
+              <div className={`${styles.footerItem} ${styles.footerItemBadge}`}>
                 <OfficialIconH className={styles.officialItemIcon} aria-label="Evento oficial" />
               </div>
             )}

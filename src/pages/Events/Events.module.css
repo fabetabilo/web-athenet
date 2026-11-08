@@ -4,11 +4,11 @@
 
 .content {
   background: var(--bg-light);
-  padding: var(--spacing-md) 0 4rem;
+  padding: var(--section-pad-sm) 0 var(--section-pad-lg);
 }
 
 .container {
-  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  width: var(--layout-container);
   margin-inline: auto;
 }
 
@@ -16,13 +16,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--space-10);
 }
 
 /* radios nativos: solo el espaciado que el reset global quita y el color sobre fondo claro */
 .viewToggle {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   color: var(--text-dark);
   font-size: var(--text-base);
 }
@@ -39,18 +39,18 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: var(--grid-gap-xl);
 }
 
 @media (max-width: 600px) {
   .grid {
-    gap: var(--spacing-sm);
+    gap: var(--grid-gap-lg);
   }
 
   .toolbar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 }
 

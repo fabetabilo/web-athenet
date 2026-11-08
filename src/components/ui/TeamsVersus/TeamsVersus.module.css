@@ -9,6 +9,7 @@
 }
 
 .versusContent {
+  --team-logo-size: clamp(60px, 15vw, 120px);
   display: flex;
   width: 100%;
   max-width: 70rem;
@@ -22,25 +23,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: clamp(1.5rem, 5vw, 3rem) 1rem;
+  padding: clamp(var(--space-6), 5vw, var(--space-12)) var(--space-4);
   text-align: center;
 }
 
 .teamLogo {
-  width: clamp(60px, 15vw, 120px);
-  height: clamp(60px, 15vw, 120px);
+  width: var(--team-logo-size);
+  height: var(--team-logo-size);
   object-fit: contain;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .teamLogoFallback {
   display: grid;
   place-items: center;
-  width: clamp(60px, 15vw, 120px);
-  height: clamp(60px, 15vw, 120px);
-  margin-bottom: 0.75rem;
+  width: var(--team-logo-size);
+  height: var(--team-logo-size);
+  margin-bottom: var(--space-3);
   border: 2px solid currentColor;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   color: var(--text-dark);
   font-family: var(--font-heading);
   font-size: clamp(var(--text-sm), 3vw, var(--text-lg));
@@ -60,7 +61,7 @@
 .teamInstitution {
   font-size: var(--text-md);
   color: var(--text-dark);
-  margin: 0.25rem 0 0 0;
+  margin: var(--space-1) 0 0 0;
 }
 
 .matchInfo {
@@ -72,7 +73,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: var(--z-raised);
   text-align: center;
 }
 
@@ -80,10 +81,10 @@
 .matchCompetition {
   font-family: var(--font-primary);
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--text-dark);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-widest);
 }
 
 .matchDate {
@@ -92,9 +93,9 @@
   font-weight: var(--font-heading-weight);
   font-style: italic;
   color: var(--text-dark);
-  margin: 0.75rem 0;
+  margin: var(--space-3) 0;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: var(--leading-none);
 }
 
 

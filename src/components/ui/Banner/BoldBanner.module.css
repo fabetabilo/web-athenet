@@ -1,16 +1,16 @@
 .container {
   /* tokens de variante: .light / .dark solo los redefinen */
   --banner-bg: var(--bg-light);
-  --banner-stroke: #030303;
-  --banner-solid: #030303;
-  --banner-halo: #ffffff;
+  --banner-stroke: var(--color-ink-deep);
+  --banner-solid: var(--color-ink-deep);
+  --banner-halo: var(--color-white);
 
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 1rem;
+  padding: var(--space-10) var(--space-4);
   background-color: var(--banner-bg);
   overflow: hidden;
   text-align: center;
@@ -20,15 +20,15 @@
 /* variante por defecto: repite los tokens para que la clase no se elimine al minificar */
 .light {
   --banner-bg: var(--bg-light);
-  --banner-stroke: #030303;
-  --banner-solid: #030303;
-  --banner-halo: #ffffff;
+  --banner-stroke: var(--color-ink-deep);
+  --banner-solid: var(--color-ink-deep);
+  --banner-halo: var(--color-white);
 }
 
 .dark {
   --banner-bg: transparent;
-  --banner-stroke: #ffffff;
-  --banner-solid: #ffffff;
+  --banner-stroke: var(--color-white);
+  --banner-solid: var(--color-white);
   --banner-halo: var(--color-ink);
 }
 
@@ -39,10 +39,10 @@
   font-family: var(--font-heading);
   font-size: calc(3.5rem + 5.1163vw - 10.2326px);
   font-style: italic;
-  font-weight: 800;
+  font-weight: var(--font-weight-bold);
   min-height: 0;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: var(--leading-none);
   white-space: nowrap;
 }
 
@@ -50,10 +50,10 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 4.5rem);
   font-style: italic;
-  font-weight: 900;
+  font-weight: var(--font-weight-bold);
   color: var(--banner-solid);
   text-transform: uppercase;
-  line-height: 1;
+  line-height: var(--leading-none);
   margin-top: -0.8em;  /* Margen negativo para sobreponerlo al texto de atras */
   position: relative;
   z-index: 1;
@@ -63,7 +63,7 @@
      3px -3px 0 var(--banner-halo),
     -3px  3px 0 var(--banner-halo),
      3px  3px 0 var(--banner-halo),
-     0px 8px 20px rgba(0,0,0,0.15);
+     0px 8px 20px color-mix(in srgb, var(--color-black) 15%, transparent);
 }
 
 @media (max-width: 768px) {
