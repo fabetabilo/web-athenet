@@ -68,6 +68,7 @@ export default function Rankings() {
   const [data, setData] = useState({ key: null, rows: [] })
   const [expandedId, setExpandedId] = useState(null)
   const [competitionsByTeam, setCompetitionsByTeam] = useState({})
+  const [loadFailed, setLoadFailed] = useState(false)
 
   const activeSport = sports?.find((sport) => (selectedKey ?? sports[0]?.key) === sport.key) ?? null
   const isLoading = sports === null || (activeSport !== null && data.key !== activeSport.key)
@@ -78,9 +79,16 @@ export default function Rankings() {
 
   useEffect(() => {
     let isMounted = true
-    getRankingSports().then((list) => {
-      if (isMounted) setSports(list)
-    })
+    getRankingSports()
+      .then((list) => {
+        if (isMounted) setSports(list)
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLoadFailed(true)
+          setSports([])
+        }
+      })
     return () => {
       isMounted = false
     }
@@ -90,9 +98,18 @@ export default function Rankings() {
     if (!activeSport) return undefined
     let isMounted = true
     getRankingHistorico(activeSport)
-      .catch(() => [])
       .then((list) => {
-        if (isMounted) setData({ key: activeSport.key, rows: list })
+        if (isMounted) {
+          setLoadFailed(false)
+          setData({ key: activeSport.key, rows: list })
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLoadFailed(true)
+          // Con la clave del deporte activo para no dejar la tabla en estado de carga.
+          setData({ key: activeSport.key, rows: [] })
+        }
       })
     return () => {
       isMounted = false
@@ -221,7 +238,9 @@ export default function Rankings() {
                 {!isLoading && rows.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} align="center" variant="muted">
-                      Aún no hay resultados para este deporte.
+                      {loadFailed
+                        ? 'No se pudieron cargar los rankings.'
+                        : 'Aún no hay resultados para este deporte.'}
                     </TableCell>
                   </TableRow>
                 )}

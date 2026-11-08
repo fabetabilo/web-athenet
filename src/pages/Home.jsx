@@ -10,12 +10,15 @@ import Button from '../components/ui/Button/Button'
 import { heroSlides } from '../data/content/heroSlides'
 import { newsCards } from '../data/content/newsCards.js'
 import { getNextEvent, getNextEvents } from '../service/eventsApi'
-import { getCompetitionMatches } from '../service/competitionsApi'
+import { getCurrentCompetitionMatches } from '../service/competitionsApi'
 import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
 
-// Competencia que muestra el strip. Elegir "la mas proxima" es trabajo del backend.
-const HOME_COMPETITION_ID = 2
+/**
+ * Valor de una promesa resuelta, o el vacio que la seccion renderiza.
+ * Cada seccion del Home degrada por su cuenta: un servicio caido no borra las otras.
+ */
+const settled = (result, emptyValue) => (result.status === 'fulfilled' ? result.value : emptyValue)
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
@@ -29,18 +32,18 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true
 
-    Promise.all([
+    Promise.allSettled([
       getNextEvent(),
       getNextEvents(),
-      getCompetitionMatches(HOME_COMPETITION_ID),
+      getCurrentCompetitionMatches(),
       getInstitutions(),
     ]).then(
       ([event, events, matches, insts]) => {
         if (!isMounted) return
-        setFeaturedEvent(event)
-        setUpcomingEvents(events.filter((e) => e.isVisible))
-        setResults(matches)
-        setInstitutions(insts)
+        setFeaturedEvent(settled(event, null))
+        setUpcomingEvents(settled(events, []).filter((e) => e.isVisible))
+        setResults(settled(matches, []))
+        setInstitutions(settled(insts, []))
         setIsLoading(false)
       }
     )

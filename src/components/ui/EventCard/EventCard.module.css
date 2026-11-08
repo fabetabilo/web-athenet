@@ -5,11 +5,11 @@
   min-height: clamp(27rem, 26vw, 30rem);
   display: flex;
   align-items: flex-end;
-  transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: width var(--duration-carousel) var(--ease-out-quart);
   background: var(--color-ink);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-card);
 }
 
 /* card principal isPrincipal (activa): más ancha */
@@ -23,7 +23,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  transition: transform var(--duration-slow);
 }
 
 /* mismo zoom que las cards de Top Historias */
@@ -47,47 +47,47 @@
   height: 1.75rem;
   width: auto;
   max-width: none;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(var(--shadow-badge));
 }
 
 .cardTop {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .cardContent {
   position: relative;
-  z-index: 10;
+  z-index: var(--z-raised);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: var(--space-3);
   width: 100%;
   max-width: 100ch;
-  padding: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(var(--space-6), 3vw, var(--space-12));
 }
 
 .cardDate {
   font-family: var(--font-primary);
   font-size: var(--text-body);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .dateSep {
-  margin-inline: 0.5rem;
+  margin-inline: var(--space-2);
   color: var(--text-muted);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
 }
 
 /* mismo tratamiento tipografico que EventCountdown */
 .cardTitle {
   font-family: var(--font-primary);
   font-size: var(--heading-sm);
-  letter-spacing: .2px;
+  letter-spacing: var(--tracking-title);
   font-weight: var(--font-heading-weight);
-  line-height: 1;
+  line-height: var(--leading-none);
   color: var(--text-primary);
   margin: 0;
 }
@@ -98,7 +98,7 @@
   gap: 0.4rem;
   font-family: var(--font-primary);
   font-size: var(--text-body);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
 }
 
@@ -112,9 +112,17 @@
   align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
+  gap: var(--space-3) var(--space-6);
   width: 100%;
-  margin-top: var(--spacing-xsm);
+  margin-top: var(--space-4);
+}
+
+/* columna para que la pill quede sobre el contador */
+.countdownSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
 }
 
 /* en pantallas angostas el texto ocupa todo el ancho */

@@ -4,8 +4,8 @@
 }
 
 .scroller:focus-visible {
-  outline: 2px solid var(--color-secondary);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--color-link);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .table {
@@ -19,13 +19,13 @@
 }
 
 .headCell {
-  padding: 0.75rem 1.5rem;
+  padding: var(--space-3) var(--space-6);
   border-bottom: 1px solid var(--color-border-light);
   color: var(--text-dark-muted);
   font-family: var(--font-heading);
   font-size: var(--text-sm);
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-snug);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -36,10 +36,10 @@
 
 /* --row-accent lo pinta la fila en hover; el fallback deja a cada variante su color de reposo */
 .cell {
-  padding: 1rem 0.75rem;
+  padding: var(--space-4) var(--space-3);
   vertical-align: middle;
   font-size: var(--text-md);
-  letter-spacing: .2px;
+  letter-spacing: var(--tracking-title);
   color: var(--row-accent, var(--text-dark));
 }
 
@@ -64,14 +64,14 @@
 }
 
 .clickable:focus-visible {
-  outline: 2px solid var(--color-secondary);
+  outline: var(--focus-ring-width) solid var(--color-link);
   outline-offset: -2px;
 }
 
 /* sin transitiona a proposito */
 @media (hover: hover) and (pointer: fine) {
   .clickable:hover {
-    --row-accent: var(--color-secondary);
+    --row-accent: var(--color-link);
     background: var(--color-cyan-muted);
   }
 }

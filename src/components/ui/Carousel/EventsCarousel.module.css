@@ -1,7 +1,7 @@
 .eventsSection {
   background-color: var(--color-ink);
   position: relative;
-  padding: 5rem 0 3rem 0;
+  padding: var(--section-pad-xl) 0 var(--section-pad-md) 0;
   overflow: hidden;
   color: var(--text-primary);
 }
@@ -30,7 +30,7 @@
 }
 
 .container {
-  width: min(var(--layout-max-width), 100% - var(--layout-gutter) * 2);
+  width: var(--layout-container);
   margin-inline: auto;
   position: relative;
   z-index: 1;
@@ -40,7 +40,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 3rem;
+  margin-bottom: var(--space-12);
 }
 
 .headerLeft {
@@ -54,32 +54,32 @@
   font-weight: var(--font-heading-weight);
   text-transform: uppercase;
   margin: 0;
-  line-height: 1;
+  line-height: var(--leading-none);
 }
 
 .headerRight {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .navButtons {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .navBtn {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255,255,255,0.7);
+  border: 1px solid var(--color-border-strong);
+  color: var(--text-secondary);
   border-radius: var(--radius-full);
-  width: 2.75rem;
-  height: 2.75rem;
+  width: var(--control-size-lg);
+  height: var(--control-size-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--duration-fast) ease;
 }
 
 .navBtn:active {
@@ -90,8 +90,8 @@
 .navBtn:focus-visible {
   border-color: var(--color-cyan);
   color: var(--color-cyan);
-  outline: 2px solid var(--color-cyan);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: var(--focus-ring-offset);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -102,8 +102,8 @@
 }
 
 .navIcon {
-  width: 1rem;
-  height: 1rem;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
 }
 
 .carouselContainer {
@@ -113,8 +113,8 @@
 .carouselTrack {
   display: flex;
   gap: var(--gap);
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  --gap: 1.5rem;
+  transition: transform var(--duration-carousel) var(--ease-out-quart);
+  --gap: var(--grid-gap-lg);
   --card-width: 480px;
   --principal-width: 600px;
 }
@@ -124,7 +124,7 @@
   .carouselTrack {
     --card-width: 880px;
     --principal-width: 968px;
-    --gap: 2rem;
+    --gap: var(--grid-gap-xl);
   }
 }
 
@@ -132,7 +132,7 @@
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .carouselTrack {
