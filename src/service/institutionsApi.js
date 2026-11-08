@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { createApiClient } from './apiClient'
 import { institutions as institutionsMock } from '../data/demo/institutions'
 
 /**
@@ -10,13 +10,11 @@ import { institutions as institutionsMock } from '../data/demo/institutions'
  * de instituciones y la resolucion de referencias de otros servicios (getTeamsById, getSportsById).
  */
 
-const BASE_URL = import.meta.env.VITE_INSTITUTIONS_API_URL || ''
-const FORCED_MOCK = import.meta.env.VITE_USE_INSTITUTION_MOCKS === 'true'
-
-const institutionsClient = axios.create({
-  baseURL: BASE_URL,
+const { client: institutionsClient, mockMode, mockModeReason, warn, logNetworkError } = createApiClient({
+  service: 'institutionsApi',
+  baseUrl: import.meta.env.VITE_INSTITUTIONS_API_URL || '',
+  urlVar: 'VITE_INSTITUTIONS_API_URL',
   timeout: 7000,
-  headers: { Accept: 'application/json' },
 })
 
 export const INSTITUTION_ENDPOINTS = {
@@ -26,10 +24,8 @@ export const INSTITUTION_ENDPOINTS = {
   SPORTS: '/deportes',
 }
 
-function warnFallback(reason) {
-  if (import.meta.env.DEV) {
-    console.warn(`[institutionsApi] Usando datos locales: ${reason}`)
-  }
+function warnMocks(reason) {
+  warn(`Usando datos locales: ${reason}`)
 }
 
 function unwrapCollection(payload) {
@@ -61,15 +57,17 @@ function buildTeamsById(institutions, sedes, teams) {
 
 async function fetchCatalog() {
   // Sin URL, axios pegaria al host de Vite y recibiria index.html con 200.
-  if (FORCED_MOCK) throw new Error('VITE_USE_INSTITUTION_MOCKS=true')
-  if (!BASE_URL) throw new Error('VITE_INSTITUTIONS_API_URL no definida')
+  if (mockMode) throw new Error(mockModeReason)
 
   const [institutionsRes, sedesRes, teamsRes, sportsRes] = await Promise.all([
     institutionsClient.get(INSTITUTION_ENDPOINTS.INSTITUTIONS),
     institutionsClient.get(INSTITUTION_ENDPOINTS.SEDES),
     institutionsClient.get(INSTITUTION_ENDPOINTS.TEAMS),
     institutionsClient.get(INSTITUTION_ENDPOINTS.SPORTS),
-  ])
+  ]).catch((error) => {
+    logNetworkError('catalogo', error)
+    throw error
+  })
 
   const institutions = unwrapCollection(institutionsRes.data)
   const sedes = unwrapCollection(sedesRes.data)
@@ -130,7 +128,7 @@ export async function getInstitutionsById() {
 
 // --- Instituciones -------------------------------------------------------------
 
-function normalizeFallbackInstitution(institution) {
+function normalizeMockInstitution(institution) {
   return {
     ...institution,
     acronym: institution.acronym || institution.name.slice(0, 3).toUpperCase(),
@@ -144,11 +142,11 @@ function normalizeFallbackInstitution(institution) {
     })),
     teams: institution.teams || 0,
     disciplines: institution.disciplines || [],
-    source: 'fallback',
+    source: 'mock',
   }
 }
 
-const getFallbackInstitutions = () => institutionsMock.map(normalizeFallbackInstitution)
+const getMockInstitutions = () => institutionsMock.map(normalizeMockInstitution)
 
 function normalizeInstitution(rawInstitution, sedes, teams) {
   const institutionSedes = sedes.filter((sede) => String(sede.institucionId) === String(rawInstitution.id))
@@ -174,25 +172,25 @@ function normalizeInstitution(rawInstitution, sedes, teams) {
 }
 
 export async function getInstitutions() {
-  try {
-    const { institutions, sedes, teams } = await loadCatalog()
-    return institutions
-      .filter((institution) => institution.activo !== false)
-      .map((institution) => normalizeInstitution(institution, sedes, teams))
-  } catch (error) {
-    warnFallback(error.message)
-    return getFallbackInstitutions()
+  if (mockMode) {
+    warnMocks(mockModeReason)
+    return getMockInstitutions()
   }
+
+  const { institutions, sedes, teams } = await loadCatalog()
+  return institutions
+    .filter((institution) => institution.activo !== false)
+    .map((institution) => normalizeInstitution(institution, sedes, teams))
 }
 
 export async function getInstitutionById(id) {
-  try {
-    const { institutions, sedes, teams } = await loadCatalog()
-    const institution = institutions.find((item) => String(item.id) === String(id))
-    if (!institution || institution.activo === false) return null
-    return normalizeInstitution(institution, sedes, teams)
-  } catch (error) {
-    warnFallback(error.message)
-    return getFallbackInstitutions().find((institution) => String(institution.id) === String(id)) ?? null
+  if (mockMode) {
+    warnMocks(mockModeReason)
+    return getMockInstitutions().find((institution) => String(institution.id) === String(id)) ?? null
   }
+
+  const { institutions, sedes, teams } = await loadCatalog()
+  const institution = institutions.find((item) => String(item.id) === String(id))
+  if (!institution || institution.activo === false) return null
+  return normalizeInstitution(institution, sedes, teams)
 }

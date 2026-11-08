@@ -11,6 +11,7 @@ export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useTransitionHold(isLoading);
 
@@ -26,6 +27,7 @@ export default function EventDetail() {
       })
       .catch(() => {
         if (isMounted) {
+          setLoadFailed(true);
           setEvent(null);
           setIsLoading(false);
         }
@@ -50,7 +52,7 @@ export default function EventDetail() {
     return (
       <div className={styles.page}>
         <div className={styles.notFound}>
-          <h2>Evento no encontrado</h2>
+          <h2>{loadFailed ? 'No se pudo cargar el evento.' : 'Evento no encontrado'}</h2>
           <TransitionLink to="/events" className={styles.notFoundLink}>
             Volver a eventos
           </TransitionLink>

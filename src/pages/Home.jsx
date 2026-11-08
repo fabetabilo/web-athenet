@@ -14,6 +14,12 @@ import { getCurrentCompetitionMatches } from '../service/competitionsApi'
 import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
 
+/**
+ * Valor de una promesa resuelta, o el vacio que la seccion renderiza.
+ * Cada seccion del Home degrada por su cuenta: un servicio caido no borra las otras.
+ */
+const settled = (result, emptyValue) => (result.status === 'fulfilled' ? result.value : emptyValue)
+
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState([])
@@ -26,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true
 
-    Promise.all([
+    Promise.allSettled([
       getNextEvent(),
       getNextEvents(),
       getCurrentCompetitionMatches(),
@@ -34,10 +40,10 @@ export default function Home() {
     ]).then(
       ([event, events, matches, insts]) => {
         if (!isMounted) return
-        setFeaturedEvent(event)
-        setUpcomingEvents(events.filter((e) => e.isVisible))
-        setResults(matches)
-        setInstitutions(insts)
+        setFeaturedEvent(settled(event, null))
+        setUpcomingEvents(settled(events, []).filter((e) => e.isVisible))
+        setResults(settled(matches, []))
+        setInstitutions(settled(insts, []))
         setIsLoading(false)
       }
     )

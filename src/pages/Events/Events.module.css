@@ -61,3 +61,8 @@
   max-width: none;
   display: inline-block;
 }
+
+.status {
+  padding: var(--space-8) 0;
+  color: var(--text-dark-muted);
+}

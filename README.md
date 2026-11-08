@@ -26,7 +26,7 @@ Más que una cartelera, esta plataforma es una herramienta dinámica diseñada p
 
 ### Desarrollo Local
 
-> **Nota:** El proyecto cuenta con un fallback, si no hay una API configurada, el frontend utiliza datos demo (mocks). Revisa la advertencia informativa en la consola del navegador.
+> **Nota:** Si no hay una API configurada, el frontend utiliza datos demo (mocks) y lo avisa en la consola del navegador. Con la API configurada no hay mocks: un fallo no muestra datos y se reporta como error de red.
 
 Levanta el proyecto en tu entorno local:
 
@@ -55,11 +55,11 @@ Levanta el proyecto en tu entorno local:
    | `VITE_COMPETITIONS_API_URL` | URL base de `ms-competitions`. Si se omite, `MatchStrip` usa mocks. | _(vacía)_ |
 | `VITE_NOTIFICATIONS_API_URL` | URL base del servicio de suscripciones de `ms-notifications`. Sin mocks: si se omite, el newsletter muestra error. Ver [docs/dev/turnstile.md](docs/dev/turnstile.md). | _(vacía)_ |
 | `VITE_TURNSTILE_SITE_KEY` | Site key pública de Cloudflare Turnstile para el newsletter. | `1x00000000000000000000AA` (prueba) |
-   | `VITE_USE_EVENT_MOCKS` | Fuerza los mocks de eventos sin llamadas de red (`true` \| `false`). | `false` |
-   | `VITE_USE_INSTITUTION_MOCKS` | Fuerza los mocks de instituciones sin llamadas de red (`true` \| `false`). | `false` |
-   | `VITE_USE_COMPETITION_MOCKS` | Fuerza los mocks de competencias sin llamadas de red (`true` \| `false`). | `false` |
+   | `VITE_USE_DEMO_MOCKS` | Modo demo: fuerza los mocks de todos los servicios de lectura sin llamadas de red (`true` \| `false`). | `false` |
 
    > Los eventos reales solo se resuelven con el catálogo real de `ms-institution`, nunca con mocks: si ese servicio no responde, se muestran sin equipos ni deporte.
+   >
+   > Con `VITE_USE_DEMO_MOCKS=false`, dejar vacía la URL de un servicio manda a mocks solo a ese servicio; los demás siguen consumiendo su API. Si una API configurada falla **no** se cae a mocks: la sección queda vacía y el fallo se reporta con `console.error` (en producción sin el endpoint).
    >
    > Para apuntar a microservicios locales sin tocar `.env`, crea un `.env.local` (tiene prioridad y está en `.gitignore`).
 
