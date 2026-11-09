@@ -4,6 +4,7 @@ import { createApiClient } from './apiClient'
 import { getInstitutionsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
 import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
+import { competitions as competitionsMock } from '../data/demo/competitions'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con mocks locales para el modo demo.
@@ -95,6 +96,21 @@ export async function getCurrentCompetitionMatches(config = {}) {
         COMPETITION_ENDPOINTS.CURRENT_FIXTURE,
         competitionMatchesMock,
         (rawList) => normalizeList(rawList, resolve),
+        config
+    )
+}
+
+/**
+ * Todas las competencias, mas reciente primero.
+ *
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition[]>}
+ */
+export async function getCompetitions(config = {}) {
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITIONS,
+        competitionsMock,
+        normalizeCompetitionList,
         config
     )
 }

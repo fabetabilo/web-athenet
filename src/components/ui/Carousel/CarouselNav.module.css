@@ -1,0 +1,54 @@
+.navButtons {
+  --nav-border: var(--color-border-strong);
+  --nav-color: var(--text-secondary);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.light {
+  --nav-border: var(--color-border-light);
+  --nav-color: var(--text-dark-muted);
+}
+
+.navBtn {
+  background: transparent;
+  border: 1px solid var(--nav-border);
+  color: var(--nav-color);
+  border-radius: var(--radius-full);
+  width: var(--control-size-lg);
+  height: var(--control-size-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+}
+
+.navBtn:active:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.navBtn:focus-visible {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.navBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navBtn:hover:not(:disabled) {
+    border-color: var(--color-cyan);
+    color: var(--color-cyan);
+  }
+}
+
+.navIcon {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}

@@ -51,7 +51,7 @@ function CompetitionsPanel({ entry }) {
     <ul className={styles.compList}>
       {entry.items.map((competition) => (
         <li key={competition.id} className={styles.compCard}>
-          <Avatar src={competition.logo} name={competition.name} size="lg" />
+          <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
           <span className={styles.compText}>
             <span className={styles.compName}>{competition.name}</span>
             <span className={styles.compDate}>{competition.dateLabel}</span>

@@ -6,7 +6,7 @@
  * @typedef {Object} NormalizedCompetition
  * @property {number|string} id
  * @property {string} name
- * @property {string|null} logo
+ * @property {string|null} competitionImg
  * @property {string|null} startDate - ISO "YYYY-MM-DD"
  * @property {string|null} endDate - ISO "YYYY-MM-DD"
  * @property {string} dateLabel - Ej: "1 oct 2026 - 15 nov 2026"
@@ -36,7 +36,7 @@ export function normalizeCompetition(raw) {
   return {
     id: raw.id,
     name: raw.name,
-    logo: raw.competitionImg || null,
+    competitionImg: raw.competitionImg || null,
     startDate,
     endDate,
     dateLabel: buildDateLabel(startDate, endDate),
