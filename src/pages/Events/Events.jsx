@@ -49,33 +49,36 @@ export default function Events() {
       />
 
       <section className={styles.content}>
-        <div className={styles.container}>
-
-          {/* Toolbar: contador de eventos + toggle de vista */}
-          <div className={styles.toolbar}>
-            <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
-              <label className={styles.viewOption}>
-                <input
-                  type="radio"
-                  name="view"
-                  value="grid"
-                  checked={view === 'grid'}
-                  onChange={() => setView('grid')}
-                />
-                GRID
-              </label>
-              <label className={styles.viewOption}>
-                <input
-                  type="radio"
-                  name="view"
-                  value="list"
-                  checked={view === 'list'}
-                  onChange={() => setView('list')}
-                />
-                LISTA
-              </label>
+        <div className={styles.darkBand}>
+          <div className={styles.container}>
+            <div className={styles.toolbar}>
+              <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
+                <label className={styles.viewOption}>
+                  <input
+                    type="radio"
+                    name="view"
+                    value="grid"
+                    checked={view === 'grid'}
+                    onChange={() => setView('grid')}
+                  />
+                  GRID
+                </label>
+                <label className={styles.viewOption}>
+                  <input
+                    type="radio"
+                    name="view"
+                    value="list"
+                    checked={view === 'list'}
+                    onChange={() => setView('list')}
+                  />
+                  LISTA
+                </label>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div className={styles.container}>
 
           {loadFailed && <p className={styles.status}>No se pudieron cargar los eventos.</p>}
 

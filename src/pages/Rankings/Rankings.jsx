@@ -144,35 +144,38 @@ export default function Rankings() {
       />
 
       <section className={styles.content}>
-        <div className={styles.container}>
+        <div className={styles.darkBand}>
+          <div className={styles.container}>
+            <div className={styles.toolbar}>
+              <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
+                {(sports ?? []).map((sport) => (
+                  <button
+                    key={sport.key}
+                    type="button"
+                    aria-pressed={sport.key === activeSport?.key}
+                    className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
+                    onClick={() => {
+                      setSelectedKey(sport.key)
+                      setExpandedId(null)
+                    }}
+                  >
+                    {sport.label}
+                  </button>
+                ))}
+              </div>
 
-          <div className={styles.toolbar}>
-            <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
-              {(sports ?? []).map((sport) => (
-                <button
-                  key={sport.key}
-                  type="button"
-                  aria-pressed={sport.key === activeSport?.key}
-                  className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
-                  onClick={() => {
-                    setSelectedKey(sport.key)
-                    setExpandedId(null)
-                  }}
-                >
-                  {sport.label}
-                </button>
-              ))}
+              {lastUpdate && (
+                <p className={styles.updated}>
+                  Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
+                </p>
+              )}
             </div>
 
-            {lastUpdate && (
-              <p className={styles.updated}>
-                Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
-              </p>
-            )}
+            <TeamStandings rows={rows} />
           </div>
+        </div>
 
-          <TeamStandings rows={rows} />
-
+        <div className={styles.container}>
           <div className={isLoading ? styles.busy : undefined} aria-busy={isLoading}>
             <Table
               minWidth="66rem"
