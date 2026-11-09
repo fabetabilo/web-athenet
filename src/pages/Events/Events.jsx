@@ -43,38 +43,42 @@ export default function Events() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="EVENTOS"
-        backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
+        title="Eventos"
+        subtitle="Calendario de partidos, torneos y fechas clave del deporte universitario."
+        backgroundImage={`${import.meta.env.BASE_URL}img/events.webp`}
       />
 
       <section className={styles.content}>
-        <div className={styles.container}>
-
-          {/* Toolbar: contador de eventos + toggle de vista */}
-          <div className={styles.toolbar}>
-            <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
-              <label className={styles.viewOption}>
-                <input
-                  type="radio"
-                  name="view"
-                  value="grid"
-                  checked={view === 'grid'}
-                  onChange={() => setView('grid')}
-                />
-                GRID
-              </label>
-              <label className={styles.viewOption}>
-                <input
-                  type="radio"
-                  name="view"
-                  value="list"
-                  checked={view === 'list'}
-                  onChange={() => setView('list')}
-                />
-                LISTA
-              </label>
+        <div className={styles.darkBand}>
+          <div className={styles.container}>
+            <div className={styles.toolbar}>
+              <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
+                <label className={styles.viewOption}>
+                  <input
+                    type="radio"
+                    name="view"
+                    value="grid"
+                    checked={view === 'grid'}
+                    onChange={() => setView('grid')}
+                  />
+                  GRID
+                </label>
+                <label className={styles.viewOption}>
+                  <input
+                    type="radio"
+                    name="view"
+                    value="list"
+                    checked={view === 'list'}
+                    onChange={() => setView('list')}
+                  />
+                  LISTA
+                </label>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div className={styles.container}>
 
           {loadFailed && <p className={styles.status}>No se pudieron cargar los eventos.</p>}
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTransitionHold } from '../components/transition'
 import Carousel from '../components/ui/Carousel/Carousel'
 import EventsCarousel from '../components/ui/Carousel/EventsCarousel'
+import CompetitionsCarousel from '../components/ui/Carousel/CompetitionsCarousel'
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
 import MatchStrip from '../components/ui/MatchStrip/MatchStrip'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
@@ -10,7 +11,7 @@ import Button from '../components/ui/Button/Button'
 import { heroSlides } from '../data/content/heroSlides'
 import { newsCards } from '../data/content/newsCards.js'
 import { getNextEvent, getNextEvents } from '../service/eventsApi'
-import { getCurrentCompetitionMatches } from '../service/competitionsApi'
+import { getCompetitions, getCurrentCompetitionMatches } from '../service/competitionsApi'
 import { getInstitutions } from '../service/institutionsApi'
 import styles from './Home.module.css'
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState([])
   const [results, setResults] = useState([])
   const [institutions, setInstitutions] = useState([])
+  const [competitions, setCompetitions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   useTransitionHold(isLoading)
@@ -37,13 +39,15 @@ export default function Home() {
       getNextEvents(),
       getCurrentCompetitionMatches(),
       getInstitutions(),
+      getCompetitions(),
     ]).then(
-      ([event, events, matches, insts]) => {
+      ([event, events, matches, insts, comps]) => {
         if (!isMounted) return
         setFeaturedEvent(settled(event, null))
         setUpcomingEvents(settled(events, []).filter((e) => e.isVisible))
         setResults(settled(matches, []))
         setInstitutions(settled(insts, []))
+        setCompetitions(settled(comps, []))
         setIsLoading(false)
       }
     )
@@ -62,6 +66,7 @@ export default function Home() {
       <MatchStrip matches={results} />
       <EventCountdown event={featuredEvent} />
       <EventsCarousel events={upcomingEvents} />
+      <CompetitionsCarousel competitions={competitions} getLink={(c) => `/competitions/${c.id}`} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
       <section className={styles.section}>

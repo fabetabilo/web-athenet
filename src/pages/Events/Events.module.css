@@ -4,7 +4,14 @@
 
 .content {
   background: var(--bg-light);
-  padding: var(--section-pad-sm) 0 var(--section-pad-lg);
+  padding-bottom: var(--section-pad-lg);
+}
+
+/* franja oscura de ancho completo, pegada al PageBanner: mismo fondo que las secciones oscuras del Home */
+.darkBand {
+  margin-bottom: var(--section-pad-sm);
+  padding-block: var(--space-5);
+  background: var(--color-ink);
 }
 
 .container {
@@ -16,15 +23,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-10);
 }
 
-/* radios nativos: solo el espaciado que el reset global quita y el color sobre fondo claro */
+/* radios nativos: solo el espaciado que el reset global quita y el color sobre fondo oscuro */
 .viewToggle {
   display: flex;
   gap: var(--space-4);
-  color: var(--text-dark);
+  color: var(--text-primary);
   font-size: var(--text-base);
+  color-scheme: dark;
+  accent-color: var(--color-highlight);
 }
 
 .viewOption {

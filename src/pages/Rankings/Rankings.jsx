@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from 'react'
-import { useTransitionHold } from '../../components/transition'
+import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
+import TeamStandings from '../../components/ui/TeamStandings/TeamStandings'
 import { getTeamCompetitions } from '../../service/competitionsApi'
 import { formatNumericDate, getLastUpdate } from '../../utils/normalizeRanking'
 import { getRankingHistorico, getRankingSports } from '../../service/rankingApi'
@@ -50,12 +51,14 @@ function CompetitionsPanel({ entry }) {
   return (
     <ul className={styles.compList}>
       {entry.items.map((competition) => (
-        <li key={competition.id} className={styles.compCard}>
-          <Avatar src={competition.logo} name={competition.name} size="lg" />
-          <span className={styles.compText}>
-            <span className={styles.compName}>{competition.name}</span>
-            <span className={styles.compDate}>{competition.dateLabel}</span>
-          </span>
+        <li key={competition.id}>
+          <TransitionLink to={`/competitions/${competition.id}`} className={styles.compCard}>
+            <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
+            <span className={styles.compText}>
+              <span className={styles.compName}>{competition.name}</span>
+              <span className={styles.compDate}>{competition.dateLabel}</span>
+            </span>
+          </TransitionLink>
         </li>
       ))}
     </ul>
@@ -135,38 +138,44 @@ export default function Rankings() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="RANKINGS"
-        backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
+        title="Rankings"
+        subtitle="Posiciones históricas de los equipos universitarios, deporte por deporte."
+        backgroundImage={`${import.meta.env.BASE_URL}img/rankings.webp`}
       />
 
       <section className={styles.content}>
-        <div className={styles.container}>
+        <div className={styles.darkBand}>
+          <div className={styles.container}>
+            <div className={styles.toolbar}>
+              <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
+                {(sports ?? []).map((sport) => (
+                  <button
+                    key={sport.key}
+                    type="button"
+                    aria-pressed={sport.key === activeSport?.key}
+                    className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
+                    onClick={() => {
+                      setSelectedKey(sport.key)
+                      setExpandedId(null)
+                    }}
+                  >
+                    {sport.label}
+                  </button>
+                ))}
+              </div>
 
-          <div className={styles.toolbar}>
-            <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
-              {(sports ?? []).map((sport) => (
-                <button
-                  key={sport.key}
-                  type="button"
-                  aria-pressed={sport.key === activeSport?.key}
-                  className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
-                  onClick={() => {
-                    setSelectedKey(sport.key)
-                    setExpandedId(null)
-                  }}
-                >
-                  {sport.label}
-                </button>
-              ))}
+              {lastUpdate && (
+                <p className={styles.updated}>
+                  Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
+                </p>
+              )}
             </div>
 
-            {lastUpdate && (
-              <p className={styles.updated}>
-                Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
-              </p>
-            )}
+            <TeamStandings rows={rows} />
           </div>
+        </div>
 
+        <div className={styles.container}>
           <div className={isLoading ? styles.busy : undefined} aria-busy={isLoading}>
             <Table
               minWidth="66rem"

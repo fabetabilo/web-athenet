@@ -14,10 +14,10 @@ const MATCH_DURATION_MS = 2 * 60 * 60 * 1000
 
 const COMPETITION = {
   id: 1,
-  name: 'Copa Instituciones de Chile',
+  name: 'Copa Instituciones de Chile 2026',
   season: String(new Date().getFullYear()),
   sportId: 1,
-  competitionImg: null,
+  competitionImg: `${import.meta.env.BASE_URL}img/c-inst2026.png`,
 }
 
 const side = (teamId, score) => {

@@ -1,23 +1,13 @@
-import { useState } from 'react'
 import { useTransitionNavigate } from '../../transition'
-import { ChevronLeft, ChevronRight } from '../../icons'
 import Button from '../Button/Button'
 import EventCard from '../EventCard/EventCard'
+import CarouselNav from './CarouselNav'
+import { useCarousel } from './useCarousel'
 import styles from './EventsCarousel.module.css'
 
 export default function EventsCarousel({ events = [] }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const { index, next, prev, canNavigate, trackStyle } = useCarousel(events.length)
   const navigate = useTransitionNavigate()
-
-  const handleNext = () => {
-    if (events.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % events.length)
-  }
-
-  const handlePrev = () => {
-    if (events.length === 0) return;
-    setCurrentIndex((prev) => (prev - 1 + events.length) % events.length)
-  }
 
   return (
     <section className={styles.eventsSection}>
@@ -29,29 +19,23 @@ export default function EventsCarousel({ events = [] }) {
           </div>
           <div className={styles.headerRight}>
             <Button variant="dark" onClick={() => navigate('/events')}>TODOS LOS EVENTOS</Button>
-            <div className={styles.navButtons}>
-              <button className={styles.navBtn} onClick={handlePrev} aria-label="Evento anterior">
-                <ChevronLeft className={styles.navIcon} />
-              </button>
-              <button className={styles.navBtn} onClick={handleNext} aria-label="Evento siguiente">
-                <ChevronRight className={styles.navIcon} />
-              </button>
-            </div>
+            <CarouselNav
+              onPrev={prev}
+              onNext={next}
+              disabled={!canNavigate}
+              prevLabel="Evento anterior"
+              nextLabel="Evento siguiente"
+            />
           </div>
         </div>
 
         <div className={styles.carouselContainer}>
-          <div
-            className={styles.carouselTrack}
-            style={{
-              transform: `translateX(calc(-${currentIndex} * (var(--card-width) + var(--gap))))`
-            }}
-          >
-            {events.map((event, index) => (
+          <div className={styles.carouselTrack} style={trackStyle}>
+            {events.map((event, i) => (
               <EventCard
                 key={event.id}
                 event={event}
-                isPrincipal={index === currentIndex}
+                isPrincipal={i === index}
               />
             ))}
           </div>

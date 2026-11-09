@@ -27,13 +27,26 @@
 }
 
 .title {
+  font-family: var(--font-primary);
+  font-weight: var(--font-heading-weight);
   color: var(--text-primary);
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-bold);
-  font-style: italic;
-  font-size: var(--display-lg);
-  text-transform: uppercase;
+  line-height: var(--leading-none);
   margin-bottom: var(--space-6);
-  letter-spacing: var(--tracking-display);
-  text-shadow: var(--text-shadow-banner);
+  letter-spacing: var(--tracking-title);
+  font-size: var(--display-sm);
+}
+
+.subtitle {
+  font-family: var(--font-primary);
+  font-weight: var(--font-text-weight);
+  font-size: var(--text-md);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+  max-width: 42rem;
+}
+
+@media (min-width: 768px) {
+  .subtitle {
+    font-size: var(--text-lead);
+  }
 }

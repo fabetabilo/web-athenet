@@ -1,9 +1,11 @@
 import { normalizeMatch } from '../utils/normalizeMatch'
-import { normalizeCompetitionList } from '../utils/normalizeCompetition'
+import { normalizeCompetition, normalizeCompetitionList } from '../utils/normalizeCompetition'
 import { createApiClient } from './apiClient'
-import { getInstitutionsById } from './institutionsApi'
+import { getInstitutionsById, getSportsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
 import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
+import { competitions as competitionsMock } from '../data/demo/competitions'
+import { resolveSport as resolveMockSport } from '../data/demo/sports'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con mocks locales para el modo demo.
@@ -28,6 +30,7 @@ const { request, warn } = createApiClient({
 
 export const COMPETITION_ENDPOINTS = {
     COMPETITIONS: '/competitions',
+    COMPETITION_BY_ID: (id) => `/competitions/${id}`,
     COMPETITION_FIXTURE: (id) => `/competitions/${id}/fixture`,
     CURRENT_FIXTURE: '/competitions/current/fixture',
 }
@@ -46,6 +49,28 @@ export const COMPETITION_ENDPOINTS = {
 async function requestAndNormalize(endpoint, mockData, normalizer, config = {}) {
     const { data } = await request(endpoint, mockData, config)
     return normalizer(data)
+}
+
+/**
+ * Deporte resuelto segun el origen
+ * Si ms-institution no responde, las competencias reales quedan sin deporte.
+ */
+async function getSportResolver(source) {
+    if (source === 'mock') return resolveMockSport
+
+    try {
+        const sportsById = await getSportsById()
+        return (id) => sportsById.get(String(id)) ?? null
+    } catch (error) {
+        warn(`Deportes sin resolver: ${error.message}`)
+        return () => null
+    }
+}
+
+async function requestCompetitions(endpoint, mockData, toResult, config = {}) {
+    const { data, source } = await request(endpoint, mockData, config)
+    const resolveSport = await getSportResolver(source)
+    return toResult(data, { resolveSport })
 }
 
 /** Institucion que no se pudo resolver: el marcador queda con la sigla neutra. */
@@ -95,6 +120,37 @@ export async function getCurrentCompetitionMatches(config = {}) {
         COMPETITION_ENDPOINTS.CURRENT_FIXTURE,
         competitionMatchesMock,
         (rawList) => normalizeList(rawList, resolve),
+        config
+    )
+}
+
+/**
+ * Todas las competencias, mas reciente primero.
+ *
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition[]>}
+ */
+export async function getCompetitions(config = {}) {
+    return requestCompetitions(
+        COMPETITION_ENDPOINTS.COMPETITIONS,
+        competitionsMock,
+        normalizeCompetitionList,
+        config
+    )
+}
+
+/**
+ * Una competencia por id; null si no existe.
+ *
+ * @param {number|string} id
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition|null>}
+ */
+export async function getCompetitionById(id, config = {}) {
+    return requestCompetitions(
+        COMPETITION_ENDPOINTS.COMPETITION_BY_ID(id),
+        competitionsMock.find((competition) => String(competition.id) === String(id)) ?? null,
+        (raw, resolvers) => (raw ? normalizeCompetition(raw, resolvers) : null),
         config
     )
 }
