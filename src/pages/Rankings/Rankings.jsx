@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from 'react'
-import { useTransitionHold } from '../../components/transition'
+import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
+import TeamStandings from '../../components/ui/TeamStandings/TeamStandings'
 import { getTeamCompetitions } from '../../service/competitionsApi'
 import { formatNumericDate, getLastUpdate } from '../../utils/normalizeRanking'
 import { getRankingHistorico, getRankingSports } from '../../service/rankingApi'
@@ -50,12 +51,14 @@ function CompetitionsPanel({ entry }) {
   return (
     <ul className={styles.compList}>
       {entry.items.map((competition) => (
-        <li key={competition.id} className={styles.compCard}>
-          <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
-          <span className={styles.compText}>
-            <span className={styles.compName}>{competition.name}</span>
-            <span className={styles.compDate}>{competition.dateLabel}</span>
-          </span>
+        <li key={competition.id}>
+          <TransitionLink to={`/competitions/${competition.id}`} className={styles.compCard}>
+            <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
+            <span className={styles.compText}>
+              <span className={styles.compName}>{competition.name}</span>
+              <span className={styles.compDate}>{competition.dateLabel}</span>
+            </span>
+          </TransitionLink>
         </li>
       ))}
     </ul>
@@ -167,6 +170,8 @@ export default function Rankings() {
               </p>
             )}
           </div>
+
+          <TeamStandings rows={rows} />
 
           <div className={isLoading ? styles.busy : undefined} aria-busy={isLoading}>
             <Table
