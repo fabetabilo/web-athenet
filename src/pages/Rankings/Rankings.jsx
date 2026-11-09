@@ -135,8 +135,9 @@ export default function Rankings() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="RANKINGS"
-        backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
+        title="Rankings"
+        subtitle="Posiciones históricas de los equipos universitarios, deporte por deporte."
+        backgroundImage={`${import.meta.env.BASE_URL}img/rankings.webp`}
       />
 
       <section className={styles.content}>

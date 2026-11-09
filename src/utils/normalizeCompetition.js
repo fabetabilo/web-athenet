@@ -7,6 +7,9 @@
  * @property {number|string} id
  * @property {string} name
  * @property {string|null} competitionImg
+ * @property {string|null} description
+ * @property {number|null} sportId
+ * @property {string|null} sportLabel - Nombre resuelto; null si no se pudo resolver
  * @property {string|null} startDate - ISO "YYYY-MM-DD"
  * @property {string|null} endDate - ISO "YYYY-MM-DD"
  * @property {string} dateLabel - Ej: "1 oct 2026 - 15 nov 2026"
@@ -29,14 +32,22 @@ function buildDateLabel(startDate, endDate) {
   return 'Fechas por definir'
 }
 
-/** @returns {NormalizedCompetition} */
-export function normalizeCompetition(raw) {
+/**
+ * @param {Object} raw
+ * @param {{ resolveSport?: (id: number) => string|null }} [resolvers]
+ * @returns {NormalizedCompetition}
+ */
+export function normalizeCompetition(raw, { resolveSport = () => null } = {}) {
   const startDate = raw.startDate ?? null
   const endDate = raw.endDate ?? null
+  const sportId = raw.sportId ?? null
   return {
     id: raw.id,
     name: raw.name,
     competitionImg: raw.competitionImg || null,
+    description: raw.description || null,
+    sportId,
+    sportLabel: sportId != null ? resolveSport(sportId) ?? null : null,
     startDate,
     endDate,
     dateLabel: buildDateLabel(startDate, endDate),
@@ -44,9 +55,9 @@ export function normalizeCompetition(raw) {
 }
 
 /** Mas reciente primero (por fecha de inicio). @returns {NormalizedCompetition[]} */
-export function normalizeCompetitionList(rawList) {
+export function normalizeCompetitionList(rawList, resolvers) {
   if (!Array.isArray(rawList)) return []
   return rawList
-    .map(normalizeCompetition)
+    .map((raw) => normalizeCompetition(raw, resolvers))
     .sort((a, b) => (b.startDate ?? '').localeCompare(a.startDate ?? ''))
 }

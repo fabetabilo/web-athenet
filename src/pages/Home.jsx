@@ -66,7 +66,7 @@ export default function Home() {
       <MatchStrip matches={results} />
       <EventCountdown event={featuredEvent} />
       <EventsCarousel events={upcomingEvents} />
-      <CompetitionsCarousel competitions={competitions} />
+      <CompetitionsCarousel competitions={competitions} getLink={(c) => `/competitions/${c.id}`} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
       <section className={styles.section}>

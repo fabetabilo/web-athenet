@@ -1,10 +1,11 @@
 import { normalizeMatch } from '../utils/normalizeMatch'
-import { normalizeCompetitionList } from '../utils/normalizeCompetition'
+import { normalizeCompetition, normalizeCompetitionList } from '../utils/normalizeCompetition'
 import { createApiClient } from './apiClient'
 import { getInstitutionsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
 import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
 import { competitions as competitionsMock } from '../data/demo/competitions'
+import { resolveSport } from '../data/demo/sports'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con mocks locales para el modo demo.
@@ -29,6 +30,7 @@ const { request, warn } = createApiClient({
 
 export const COMPETITION_ENDPOINTS = {
     COMPETITIONS: '/competitions',
+    COMPETITION_BY_ID: (id) => `/competitions/${id}`,
     COMPETITION_FIXTURE: (id) => `/competitions/${id}/fixture`,
     CURRENT_FIXTURE: '/competitions/current/fixture',
 }
@@ -110,7 +112,23 @@ export async function getCompetitions(config = {}) {
     return requestAndNormalize(
         COMPETITION_ENDPOINTS.COMPETITIONS,
         competitionsMock,
-        normalizeCompetitionList,
+        (rawList) => normalizeCompetitionList(rawList, { resolveSport }),
+        config
+    )
+}
+
+/**
+ * Una competencia por id; null si no existe.
+ *
+ * @param {number|string} id
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition|null>}
+ */
+export async function getCompetitionById(id, config = {}) {
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITION_BY_ID(id),
+        competitionsMock.find((competition) => String(competition.id) === String(id)) ?? null,
+        (raw) => (raw ? normalizeCompetition(raw, { resolveSport }) : null),
         config
     )
 }
