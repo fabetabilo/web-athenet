@@ -1,0 +1,146 @@
+/* --- Fondo fijo (parallax de velocidad cero) -------------------------------
+   La imagen no se mueve con el scroll: queda clavada al viewport y el contenido
+   de arriba y de abajo se desliza por encima, como una ventana a una foto quieta.
+
+   El clip-path de .board no recorta nada (inset(0) = la caja entera), pero crea un
+   contexto de recorte: por spec, un hijo position: fixed se sigue posicionando
+   contra el viewport, pero solo se pinta dentro de esta seccion.
+
+   No se usa background-attachment: fixed porque iOS Safari lo ignora y pinta el
+   fondo como si fuera scroll. */
+.board {
+  position: relative;
+  clip-path: inset(0);
+  padding-block: var(--section-pad-xl) var(--section-pad-lg);
+  background: var(--color-ink);
+}
+
+/* 100lvh y no 100%: el alto es el del viewport, no el de la seccion */
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  height: 100vh;
+  height: 100lvh;
+  object-fit: cover;
+}
+
+.fade {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: clamp(10rem, 30vh, 16rem);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--color-ink) 85%, transparent), transparent);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: var(--layout-container);
+  margin-inline: auto;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: var(--display-xs);
+  letter-spacing: var(--tracking-title);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--leading-none);
+  color: var(--text-primary);
+  text-shadow: var(--text-shadow-banner-soft);
+  margin-bottom: var(--space-4);
+}
+
+.range {
+  min-height: 1.6em;
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  text-shadow: var(--text-shadow-banner-soft);
+  margin-bottom: var(--space-6);
+}
+
+.panel {
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--bg-light);
+  box-shadow: var(--shadow-floating);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: var(--space-5) var(--card-pad-md);
+  background: var(--color-ink);
+}
+
+.logo {
+  height: clamp(16px, 4vw, 22px);
+  width: auto;
+}
+
+.table th {
+  padding-inline: var(--space-3);
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: var(--card-pad-md);
+}
+
+.table th:last-child,
+.table td:last-child {
+  padding-right: var(--card-pad-md);
+}
+
+.officialBadge {
+  height: 24px;
+  width: auto;
+  max-width: none;
+  display: inline-block;
+}
+
+.cta {
+  display: block;
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-white) 92%, transparent);
+  color: var(--text-dark);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  transition: background-color var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.cta:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cta:hover {
+    background: var(--bg-light);
+    color: var(--color-link);
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    padding: var(--space-4) var(--card-pad-sm);
+  }
+
+  .table th:first-child,
+  .table td:first-child {
+    padding-left: var(--card-pad-sm);
+  }
+
+  .table th:last-child,
+  .table td:last-child {
+    padding-right: var(--card-pad-sm);
+  }
+}

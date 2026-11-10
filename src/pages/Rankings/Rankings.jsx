@@ -3,6 +3,7 @@ import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
 import TeamStandings from '../../components/ui/TeamStandings/TeamStandings'
+import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
 import { getTeamCompetitions } from '../../service/competitionsApi'
 import { formatNumericDate, getLastUpdate } from '../../utils/normalizeRanking'
 import { getRankingHistorico, getRankingSports } from '../../service/rankingApi'
@@ -258,6 +259,7 @@ export default function Rankings() {
           </div>
         </div>
       </section>
+      <EventsBoard />
     </div>
   )
 }
