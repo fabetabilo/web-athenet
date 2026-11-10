@@ -125,6 +125,27 @@ export async function getCurrentCompetitionMatches(config = {}) {
 }
 
 /**
+ * Un partido de una competencia, para mostrar su marcador y ronda junto al evento
+ * que lo copia. Lo busca en el fixture publico porque /matches/{id} expone otro DTO.
+ *
+ * @param {number} competitionId
+ * @param {number} matchId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch | null>}
+ */
+export async function getCompetitionMatch(competitionId, matchId, config = {}) {
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(competitionId),
+        competitionMatchesMock,
+        (rawList) => {
+            const raw = Array.isArray(rawList) ? rawList.find((m) => m.id === matchId) : null
+            return raw ? normalizeMatch(raw) : null
+        },
+        config
+    )
+}
+
+/**
  * Todas las competencias, mas reciente primero.
  *
  * @param {import('axios').AxiosRequestConfig} [config]

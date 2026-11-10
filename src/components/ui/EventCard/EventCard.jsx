@@ -57,8 +57,13 @@ export default function EventCard({ event, isPrincipal = false, showCountdown = 
 
           {showCountdown && (
             <div className={styles.countdownSlot}>
-              {event.hasStarted && <Pill size="lg" variant="red">En curso</Pill>}
-              <Countdown date={event.startsAt} size="sm" />
+              {event.isFinished ? (
+                <Pill size="lg" variant="neutral">Finalizado</Pill>
+              ) : event.hasStarted ? (
+                <Pill size="lg" variant="red">En curso</Pill>
+              ) : (
+                <Countdown date={event.startsAt} size="sm" />
+              )}
             </div>
           )}
         </div>
