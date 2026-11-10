@@ -16,6 +16,11 @@
   background: var(--color-red);
 }
 
+.neutral {
+  background: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
 .lg {
   font-size: var(--text-md);
   padding: 0.4rem var(--space-5);

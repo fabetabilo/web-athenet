@@ -6,7 +6,8 @@ import {
   LuCalendar,
   LuBuilding2,
   LuUsers,
-  LuSearch
+  LuSearch,
+  LuClock
 } from 'react-icons/lu';
 
 import {
@@ -35,7 +36,8 @@ export {
   LuCalendar as Calendar,
   LuBuilding2 as Building2,
   LuUsers as Users,
-  LuSearch as Search
+  LuSearch as Search,
+  LuClock as Clock
 };
 
 // Logos de redes sociales (set Font Awesome 6)

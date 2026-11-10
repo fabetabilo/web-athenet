@@ -4,6 +4,7 @@ import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
 import TeamMatchup from '../../components/ui/TeamChip/TeamMatchup'
+import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
 import { OfficialIconH } from '../../components/icons'
 import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
@@ -126,6 +127,7 @@ export default function Events() {
           )}
         </div>
       </section>
+      <EventsBoard />
     </div>
   )
 }
