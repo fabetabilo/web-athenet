@@ -1,6 +1,77 @@
+/* --- About ----------------------------------------- */
+.about {
+  background: var(--bg-light);
+  padding-block: var(--section-pad-lg);
+  scroll-margin-top: var(--navbar-height);
+}
+.aboutInner {
+  width: var(--layout-container);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap-xl);
+  align-items: center;
+}
+.aboutTitle {
+  font-family: var(--font-primary);
+  font-size: var(--display-xs);
+  letter-spacing: var(--tracking-title);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--leading-none);
+  color: var(--text-dark);
+  margin-bottom: var(--space-4);
+}
+.aboutLead,
+.aboutParagraph {
+  font-family: var(--font-primary);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-dark);
+  max-width: 42rem;
+}
+.aboutList {
+  margin-top: var(--space-6);
+  padding-left: var(--space-5);
+  list-style: disc;
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-dark);
+  max-width: 42rem;
+}
+.aboutList li::marker {
+  color: var(--color-link);
+}
+.aboutImg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+@media (min-width: 768px) {
+  .aboutLead,
+  .aboutParagraph,
+  .aboutList {
+    font-size: var(--text-lead);
+  }
+  .aboutInner {
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gap-xl);
+  }
+  .aboutText { grid-column: span 6; }
+  .aboutMedia { grid-column: span 6; }
+}
+@media (min-width: 1024px) {
+  .aboutInner {
+    gap: var(--space-16);
+  }
+}
+
 /* --- Top historias --------------------------------- */
 .section {
   background: var(--bg-light);
+  padding-top: var(--section-pad-xl);
   padding-bottom: var(--section-pad-sm);
 }
 .inner {
