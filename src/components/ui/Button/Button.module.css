@@ -51,6 +51,23 @@
   height: var(--icon-xs);
 }
 
+/* tamano SM: ~20% menor que md */
+.sm {
+  padding: 0.4rem 1rem;
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-snug);
+}
+
+.sm .inner {
+  gap: var(--space-2);
+}
+
+.sm .arrow {
+  width: var(--icon-xs);
+  height: var(--icon-xs);
+}
+
 /* variante LIGHT para fondos claros */
 .light {
   border: 1px solid var(--color-ink);
@@ -150,5 +167,29 @@
     background: var(--color-ink);
     color: var(--color-white);
     border-color: var(--color-ink)
+  }
+}
+
+/* variante MUTED: relleno gris para acciones secundarias sobre fondos oscuros */
+.muted {
+  background: var(--color-gray-600);
+  border: 1px solid var(--color-gray-600);
+  color: var(--color-white);
+}
+
+.muted:active {
+  background: color-mix(in srgb, var(--color-gray-600) 85%, var(--color-white));
+  border-color: color-mix(in srgb, var(--color-gray-600) 85%, var(--color-white));
+}
+
+.muted:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-white);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .muted:hover {
+    background: color-mix(in srgb, var(--color-gray-600) 85%, var(--color-white));
+    border-color: color-mix(in srgb, var(--color-gray-600) 85%, var(--color-white));
   }
 }
