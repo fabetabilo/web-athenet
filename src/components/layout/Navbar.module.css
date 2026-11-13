@@ -109,14 +109,7 @@
   }
 }
 
-.cta {
-  display: none;
-  align-items: center;
-  gap: var(--space-4);
-  pointer-events: auto;
-}
-
-/* Base comun de todo boton de icono: menu, buscador y cerrar. El color lo heredan los svg via currentColor igual que links */
+/* Base comun de los botones de icono: menu y cerrar. El color lo heredan los svg via currentColor igual que links */
 .iconBtn {
   display: flex;
   align-items: center;
@@ -129,11 +122,6 @@
   border: none;
   color: var(--text-primary);
   transition: color var(--duration-fast);
-}
-
-.searchIcon {
-  width: var(--icon-md);
-  height: var(--icon-md);
 }
 
 .topControls {
@@ -453,6 +441,7 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
   .inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    column-gap: var(--space-4);   /* separacion minima entre logo, links y acceso */
     align-items: center;
   }
 
@@ -466,10 +455,6 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
   .links {
     display: flex;
     justify-self: center;
-  }
-
-  .cta {
-    display: flex;
   }
 
   .drawer {
@@ -512,5 +497,104 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
     margin-left: var(--space-16);
     grid-column: 2;
     grid-row: 1;
+  }
+}
+
+/* Acceso de usuarios. Va como tercera celda de la grilla, pegado al borde derecho: si no cabe,
+   empuja los enlaces en vez de superponerse. Bajo 1280px vive en el drawer. */
+.auth {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  justify-self: end;
+}
+
+/* Botones de acceso: misma forma que el recuadro del usuario (UserMenu).
+   Iniciar sesion = placa oscura; Registrarse y Cerrar sesion = celeste */
+.loginButton,
+.registerButton,
+.logoutButton {
+  align-self: stretch;   /* misma altura que el recuadro del usuario */
+  min-height: calc(2rem + var(--space-2) + 2px);
+  padding: 0 var(--space-4);
+  color: var(--color-ink);
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);     /* menor que los links del menu (text-md) */
+  font-weight: 450;              /* igual que los links del menu */
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.registerButton,
+.logoutButton {
+  background: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+}
+
+.loginButton {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  border: 1px solid var(--color-border-strong);
+  backdrop-filter: blur(6px);
+}
+
+.registerButton:active,
+.logoutButton:active {
+  background: var(--color-white);
+  border-color: var(--color-white);
+}
+
+.loginButton:active {
+  border-color: var(--color-cyan);
+}
+
+.registerButton:focus-visible,
+.logoutButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-white);
+  outline-offset: 3px;
+}
+
+.loginButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .registerButton:hover,
+  .logoutButton:hover {
+    background: var(--color-white);
+    border-color: var(--color-white);
+  }
+
+  .loginButton:hover {
+    border-color: var(--color-cyan);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loginButton,
+  .registerButton,
+  .logoutButton {
+    transition: none;
+  }
+}
+
+.drawerAuth {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 1280px) {
+  .auth {
+    display: flex;
+  }
+
+  .drawerAuth {
+    display: none;
   }
 }

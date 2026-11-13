@@ -1,0 +1,280 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Panel de marca: negro que se abre a cian desde la esquina inferior izquierda,
+   igual que el fade de la seccion de eventos de la home */
+.brand {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: var(--space-10);
+  background:
+    radial-gradient(
+      ellipse 130% 85% at bottom left,
+      color-mix(in srgb, var(--color-cyan) 55%, transparent) 0%,
+      color-mix(in srgb, var(--color-blue) 22%, transparent) 40%,
+      transparent 75%
+    ),
+    var(--color-ink);
+}
+
+.logo {
+  width: 7rem;
+  height: auto;
+}
+
+.title {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.05;
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+}
+
+.text {
+  max-width: 22rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.perks {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-12);
+  padding: 0;
+  list-style: none;
+  color: var(--text-primary);
+  font-size: var(--text-base);
+}
+
+.perks li {
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-cyan);
+}
+
+/* En pantallas chicas el fade pasa a ser un halo en la parte superior del formulario */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-12) var(--space-5) var(--space-8);
+  background: radial-gradient(
+    circle at top left,
+    color-mix(in srgb, var(--color-cyan) 22%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+@media (min-width: 860px) {
+  .layout {
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .brand {
+    display: flex;
+  }
+
+  .panel {
+    padding: var(--space-12) var(--space-10) var(--space-10);
+    background: none;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-6);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.tab {
+  margin-bottom: -1px;
+  padding: var(--space-2) 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.tabActive {
+  color: var(--color-white);
+  border-bottom-color: var(--color-cyan);
+}
+
+.tab:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    color: var(--color-white);
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 520px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lead {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.lead strong {
+  color: var(--color-white);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Checklist de la contrasena */
+.rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-4);
+  margin: calc(var(--space-2) * -1) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.rules li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ruleIcon {
+  flex: none;
+  opacity: 0.3;
+}
+
+.ruleMet {
+  color: var(--text-primary);
+}
+
+.ruleMet .ruleIcon {
+  color: var(--color-cyan);
+  opacity: 1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Terminos */
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.check input {
+  flex: none;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  margin: 0.1rem 0 0;
+  accent-color: var(--color-cyan);
+}
+
+.checkError {
+  margin: var(--space-2) 0 0;
+  color: color-mix(in srgb, var(--color-red) 70%, var(--color-white));
+  font-size: var(--text-sm);
+}
+
+/* Mensajes */
+.alert,
+.notice,
+.demo {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  border-left: 2px solid;
+}
+
+.alert {
+  color: color-mix(in srgb, var(--color-red) 70%, var(--color-white));
+  background: color-mix(in srgb, var(--color-red) 12%, transparent);
+  border-color: var(--color-red);
+}
+
+.notice {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--color-cyan) 12%, transparent);
+  border-color: var(--color-cyan);
+}
+
+.demo {
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--color-white) 6%, transparent);
+  border-color: var(--color-border-strong);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.linkButton {
+  color: var(--color-cyan);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.linkButton:disabled {
+  color: var(--text-muted);
+  text-decoration: none;
+  cursor: default;
+}
+
+.linkButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+}

@@ -1,0 +1,70 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  overflow-y: auto;
+  background: var(--color-scrim);
+  backdrop-filter: blur(6px);
+  animation: overlayIn var(--duration-fast) ease-out;
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 58rem;
+  max-height: calc(100dvh - var(--space-8));
+  overflow-y: auto;
+  color: var(--text-primary);
+  background: var(--surface-page);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-card);
+  animation: dialogIn var(--duration-base) var(--ease-out-quart);
+}
+
+.dialog:focus {
+  outline: none;
+}
+
+.close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: var(--z-raised);
+  display: grid;
+  place-items: center;
+  width: var(--icon-btn-size);
+  height: var(--icon-btn-size);
+  color: var(--text-secondary);
+  font-size: var(--icon-md);
+  transition: color var(--duration-fast);
+}
+
+.close:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover {
+    color: var(--color-white);
+  }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(var(--space-4)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .dialog {
+    animation: none;
+  }
+}

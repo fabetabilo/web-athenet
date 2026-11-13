@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import logo from '../../assets/icon/brand2.png'
 import { TransitionLink, TransitionNavLink } from '../transition'
 import { lockScroll, unlockScroll } from '../../utils/scrollLock'
-import { Search } from '../icons'
+import { useAuth } from '../../auth/useAuth'
+import UserMenu from './UserMenu'
 import styles from './Navbar.module.css'
 
 const MENU_DELAY = 70
@@ -52,7 +53,39 @@ function TopLink({ to, label }) {
   )
 }
 
+// Acceso de usuarios externos: abre el modal de registro / inicio de sesion
+function AuthButtons({ onNavigate }) {
+  const { openAuth } = useAuth()
+  const open = (view) => () => {
+    onNavigate?.()
+    openAuth(view)
+  }
+
+  return (
+    <>
+      <button type="button" className={styles.loginButton} onClick={open('login')}>Iniciar sesión</button>
+      <button type="button" className={styles.registerButton} onClick={open('register')}>Registrarse</button>
+    </>
+  )
+}
+
+// Sesion iniciada: menu del usuario; si no, botones de acceso. Mientras se recupera la sesion no muestra nada
+function AuthArea({ inline = false, onNavigate }) {
+  const { status, signOut } = useAuth()
+  if (status === 'loading') return null
+  if (status !== 'authenticated') return <AuthButtons onNavigate={onNavigate} />
+  if (inline) return <UserMenu inline onNavigate={onNavigate} />
+
+  return (
+    <>
+      <UserMenu />
+      <button type="button" className={styles.logoutButton} onClick={signOut}>Cerrar sesión</button>
+    </>
+  )
+}
+
 export default function Navbar() {
+  const { authEnabled } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sweep, setSweep] = useState(false)   // barrido de las barras al pasar el cursor
@@ -100,13 +133,6 @@ export default function Navbar() {
             </span>
             <span className={styles.menuLabel} aria-hidden="true">Cerrar</span>
           </button>
-
-          {/* Buscador: TEMPORAL AUN NO BUSCA :V */}
-          <div className={styles.cta}>
-            <button type="button" className={styles.iconBtn} aria-label="Buscar">
-              <Search className={styles.searchIcon} aria-hidden="true" />
-            </button>
-          </div>
         </div>
       </div>
 
@@ -125,6 +151,13 @@ export default function Navbar() {
               <TopLink key={label} to={to} label={label} />
             ))}
           </div>
+
+          {/* Acceso: en pantallas anchas va en la barra; en las demas, dentro del drawer */}
+          {authEnabled && (
+            <div className={styles.auth}>
+              <AuthArea />
+            </div>
+          )}
 
         </div>
       </nav>
@@ -157,6 +190,12 @@ export default function Navbar() {
                     {label}
                   </DrawerLink>
                 ))}
+
+                {authEnabled && (
+                  <div className={styles.drawerAuth}>
+                    <AuthArea inline onNavigate={() => setMenuOpen(false)} />
+                  </div>
+                )}
               </div>
 
               <div className={styles.drawerAside}>

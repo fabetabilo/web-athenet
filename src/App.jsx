@@ -5,6 +5,9 @@ import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import { RouteTransitionProvider, useRouteTransition } from './components/transition'
 import { resetScroll } from './utils/resetScroll'
+import AuthProvider from './auth/AuthProvider'
+import ProtectedRoute from './auth/ProtectedRoute'
+import AuthModal from './components/ui/AuthModal/AuthModal'
 import Home from './pages/Home'
 import Events from './pages/Events/Events'
 import EventDetail from './pages/Events/EventDetail'
@@ -13,6 +16,7 @@ import InstitutionDetail from './pages/Institutions/InstitutionDetail'
 import CompetitionDetail from './pages/Competitions/CompetitionDetail'
 import Rankings from './pages/Rankings/Rankings'
 import ConfirmSubscription from './pages/Subscription/ConfirmSubscription'
+import Profile from './pages/Profile/Profile'
 
 function AppShell() {
   const { phase, isCovering } = useRouteTransition()
@@ -50,6 +54,7 @@ function AppShell() {
           <Route path="/competitions/:id" element={<CompetitionDetail />} />
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/suscripcion/confirmar" element={<ConfirmSubscription />} />
+          <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </main>
       <Footer />
@@ -60,7 +65,11 @@ function AppShell() {
 function App() {
   return (
     <RouteTransitionProvider>
-      <AppShell />
+      <AuthProvider>
+        <AppShell />
+        {/* Fuera de AppShell: el modal no debe heredar su inert */}
+        <AuthModal />
+      </AuthProvider>
     </RouteTransitionProvider>
   )
 }
