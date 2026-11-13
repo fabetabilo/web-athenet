@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { TransitionLink, useTransitionHold } from '../../components/transition';
-import { MapPin, Calendar, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/icons';
+import { MapPin, Clock, ChevronLeft, OfficialIconH, ArrowRight } from '../../components/icons';
 import { getEventById } from '../../service/eventsApi';
+import { getCompetitionMatch } from '../../service/competitionsApi';
+import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
+import GalleryCarousel from '../../components/ui/Carousel/GalleryCarousel';
 import Pill from '../../components/ui/Pill/Pill';
+import Countdown from '../../components/ui/Countdown/Countdown';
 import TeamsVersus from '../../components/ui/TeamsVersus/TeamsVersus';
+import TeamChipList from '../../components/ui/TeamChip/TeamChipList';
+import { formatDateRange } from '../../utils/dateTime';
 import styles from './EventDetail.module.css';
 
 export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const [match, setMatch] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
 
@@ -19,9 +26,13 @@ export default function EventDetail() {
     let isMounted = true;
 
     getEventById(id)
-      .then((data) => {
+      .then(async (data) => {
+        const eventMatch = data?.competitionId && data?.competitionMatchId
+          ? await getCompetitionMatch(data.competitionId, data.competitionMatchId).catch(() => null)
+          : null;
         if (isMounted) {
           setEvent(data);
+          setMatch(eventMatch);
           setIsLoading(false);
         }
       })
@@ -61,59 +72,83 @@ export default function EventDetail() {
     );
   }
 
+  const dateLabel = formatDateRange(event.eventDate, event.endDate || event.eventDate);
+
   return (
     <div className={styles.page}>
       <div className={styles.bannerContainer} style={{ backgroundImage: `url(${event.image})` }}>
         <div className={styles.overlay}></div>
         <div className={styles.contentWrapper}>
           <div className={styles.titleWrapper}>
-            <div>
+            <div className={styles.bannerText}>
               <TransitionLink to="/events" className={styles.backLink}>
                 <ChevronLeft className={styles.backLinkIcon} />
                 Todos los eventos
               </TransitionLink>
-              <h1 className={styles.title}>
-                {event.title}
-              </h1>
+
+              <div className={styles.bannerTop}>
+                {event.sportLabel && <Pill>{event.sportLabel}</Pill>}
+                {event.isOfficial && (
+                  <OfficialIconH className={styles.officialBadgeImg} aria-label="Evento oficial verificado" />
+                )}
+              </div>
+
+              <h1 className={styles.title}>{event.title}</h1>
+
+              <p className={styles.bannerLocation}>
+                {event.location && (
+                  <>
+                    <MapPin size={24} strokeWidth={1} aria-hidden="true" />
+                    {event.location}
+                    <span className={styles.dateSep} aria-hidden="true">|</span>
+                  </>
+                )}
+                <span className={styles.bannerDate}>{dateLabel}</span>
+              </p>
+
+              <TeamChipList event={event} />
+            </div>
+
+            <div className={styles.countdownSlot}>
+              {event.isFinished ? (
+                <Pill size="lg" variant="neutral">Finalizado</Pill>
+              ) : event.hasStarted ? (
+                <Pill size="lg" variant="red">En curso</Pill>
+              ) : (
+                <Countdown date={event.startsAt} size="sm" />
+              )}
             </div>
           </div>
 
-          <div className={styles.bannerFooter}>
-            {event.isOfficial && (
-              <div className={`${styles.footerItem} ${styles.footerItemBadge}`}>
-                <OfficialIconH className={styles.officialItemIcon} aria-label="Evento oficial" />
-              </div>
-            )}
-            <div className={styles.footerItem}>
-              <MapPin className={styles.itemIcon} />
-              <span className={styles.itemText}>{event.location}</span>
+          {(event.startTime || event.endTime) && (
+            <div className={styles.bannerFooter}>
+              {event.startTime && (
+                <div className={styles.footerItem}>
+                  <Clock className={styles.itemIcon} />
+                  <span className={styles.itemLabel}>Inicio</span>
+                  <span className={styles.itemText}>{event.startTime}</span>
+                </div>
+              )}
+              {event.endTime && (
+                <div className={styles.footerItem}>
+                  <Clock className={styles.itemIcon} />
+                  <span className={styles.itemLabel}>Término</span>
+                  <span className={styles.itemText}>{event.endTime}</span>
+                </div>
+              )}
             </div>
-            <div className={styles.footerItem}>
-              <Calendar className={styles.itemIcon} />
-              {/* Fecha: migrada a formattedDate (ISO normalizado, timezone-safe) */}
-              <span className={styles.itemText}>{event.formattedDate}</span>
-            </div>
-            {event.sportLabel && (
-              <div className={styles.footerItem}>
-                <Pill>{event.sportLabel}</Pill>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
-      <TeamsVersus event={event} />
+      <TeamsVersus event={event} match={match} />
 
       <div className={styles.eventContentLayout}>
         <div>
-          <p className={styles.boldDescription}>
-            <strong>{event.descriptionOpt}</strong></p>
-          <p className={styles.loremText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore 
-            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
-            voluptate velit esse cillum dolore.
-          </p>
+          <p className={styles.lead}>{event.description}</p>
+          {event.descriptionOpt && (
+            <p className={styles.body}>{event.descriptionOpt}</p>
+          )}
         </div>
 
         <div className={styles.sidebarContent}>
@@ -130,6 +165,8 @@ export default function EventDetail() {
           </div>
         </div>
       </div>
+      <GalleryCarousel key={event.id} images={event.photos} />
+      <EventsBoard />
     </div>
   );
 }

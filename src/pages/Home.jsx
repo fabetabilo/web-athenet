@@ -6,6 +6,7 @@ import CompetitionsCarousel from '../components/ui/Carousel/CompetitionsCarousel
 import EventCountdown from '../components/ui/EventCountdown/EventCountdown'
 import MatchStrip from '../components/ui/MatchStrip/MatchStrip'
 import BoldBanner from '../components/ui/Banner/BoldBanner'
+import VideoBanner from '../components/ui/Banner/VideoBanner'
 import InstCarousel from '../components/ui/Carousel/InstCarousel'
 import Button from '../components/ui/Button/Button'
 import { heroSlides } from '../data/content/heroSlides'
@@ -57,6 +58,14 @@ export default function Home() {
     }
   }, [])
 
+  const scrollToAbout = (event) => {
+    event.preventDefault()
+    const section = document.getElementById('about')
+    if (!section) return
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    section.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' })
+  }
+
   const featured = newsCards.find((c) => c.featured)
   const rest = newsCards.filter((c) => !c.featured)
 
@@ -66,9 +75,46 @@ export default function Home() {
       <MatchStrip matches={results} />
       <EventCountdown event={featuredEvent} />
       <EventsCarousel events={upcomingEvents} />
+      <VideoBanner
+        title="El deporte estudiantil, una oportunidad para todos"
+        subtitle="Torneos, competencias y eventos de las instituciones de todo el pais, reunidos en una comunidad que impulsa a cada atleta."
+        cta="Conoce Athenet"
+        href="#about"
+        onCtaClick={scrollToAbout}
+      />
       <CompetitionsCarousel competitions={competitions} getLink={(c) => `/competitions/${c.id}`} />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
+      <section id="about" className={styles.about}>
+        <div className={styles.aboutInner}>
+          <div className={styles.aboutText}>
+            <h2 className={styles.aboutTitle}>Donde se vive el deporte estudiantil</h2>
+            <p className={styles.aboutLead}>
+              Athenet nace para impulsar el deporte estudiantil y consolidar la comunidad deportiva a nivel
+              nacional. Competencias oficiales, torneos independientes y los equipos que los disputan, con información al día y abierta a todo público.
+            </p>
+            <p className={styles.aboutParagraph}>
+              Athenet gestiona y visibiliza un espectro completo de actividades: desde torneos y
+              competencias oficiales reguladas por nuestra organización, hasta las iniciativas independientes
+              donde cada institución publica sus propios enfrentamientos, exhibiciones o eventos.
+            </p>
+            <ul className={styles.aboutList}>
+              <li>Competencias y equipos para seguir a tu Institución o Universidad cada temporada</li>
+              <li>Un calendario único para no perderse ninguna fecha</li>
+              <li>Resultados y rankings actualizados</li>
+              <li>Suscripción al boletín para no perderse ningún evento o resultado</li>
+            </ul>
+          </div>
+
+          <div className={styles.aboutMedia}>
+            <img
+              src={`${import.meta.env.BASE_URL}img/about.webp`}
+              alt="Atletas universitarios en competencia"
+              className={styles.aboutImg}
+            />
+          </div>
+        </div>
+      </section>
       <section className={styles.section}>
         <div className={styles.inner}>
           {/* Header */}
