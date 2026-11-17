@@ -19,6 +19,7 @@ export const competitions = [
     season: String(new Date().getFullYear()),
     status: 'IN_PROGRESS',
     competitionImg: `${BASE_URL}img/c-inst2026.png`,
+    priority: 2,
     startDate: daysFromToday(-30),
     endDate: daysFromToday(14),
   },
@@ -43,6 +44,8 @@ export const competitions = [
     season: '2026',
     status: 'FINISHED',
     competitionImg: `${BASE_URL}img/c-inv2026.png`,
+    // sin llave por ahora: la card no lleva a una pagina vacia
+    hasDetail: false,
     startDate: '2026-06-01',
     endDate: '2026-07-18',
   },
@@ -67,6 +70,8 @@ export const competitions = [
     season: '2025',
     status: 'FINISHED',
     competitionImg: `${BASE_URL}img/c-tofuve2025.png`,
+    // sube en el carrusel para que quede a la vista (sin esto iria al final por fecha)
+    priority: 1,
     startDate: '2025-01-06',
     endDate: '2025-02-15',
   },

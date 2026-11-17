@@ -82,7 +82,7 @@ export default function Home() {
         href="#about"
         onCtaClick={scrollToAbout}
       />
-      <CompetitionsCarousel competitions={competitions} getLink={(c) => `/competitions/${c.id}`} />
+      <CompetitionsCarousel competitions={competitions} getLink={(c) => (c.hasDetail ? `/competitions/${c.id}` : undefined)} viewAllTo="/competitions" />
       <BoldBanner outlineText="36+INSTITUCIONES" solidText="Un solo equipo" />
       <InstCarousel institutions={institutions} />
       <section id="about" className={styles.about}>

@@ -7,8 +7,8 @@ import styles from './UserMenu.module.css'
 
 /**
  * Menu del usuario con sesion iniciada. En la barra es un desplegable (avatar + nombre) con
- * el acceso al perfil; "Cerrar sesion" va como boton aparte en el Navbar. Con `inline` se
- * muestra plano, con ambas opciones, para el drawer.
+ * el acceso al perfil y "Cerrar sesion". Con `inline` se muestra plano, con ambas opciones,
+ * para el drawer.
  *
  * @param {Object} props
  * @param {boolean} [props.inline=false]
@@ -107,6 +107,9 @@ export default function UserMenu({ inline = false, onNavigate }) {
         <div id="user-menu" className={styles.panel}>
           {identity}
           {profileLink}
+          <button type="button" className={styles.item} onClick={handleSignOut}>
+            Cerrar sesión
+          </button>
         </div>
       )}
     </div>

@@ -11,6 +11,7 @@ export const SECTIONS = [
   { id: 'institutions', path: '/institutions', label: 'Instituciones' },
   { id: 'rankings',     path: '/rankings',     label: 'Rankings' },
   { id: 'competitions', path: '/competitions', label: 'Competencias' },
+  { id: 'matches',      path: '/partidos',     label: 'Partidos' },
   // Pendientes de ruta real: noticias, equipos, deportes.
   // Mientras sean stubs con to="#" en el navbar no tienen path que registrar.
 ]

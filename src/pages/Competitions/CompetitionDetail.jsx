@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom'
 import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Pill from '../../components/ui/Pill/Pill'
-import { getCompetitionById } from '../../service/competitionsApi'
+import Bracket from '../../components/ui/Bracket/Bracket'
+import { getCompetitionById, getCompetitionMatches } from '../../service/competitionsApi'
 import styles from './Competition.module.css'
 
 export default function CompetitionDetail() {
   const { id } = useParams()
   const [competition, setCompetition] = useState(null)
+  const [matches, setMatches] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
 
@@ -18,9 +20,15 @@ export default function CompetitionDetail() {
     let mounted = true
 
     getCompetitionById(id)
-      .then((data) => {
+      .then(async (data) => {
+        // la llave solo existe en las copas; si falla, la pagina igual se muestra sin ella
+        const fixture = data?.type === 'CUP' ? await getCompetitionMatches(id).catch(() => []) : []
+        return { data, fixture }
+      })
+      .then(({ data, fixture }) => {
         if (!mounted) return
         setCompetition(data)
+        setMatches(fixture)
         setLoading(false)
       })
       .catch(() => {
@@ -56,6 +64,9 @@ export default function CompetitionDetail() {
     )
   }
 
+  // con llave, el recuadro de la llave sube directo bajo el banner y el deporte va junto a su titulo
+  const showBracket = competition.type === 'CUP' && matches.length > 0
+
   return (
     <main className={styles.page}>
       <div className={styles.banner}>
@@ -63,14 +74,26 @@ export default function CompetitionDetail() {
           title={competition.name}
           subtitle={competition.description}
           backgroundImage={competition.competitionImg}
+          posterImage={competition.competitionImg}
         />
       </div>
 
-      <section className={styles.content}>
-        <div className={styles.container}>
-          {competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
-        </div>
-      </section>
+      {showBracket ? (
+        <Bracket
+          matches={matches}
+          title="Llaves"
+          aside={competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
+        />
+      ) : (
+        <section className={styles.content}>
+          <div className={styles.container}>
+            {competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
+            {competition.type === 'CUP' && (
+              <p className={styles.description}>La llave de esta copa aún no está disponible.</p>
+            )}
+          </div>
+        </section>
+      )}
     </main>
   )
 }

@@ -1,0 +1,117 @@
+.root {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  margin-right: var(--space-1);
+}
+
+.trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--text-primary);
+  font-size: 1.625rem;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  transition: color var(--duration-fast);
+}
+
+.trigger[aria-expanded='true'] {
+  color: var(--color-cyan);
+}
+
+.trigger:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trigger:hover {
+    color: var(--color-cyan);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 0.125rem;
+  right: 0.125rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--color-cyan);
+  border-radius: 50%;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: 18rem;
+  max-width: calc(100vw - 2rem);
+  background: var(--surface-page);
+  border: 1px solid color-mix(in srgb, var(--color-cyan) 45%, transparent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  animation: panelIn var(--duration-fast) ease-out;
+}
+
+.title {
+  padding: var(--space-4);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.empty {
+  margin: 0;
+  padding: var(--space-6) var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.list {
+  max-height: 20rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.item strong {
+  color: var(--text-primary);
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(calc(var(--space-2) * -1)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+
+  .trigger {
+    transition: none;
+  }
+}

@@ -59,9 +59,10 @@ export default function MatchStrip({ matches = [] }) {
             <ul className={styles.track}>
               {orderedMatches.map((match) => {
                 const relativeDay = match.isPlayed ? null : match.relativeDay
-                const statusText = relativeDay ? match.relativeDayLabel : match.statusLabel
-                const statusClassName = relativeDay
-                  ? `${styles.status} ${styles.pill} ${relativeDay === 'TODAY' ? styles.pillToday : styles.pillTomorrow}`
+                // un partido en juego se marca "En vivo" con el mismo rojo que "Hoy"
+                const statusText = match.isLive ? 'En vivo' : relativeDay ? match.relativeDayLabel : match.statusLabel
+                const statusClassName = match.isLive || relativeDay
+                  ? `${styles.status} ${styles.pill} ${match.isLive || relativeDay === 'TODAY' ? styles.pillToday : styles.pillTomorrow}`
                   : styles.status
 
                 const teamsText = match.isPending
@@ -78,7 +79,7 @@ export default function MatchStrip({ matches = [] }) {
 
                 return (
                   <li key={match.id} className={styles.item}>
-                    <TransitionLink to="/results" className={styles.link} aria-label={label}>
+                    <TransitionLink to={match.isPending ? '/results' : `/partidos/${match.id}`} className={styles.link} aria-label={label}>
                       <span className={styles.card}>
                         <span className={styles.headerTop}>
                           <span className={styles.phase}>{match.phaseLabel}</span>

@@ -33,7 +33,9 @@
 
 .card {
   --number-size: clamp(5rem, 9vw, 8rem);
-  --card-bg: var(--color-ink);
+  --position-color: #e3b730;
+  --position-stroke: #94700f;
+  --card-bg: var(--color-white);
 
   display: flex;
   flex: 1;
@@ -41,9 +43,7 @@
   min-width: 0;
   overflow: hidden;
   background: var(--card-bg);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  transition: border-color var(--duration-fast) ease;
 }
 
 .link {
@@ -61,16 +61,13 @@
     cursor: pointer;
   }
 
-  .card:hover {
-    border-color: var(--color-border-strong);
-  }
 }
 
 .position {
   padding-top: var(--space-2);
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: var(--position-color);
   -webkit-text-stroke-width: 1.5px;
-  -webkit-text-stroke-color: var(--text-primary);
+  -webkit-text-stroke-color: var(--position-stroke);
   font-family: var(--font-heading);
   font-size: var(--number-size);
   font-style: italic;
@@ -84,7 +81,7 @@
   position: relative;
   z-index: 1;
   aspect-ratio: 10 / 7;
-  margin-top: calc(var(--number-size) * -0.4);
+  margin-top: calc(var(--number-size) * -0.25);
   overflow: hidden;
 }
 
@@ -92,7 +89,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 60%, var(--card-bg));
+  background: linear-gradient(to bottom, transparent 80%, var(--card-bg));
   pointer-events: none;
 }
 
@@ -114,7 +111,7 @@
   height: 100%;
   place-items: end center;
   padding-bottom: var(--space-2);
-  color: var(--text-secondary);
+  color: var(--text-dark-muted);
   font-family: var(--font-heading);
   font-size: clamp(1.75rem, 4vw, 3rem);
   font-weight: var(--font-weight-bold);
@@ -128,7 +125,7 @@
   padding: var(--space-2) var(--space-3) 0;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  color: var(--text-primary);
+  color: var(--text-dark);
   font-family: var(--font-primary);
   font-size: var(--text-lead);
   font-weight: var(--font-weight-semibold);
@@ -143,18 +140,18 @@
   justify-content: space-between;
   margin: auto 0 0;
   padding: var(--space-2) var(--space-3);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .pointsLabel {
-  color: var(--text-secondary);
+  color: var(--text-dark-muted);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-wide);
 }
 
 .pointsValue {
-  color: var(--text-primary);
+  color: var(--text-dark);
   font-family: var(--font-heading);
   font-size: var(--text-lead);
   font-weight: var(--font-weight-bold);
