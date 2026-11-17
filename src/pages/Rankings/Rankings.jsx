@@ -3,6 +3,7 @@ import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
 import TeamStandings from '../../components/ui/TeamStandings/TeamStandings'
+import FilterGroup from '../../components/ui/FilterGroup/FilterGroup'
 import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
 import { getTeamCompetitions } from '../../service/competitionsApi'
 import { formatNumericDate, getLastUpdate } from '../../utils/normalizeRanking'
@@ -41,6 +42,18 @@ function LastMatch({ match }) {
   )
 }
 
+function CompetitionCardBody({ competition }) {
+  return (
+    <>
+      <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
+      <span className={styles.compText}>
+        <span className={styles.compName}>{competition.name}</span>
+        <span className={styles.compDate}>{competition.dateLabel}</span>
+      </span>
+    </>
+  )
+}
+
 function CompetitionsPanel({ entry }) {
   if (!entry || entry.status === 'loading') {
     return <p className={styles.panelMessage}>Cargando competencias…</p>
@@ -53,13 +66,16 @@ function CompetitionsPanel({ entry }) {
     <ul className={styles.compList}>
       {entry.items.map((competition) => (
         <li key={competition.id}>
-          <TransitionLink to={`/competitions/${competition.id}`} className={styles.compCard}>
-            <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
-            <span className={styles.compText}>
-              <span className={styles.compName}>{competition.name}</span>
-              <span className={styles.compDate}>{competition.dateLabel}</span>
-            </span>
-          </TransitionLink>
+          {competition.hasDetail ? (
+            <TransitionLink to={`/competitions/${competition.id}`} className={styles.compCard}>
+              <CompetitionCardBody competition={competition} />
+            </TransitionLink>
+          ) : (
+            // sin pagina con contenido: se muestra pero no es link
+            <div className={`${styles.compCard} ${styles.compCardStatic}`}>
+              <CompetitionCardBody competition={competition} />
+            </div>
+          )}
         </li>
       ))}
     </ul>
@@ -142,41 +158,35 @@ export default function Rankings() {
         title="Rankings"
         subtitle="Posiciones históricas de los equipos universitarios, deporte por deporte."
         backgroundImage={`${import.meta.env.BASE_URL}img/rankings.webp`}
+        spacious
       />
 
       <section className={styles.content}>
-        <div className={styles.darkBand}>
+        <div className={styles.topBand}>
           <div className={styles.container}>
-            <div className={styles.toolbar}>
-              <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
-                {(sports ?? []).map((sport) => (
-                  <button
-                    key={sport.key}
-                    type="button"
-                    aria-pressed={sport.key === activeSport?.key}
-                    className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
-                    onClick={() => {
-                      setSelectedKey(sport.key)
-                      setExpandedId(null)
-                    }}
-                  >
-                    {sport.label}
-                  </button>
-                ))}
-              </div>
-
-              {lastUpdate && (
-                <p className={styles.updated}>
-                  Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
-                </p>
-              )}
-            </div>
-
             <TeamStandings rows={rows} />
           </div>
         </div>
 
         <div className={styles.container}>
+          <div className={styles.toolbar}>
+            <FilterGroup
+              label="Deporte"
+              options={(sports ?? []).map((sport) => ({ id: sport.key, label: sport.label }))}
+              value={activeSport?.key}
+              onChange={(key) => {
+                setSelectedKey(key)
+                setExpandedId(null)
+              }}
+            />
+
+            {lastUpdate && (
+              <p className={styles.updated}>
+                Última actualización del ranking: <time dateTime={lastUpdate}>{formatNumericDate(lastUpdate)}</time>
+              </p>
+            )}
+          </div>
+
           <div className={isLoading ? styles.busy : undefined} aria-busy={isLoading}>
             <Table
               minWidth="66rem"

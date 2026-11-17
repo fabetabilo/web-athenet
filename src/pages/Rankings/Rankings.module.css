@@ -7,11 +7,9 @@
   padding-bottom: var(--section-pad-lg);
 }
 
-/* franja oscura de ancho completo, pegada al PageBanner: mismo fondo que las secciones oscuras del Home */
-.darkBand {
+.topBand {
   margin-bottom: var(--section-pad-sm);
   padding-block: var(--space-5);
-  background: var(--color-ink);
 }
 
 .container {
@@ -25,55 +23,20 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3) var(--space-6);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .updated {
-  color: var(--text-muted);
+  margin: 0;
+  color: var(--text-dark-muted);
   font-size: var(--text-base);
 }
 
 .updated time {
-  color: var(--text-primary);
+  color: var(--text-dark);
   font-weight: var(--font-weight-semibold);
-}
-
-/* Filtro de deporte: mismo lenguaje que Pill (mayusculas, esquinas rectas) */
-.filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.filterBtn {
-  padding: var(--space-1) var(--space-4);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-none);
-  background: transparent;
-  color: var(--text-secondary);
-  font-family: var(--font-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.filterBtnActive {
-  border-color: var(--color-highlight);
-  background: var(--color-highlight);
-  color: var(--text-primary);
-}
-
-.filterBtn:focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-cyan);
-  outline-offset: var(--focus-ring-offset);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .filterBtn:not(.filterBtnActive):hover {
-    border-color: var(--color-cyan);
-    color: var(--color-cyan);
-  }
 }
 
 .busy {
@@ -257,7 +220,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .compCard:hover {
+  .compCard:hover:not(.compCardStatic) {
     box-shadow: var(--shadow-card-hover);
   }
 }

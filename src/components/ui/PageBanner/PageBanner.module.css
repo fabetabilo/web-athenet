@@ -26,6 +26,43 @@
   margin-inline: auto;
 }
 
+.hasPoster {
+  --poster-w: clamp(4.5rem, 12vw, 9.5rem);
+  height: auto;
+  min-height: clamp(250px, 40vh, 400px);
+  padding-top: var(--space-10);
+}
+
+.backdrop {
+  position: absolute;
+  inset: -2rem;
+  background-position: center;
+  background-size: cover;
+  filter: blur(5px) saturate(1.1);
+}
+
+.poster {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: max(var(--layout-gutter), calc((100% - var(--layout-max-width)) / 2));
+  width: var(--poster-w);
+  aspect-ratio: 600 / 868;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-50%);
+}
+
+.hasPoster .contentWrapper {
+  padding-right: calc(var(--poster-w) + var(--space-6));
+}
+
+.hasPoster .subtitle,
+.spacious .subtitle {
+  margin-bottom: var(--space-10);
+}
+
 .title {
   font-family: var(--font-primary);
   font-weight: var(--font-heading-weight);

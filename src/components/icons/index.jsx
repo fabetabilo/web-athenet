@@ -13,7 +13,10 @@ import {
   LuCheck,
   LuChevronDown,
   LuPencil,
-  LuClock
+  LuClock,
+  LuBell,
+  LuCamera,
+  LuUser
 } from 'react-icons/lu';
 
 import {
@@ -49,8 +52,10 @@ export {
   LuCheck as Check,
   LuChevronDown as ChevronDown,
   LuPencil as Pencil,
-  LuClock as Clock
-
+  LuClock as Clock,
+  LuBell as Bell,
+  LuCamera as Camera,
+  LuUser as User
 };
 
 // Logos de redes sociales (set Font Awesome 6)

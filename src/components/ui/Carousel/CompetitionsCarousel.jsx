@@ -1,3 +1,4 @@
+import { TransitionLink } from '../../transition'
 import CompetitionCard from '../CompetitionCard/CompetitionCard'
 import CarouselNav from './CarouselNav'
 import { useCarousel } from './useCarousel'
@@ -7,8 +8,9 @@ import styles from './CompetitionsCarousel.module.css'
  * @param {import('../../../utils/normalizeCompetition').NormalizedCompetition[]} competitions
  * @param {string} [title]
  * @param {(competition) => string} [getLink] - Ruta de detalle por competencia (opcional)
+ * @param {string} [viewAllTo] - Ruta del listado completo; si viene, muestra el enlace "Ver todas"
  */
-export default function CompetitionsCarousel({ competitions = [], title = 'COMPETENCIAS', getLink }) {
+export default function CompetitionsCarousel({ competitions = [], title = 'COMPETENCIAS', getLink, viewAllTo }) {
   const { next, prev, canNavigate, trackStyle } = useCarousel(competitions.length)
 
   if (competitions.length === 0) return null
@@ -18,6 +20,7 @@ export default function CompetitionsCarousel({ competitions = [], title = 'COMPE
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
+          {viewAllTo && <TransitionLink to={viewAllTo} className={styles.viewAll}>Ver todas</TransitionLink>}
           <CarouselNav
             onPrev={prev}
             onNext={next}

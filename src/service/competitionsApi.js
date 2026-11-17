@@ -3,7 +3,10 @@ import { normalizeCompetition, normalizeCompetitionList } from '../utils/normali
 import { createApiClient } from './apiClient'
 import { getInstitutionsById, getSportsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
-import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
+import { competitionMatches as competitionMatchesMock, historicCupMatches } from '../data/demo/competitionMatches'
+
+// Todas las llaves del demo: la vigente mas las de las copas terminadas
+const allCupMatchesMock = [...competitionMatchesMock, ...historicCupMatches]
 import { competitions as competitionsMock } from '../data/demo/competitions'
 import { resolveSport as resolveMockSport } from '../data/demo/sports'
 /**
@@ -146,6 +149,26 @@ export async function getCompetitionMatch(competitionId, matchId, config = {}) {
 }
 
 /**
+ * Los partidos de una competencia, de octavos a final y en orden de cuadro; sin llave, lista vacia.
+ * El mock trae las llaves de varias copas: se filtra por competencia.
+ *
+ * @param {number|string} competitionId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch[]>}
+ */
+export async function getCompetitionMatches(competitionId, config = {}) {
+    const resolve = await loadInstitutionResolver()
+    const mock = allCupMatchesMock.filter((m) => String(m.competition.id) === String(competitionId))
+
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(competitionId),
+        mock,
+        (rawList) => normalizeList(rawList, resolve),
+        config
+    )
+}
+
+/**
  * Todas las competencias, mas reciente primero.
  *
  * @param {import('axios').AxiosRequestConfig} [config]
@@ -191,5 +214,27 @@ export async function getTeamCompetitions(teamId, config = {}) {
         getMockTeamCompetitions(teamId),
         normalizeCompetitionList,
         { ...config, params: { teamId, limit: TEAM_COMPETITIONS_LIMIT } }
+    )
+}
+
+/**
+ * Un partido por id, de cualquier copa (la vigente o una ya terminada). Devuelve null si no existe.
+ * Nota: contra el backend real solo busca en el fixture vigente.
+ *
+ * @param {number|string} matchId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch | null>}
+ */
+export async function getMatchById(matchId, config = {}) {
+    const resolve = await loadInstitutionResolver()
+
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.CURRENT_FIXTURE,
+        allCupMatchesMock,
+        (rawList) => {
+            const list = normalizeList(rawList, resolve)
+            return list.find((m) => String(m.id) === String(matchId)) ?? null
+        },
+        config
     )
 }

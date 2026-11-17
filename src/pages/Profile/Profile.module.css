@@ -3,14 +3,6 @@
   background: var(--bg-light);
 }
 
-/* Columna centrada y angosta: es una pantalla de ajustes, no de contenido */
-.container {
-  width: var(--layout-container);
-  max-width: 52rem;
-  margin-inline: auto;
-  padding: var(--section-pad-sm) 0 var(--section-pad-xl);
-}
-
 /* Cabecera: portada + foto montada sobre su borde */
 .hero {
   background: var(--bg-light);
@@ -30,29 +22,160 @@
   background: color-mix(in srgb, var(--color-black) 45%, transparent);
 }
 
-.heroInner {
+.layout {
   --avatar-size: clamp(7rem, 22vw, 10rem);
 
+  width: var(--layout-container);
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-bottom: var(--section-pad-xl);
+}
+
+.side {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-5);
-  width: var(--layout-container);
-  max-width: 52rem;
-  margin-inline: auto;
+  min-width: 0;
 }
 
-/* El anillo del color de la pagina separa la foto de la portada */
-.heroAvatar {
-  /* sobre la portada: su capa de oscurecimiento (position) pintaria encima de la foto */
+.content {
+  min-width: 0;
+  padding-top: var(--space-6);
+}
+
+@media (min-width: 720px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    column-gap: var(--space-10);
+    align-items: stretch;
+  }
+
+  .side {
+    border-right: 1px solid var(--color-border-light);
+  }
+
+  .content {
+    padding-top: calc(var(--avatar-size) / 2 + var(--space-5) - var(--space-4));
+  }
+}
+
+.avatarWrap {
   position: relative;
   z-index: 1;
+  width: fit-content;
   margin-top: calc(var(--avatar-size) / -2);
+}
+
+.avatarButton {
+  position: relative;
+  display: block;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.avatarButton:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.avatarButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+.heroAvatar {
   box-shadow: 0 0 0 0.35rem var(--bg-light), var(--shadow-card);
+}
+
+.avatarOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-white);
+  font-size: 2rem;
+  background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.avatarButton:focus-visible .avatarOverlay {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .avatarButton:hover:not(:disabled) .avatarOverlay {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .avatarOverlay {
+    inset: auto 0.25rem 0.25rem auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.125rem;
+    background: var(--color-blue);
+    opacity: 1;
+  }
+}
+
+.heroInfo .error {
+  margin-top: var(--space-3);
+}
+
+.photoMenu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 11rem;
+  background: var(--color-white);
+  border: 1px solid color-mix(in srgb, var(--color-cyan) 45%, transparent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.photoMenuItem {
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-dark);
+  font-size: var(--text-md);
+  text-align: left;
+  cursor: pointer;
+}
+
+.photoMenuItem + .photoMenuItem {
+  border-top: 1px solid var(--color-border-light);
+}
+
+.photoMenuItem:hover,
+.photoMenuItem:focus-visible {
+  color: var(--color-blue);
+  background: color-mix(in srgb, var(--color-cyan) 12%, transparent);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatarOverlay {
+    transition: none;
+  }
 }
 
 .heroInfo {
   min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .heroInfo {
+    max-width: calc(15rem - var(--space-4));
+  }
 }
 
 .heroName {
@@ -87,48 +210,72 @@
   overflow-wrap: anywhere;
 }
 
-.photoActions {
+.sidebar {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-}
-
-/* Pestanas */
-.tabs {
-  display: flex;
-  gap: var(--space-6);
-  margin-bottom: var(--space-2);
+  gap: var(--space-2);
+  max-width: 100%;
+  margin-top: var(--space-2);
   overflow-x: auto;
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.tab {
+.sideItem {
+  display: flex;
   flex: none;
+  align-items: center;
+  gap: var(--space-3);
   margin-bottom: -1px;
-  padding: var(--space-2) 0 var(--space-3);
+  padding: var(--space-3) var(--space-3);
   color: var(--text-dark-muted);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  white-space: nowrap;
   border-bottom: 2px solid transparent;
   transition: color var(--duration-fast), border-color var(--duration-fast);
 }
 
-.tabActive {
+.sideIcon {
+  flex: none;
+  font-size: var(--icon-md, 1.25rem);
+}
+
+.sideItemActive {
   color: var(--color-navy);
   border-bottom-color: var(--color-blue);
 }
 
-.tab:focus-visible {
+.sideItem:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-blue);
-  outline-offset: 4px;
+  outline-offset: -2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .tab:hover {
+  .sideItem:hover {
     color: var(--color-navy);
+  }
+}
+
+@media (min-width: 720px) {
+  .sidebar {
+    flex-direction: column;
+    align-self: stretch;
+    gap: var(--space-1);
+    margin: var(--space-4) 0 0;
+    padding-bottom: var(--space-2);
+    overflow: visible;
+    border-bottom: 0;
+  }
+
+  .sideItem {
+    margin: 0 -1px 0 0;
+    padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
+    border-bottom: 0;
+    border-right: 2px solid transparent;
+  }
+
+  .sideItemActive {
+    border-right-color: var(--color-blue);
   }
 }
 
@@ -283,7 +430,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-6);
   padding: var(--space-10) var(--space-6);
   text-align: center;
   background: var(--color-slate-50);
@@ -298,7 +444,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tab,
+  .sideItem,
   .iconButton {
     transition: none;
   }

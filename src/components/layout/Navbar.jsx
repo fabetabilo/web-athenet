@@ -5,12 +5,14 @@ import { TransitionLink, TransitionNavLink } from '../transition'
 import { lockScroll, unlockScroll } from '../../utils/scrollLock'
 import { useAuth } from '../../auth/useAuth'
 import UserMenu from './UserMenu'
+import NotificationsBell from './NotificationsBell'
 import styles from './Navbar.module.css'
 
 const MENU_DELAY = 70
 
 const NAV_LINKS = [
   { label: 'Eventos', to: '/events' },
+  { label: 'Competencias', to: '/competitions' },
   { label: 'Rankings', to: '/rankings' },
   { label: 'Instituciones', to: '/institutions' },
   { label: 'Noticias', to: '#' },
@@ -71,15 +73,15 @@ function AuthButtons({ onNavigate }) {
 
 // Sesion iniciada: menu del usuario; si no, botones de acceso. Mientras se recupera la sesion no muestra nada
 function AuthArea({ inline = false, onNavigate }) {
-  const { status, signOut } = useAuth()
+  const { status } = useAuth()
   if (status === 'loading') return null
   if (status !== 'authenticated') return <AuthButtons onNavigate={onNavigate} />
   if (inline) return <UserMenu inline onNavigate={onNavigate} />
 
   return (
     <>
+      <NotificationsBell />
       <UserMenu />
-      <button type="button" className={styles.logoutButton} onClick={signOut}>Cerrar sesión</button>
     </>
   )
 }

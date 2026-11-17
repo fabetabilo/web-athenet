@@ -14,9 +14,11 @@ import EventDetail from './pages/Events/EventDetail'
 import Institutions from './pages/Institutions/Institutions'
 import InstitutionDetail from './pages/Institutions/InstitutionDetail'
 import CompetitionDetail from './pages/Competitions/CompetitionDetail'
+import CompetitionsGallery from './pages/Competitions/CompetitionsGallery'
 import Rankings from './pages/Rankings/Rankings'
 import ConfirmSubscription from './pages/Subscription/ConfirmSubscription'
 import Profile from './pages/Profile/Profile'
+import MatchDetail from './pages/Match/MatchDetail'
 
 function AppShell() {
   const { phase, isCovering } = useRouteTransition()
@@ -51,8 +53,10 @@ function AppShell() {
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/institutions" element={<Institutions />} />
           <Route path="/institutions/:id" element={<InstitutionDetail />} />
+          <Route path="/competitions" element={<CompetitionsGallery />} />
           <Route path="/competitions/:id" element={<CompetitionDetail />} />
           <Route path="/rankings" element={<Rankings />} />
+          <Route path="/partidos/:id" element={<MatchDetail />} />
           <Route path="/suscripcion/confirmar" element={<ConfirmSubscription />} />
           <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>

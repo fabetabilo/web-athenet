@@ -27,6 +27,17 @@
   line-height: var(--leading-none);
 }
 
+.viewAll {
+  margin-left: auto;
+  color: inherit;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
 .viewport {
   width: 100%;
 }

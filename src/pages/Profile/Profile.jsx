@@ -1,44 +1,57 @@
 import { useState } from 'react'
 import ProfileHero from './ProfileHero'
 import ProfileDetails from './ProfileDetails'
+import ProfileNotifications from './ProfileNotifications'
 import FollowedTeams from './FollowedTeams'
+import { User, Bell, Users } from '../../components/icons'
 import styles from './Profile.module.css'
 
-const TABS = [
-  { id: 'perfil', label: 'Perfil' },
-  { id: 'equipos', label: 'Equipos que sigues' },
+// Secciones de la barra lateral. Para agregar una: sumarla aqui y en PANELS
+const SECTIONS = [
+  { id: 'perfil', label: 'Perfil', Icon: User },
+  { id: 'notificaciones', label: 'Notificaciones', Icon: Bell },
+  { id: 'equipos', label: 'Equipos que sigues', Icon: Users },
 ]
+
+const PANELS = {
+  perfil: ProfileDetails,
+  notificaciones: ProfileNotifications,
+  equipos: FollowedTeams,
+}
 
 /** Perfil del usuario con sesion. Se monta dentro de ProtectedRoute: `user` siempre existe. */
 export default function Profile() {
-  const [tab, setTab] = useState('perfil')
+  const [section, setSection] = useState('perfil')
+  const Panel = PANELS[section]
 
   return (
     <div className={styles.page}>
-      <ProfileHero />
-
-      <div className={styles.container}>
-        <div className={styles.tabs} role="tablist" aria-label="Secciones del perfil">
-          {TABS.map(({ id, label }) => (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              id={`tab-${id}`}
-              aria-selected={tab === id}
-              aria-controls={`panel-${id}`}
-              className={`${styles.tab} ${tab === id ? styles.tabActive : ''}`}
-              onClick={() => setTab(id)}
-            >
-              {label}
-            </button>
-          ))}
+      <ProfileHero
+        nav={
+          // En pantallas angostas pasa a ser una fila con scroll horizontal
+          <div className={styles.sidebar} role="tablist" aria-orientation="vertical" aria-label="Secciones del perfil">
+            {SECTIONS.map(({ id, label, Icon }) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                id={`tab-${id}`}
+                aria-selected={section === id}
+                aria-controls={`panel-${id}`}
+                className={`${styles.sideItem} ${section === id ? styles.sideItemActive : ''}`}
+                onClick={() => setSection(id)}
+              >
+                <Icon className={styles.sideIcon} aria-hidden="true" />
+                {label}
+              </button>
+            ))}
+          </div>
+        }
+      >
+        <div role="tabpanel" id={`panel-${section}`} aria-labelledby={`tab-${section}`}>
+          <Panel />
         </div>
-
-        <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
-          {tab === 'perfil' ? <ProfileDetails /> : <FollowedTeams />}
-        </div>
-      </div>
+      </ProfileHero>
     </div>
   )
 }
