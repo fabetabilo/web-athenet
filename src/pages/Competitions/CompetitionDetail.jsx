@@ -1,11 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { TransitionLink, useTransitionHold } from '../../components/transition'
-import PageBanner from '../../components/ui/PageBanner/PageBanner'
+import { Calendar, ChevronLeft, MapPin } from '../../components/icons'
 import Pill from '../../components/ui/Pill/Pill'
 import Bracket from '../../components/ui/Bracket/Bracket'
 import { getCompetitionById, getCompetitionMatches } from '../../service/competitionsApi'
+import { formatDateRange } from '../../utils/dateTime'
 import styles from './Competition.module.css'
+
+const STATUS_PILLS = {
+  IN_PROGRESS: { label: 'En curso', variant: 'red' },
+  SCHEDULED: { label: 'Próxima', variant: 'neutral' },
+  FINISHED: { label: 'Finalizada', variant: 'neutral' },
+}
+
+// el ms no trae sede de la competencia: sale de los partidos de la llave
+function venueLabel(matches) {
+  const venues = new Set(matches.map((m) => m.location).filter(Boolean))
+  if (venues.size === 0) return null
+  return venues.size === 1 ? [...venues][0] : 'Varias sedes'
+}
+
+const formatDay = (iso) => formatDateRange(iso, iso)
 
 export default function CompetitionDetail() {
   const { id } = useParams()
@@ -64,33 +80,78 @@ export default function CompetitionDetail() {
     )
   }
 
-  // con llave, el recuadro de la llave sube directo bajo el banner y el deporte va junto a su titulo
   const showBracket = competition.type === 'CUP' && matches.length > 0
+  const status = STATUS_PILLS[competition.status] ?? STATUS_PILLS.FINISHED
+  const venue = venueLabel(matches)
+  const { startDate, endDate } = competition
+  const dateLine = startDate && endDate ? formatDateRange(startDate, endDate) : competition.dateLabel
 
   return (
     <main className={styles.page}>
-      <div className={styles.banner}>
-        <PageBanner
-          title={competition.name}
-          subtitle={competition.description}
-          backgroundImage={competition.competitionImg}
-          posterImage={competition.competitionImg}
-        />
-      </div>
+      <header className={styles.banner}>
+        {competition.competitionImg && (
+          <>
+            <div className={styles.backdrop} style={{ backgroundImage: `url(${competition.competitionImg})` }} />
+            <img src={competition.competitionImg} alt="" className={styles.poster} />
+          </>
+        )}
+        <div className={styles.overlay} />
 
-      {showBracket ? (
-        <Bracket
-          matches={matches}
-          title="Llaves"
-          aside={competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
-        />
-      ) : (
+        <div className={styles.bannerContent}>
+          <div className={styles.bannerText}>
+            <TransitionLink to="/competitions" className={styles.backLink}>
+              <ChevronLeft className={styles.backLinkIcon} />
+              Todas las competencias
+            </TransitionLink>
+
+            <div className={styles.bannerTop}>
+              {competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
+              <Pill variant={status.variant}>{status.label}</Pill>
+            </div>
+
+            <h1 className={styles.title}>{competition.name}</h1>
+
+            <p className={styles.meta}>
+              {venue && (
+                <>
+                  <MapPin size={24} strokeWidth={1} aria-hidden="true" />
+                  {venue}
+                  <span className={styles.dateSep} aria-hidden="true">|</span>
+                </>
+              )}
+              <span>{dateLine}</span>
+            </p>
+
+            {competition.description && <p className={styles.subtitle}>{competition.description}</p>}
+          </div>
+
+          {(startDate || endDate) && (
+            <div className={styles.bannerFooter}>
+              {startDate && (
+                <div className={styles.footerItem}>
+                  <Calendar className={styles.itemIcon} />
+                  <span className={styles.itemLabel}>Inicio</span>
+                  <span className={styles.itemText}>{formatDay(startDate)}</span>
+                </div>
+              )}
+              {endDate && (
+                <div className={styles.footerItem}>
+                  <Calendar className={styles.itemIcon} />
+                  <span className={styles.itemLabel}>Término</span>
+                  <span className={styles.itemText}>{formatDay(endDate)}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </header>
+
+      {showBracket && <Bracket matches={matches} title="Llaves" />}
+
+      {competition.type === 'CUP' && !showBracket && (
         <section className={styles.content}>
           <div className={styles.container}>
-            {competition.sportLabel && <Pill>{competition.sportLabel}</Pill>}
-            {competition.type === 'CUP' && (
-              <p className={styles.description}>La llave de esta copa aún no está disponible.</p>
-            )}
+            <p className={styles.description}>La llave de esta copa aún no está disponible.</p>
           </div>
         </section>
       )}

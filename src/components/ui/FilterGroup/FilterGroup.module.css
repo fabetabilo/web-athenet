@@ -28,6 +28,7 @@
   font: inherit;
   font-size: var(--text-sm);
   letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   cursor: pointer;
   transition:
     background var(--duration-fast) ease,

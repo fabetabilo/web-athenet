@@ -68,7 +68,7 @@
   font-weight: var(--font-heading-weight);
   color: var(--text-primary);
   line-height: var(--leading-none);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   letter-spacing: var(--tracking-title);
   font-size: var(--display-sm);
 }
