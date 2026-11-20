@@ -2,35 +2,73 @@
  * @file matchStream.js
  * Punto de entrada al stream de un partido en vivo.
  *
- * Sin URL configurada (o con el modo demo global) se usa la simulacion local; con VITE_LIVE_MATCH_URL
- * se conecta por SSE al servicio que reenvia los mensajes de Kafka (si usa WebSocket, solo cambia startSse).
+ * Sin URL configurada (o con el modo demo global) se usa la simulacion local; con VITE_STATISTICS_API_URL
+ * se conecta por STOMP a ms-statistics, que reenvia el topico `marcador` de Kafka.
  *
  * Estados de `onConnection`: 'live' | 'reconnecting' | 'ended'.
- * Un partido ya jugado no tiene stream: `loadMatchHistory` pide sus eventos guardados.
  */
+import { Client } from '@stomp/stompjs'
+import { MATCH_EVENT } from './matchEvents'
 import { buildMockHistory, startMockMatch } from './mockMatchStream'
 
-const LIVE_URL = (import.meta.env.VITE_LIVE_MATCH_URL || '').replace(/\/$/, '')
+const STATISTICS_URL = (import.meta.env.VITE_STATISTICS_API_URL || '').replace(/\/$/, '')
 const DEMO_MOCKS = import.meta.env.VITE_USE_DEMO_MOCKS === 'true'
 
-export const LIVE_MOCK_MODE = DEMO_MOCKS || !LIVE_URL
+export const LIVE_MOCK_MODE = DEMO_MOCKS || !STATISTICS_URL
 
-// La ruta es provisoria: se acuerda con quien arme el servicio que consume Kafka
-function startSse(match, { onEvent, onConnection }) {
-  const source = new EventSource(`${LIVE_URL}/matches/${match.id}/events`)
+const SOCKET_URL = `${STATISTICS_URL.replace(/^http/, 'ws')}/ws`
+const SCORE_TOPIC = '/topic/marcador'
+const CURRENT_SCORE_URL = `${STATISTICS_URL}/marcador/actual`
 
-  source.onopen = () => onConnection('live')
-  // EventSource reintenta solo; si quedo cerrado, el servidor termino el stream
-  source.onerror = () => onConnection(source.readyState === EventSource.CLOSED ? 'ended' : 'reconnecting')
-  source.onmessage = (message) => {
-    try {
-      onEvent(JSON.parse(message.data))
-    } catch {
-      // un mensaje mal formado no debe tumbar el tablero
-    }
+/** Traduce un ScoreEvent del topico marcador a los eventos internos (ver matchEvents.js). */
+function toMatchEvents(scoreEvent) {
+  const score = { type: MATCH_EVENT.SCORE, home: scoreEvent.puntosLocal, away: scoreEvent.puntosVisita }
+
+  switch (scoreEvent.tipo) {
+    case 'INICIADO':
+      return [{ id: MATCH_EVENT.START, type: MATCH_EVENT.START }]
+    case 'PUNTO':
+      return [score]
+    case 'FINALIZADO':
+      return [score, { id: MATCH_EVENT.FULLTIME, type: MATCH_EVENT.FULLTIME }]
+    default:
+      return []
   }
+}
 
-  return () => source.close()
+function startStomp(match, { onEvent, onConnection }) {
+  const isThisMatch = (scoreEvent) => String(scoreEvent?.idEncuentro) === String(match.id)
+  let receivedLive = false
+
+  const client = new Client({
+    brokerURL: SOCKET_URL,
+    onConnect: () => {
+      onConnection('live')
+      receivedLive = false
+      client.subscribe(SCORE_TOPIC, (message) => {
+        try {
+          const scoreEvent = JSON.parse(message.body)
+          if (!isThisMatch(scoreEvent)) return
+          receivedLive = true
+          toMatchEvents(scoreEvent).forEach(onEvent)
+        } catch {
+          // un mensaje mal formado no debe tumbar el tablero
+        }
+      })
+      // por STOMP solo llegan los cambios: el marcador actual se pide en cada conexion
+      // y se descarta si ya llego uno mas nuevo por el topico
+      fetch(CURRENT_SCORE_URL, { headers: { Accept: 'application/json' } })
+        .then((response) => (response.status === 200 ? response.json() : null))
+        .then((current) => {
+          if (isThisMatch(current) && !receivedLive) toMatchEvents(current).forEach(onEvent)
+        })
+        .catch(() => {})
+    },
+    onWebSocketClose: () => onConnection('reconnecting'),
+  })
+
+  client.activate()
+  return () => client.deactivate()
 }
 
 /**
@@ -41,23 +79,16 @@ function startSse(match, { onEvent, onConnection }) {
  * @returns {() => void} Cancela la suscripcion.
  */
 export function subscribeToMatch(match, handlers) {
-  return LIVE_MOCK_MODE ? startMockMatch(match, handlers) : startSse(match, handlers)
+  return LIVE_MOCK_MODE ? startMockMatch(match, handlers) : startStomp(match, handlers)
 }
 
 /**
  * Historia de un partido ya jugado: todos sus eventos, con el formato del stream; [] si no hay detalle.
- * La ruta es provisoria, como la del stream.
+ * ms-statistics no guarda historia, asi que en modo real no hay detalle.
  *
  * @param {{ id: number|string, one: { score: number|null }, two: { score: number|null } }} match
  * @returns {Promise<Array<object>>}
  */
 export async function loadMatchHistory(match) {
-  if (LIVE_MOCK_MODE) return buildMockHistory(match)
-
-  const response = await fetch(`${LIVE_URL}/matches/${match.id}/history`, { headers: { Accept: 'application/json' } })
-  if (response.status === 404) return []
-  if (!response.ok) throw new Error(`No se pudo cargar la historia del partido (${response.status})`)
-
-  const events = await response.json()
-  return Array.isArray(events) ? events : []
+  return LIVE_MOCK_MODE ? buildMockHistory(match) : []
 }

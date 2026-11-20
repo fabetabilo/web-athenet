@@ -4,6 +4,7 @@ import styles from './Match.module.css'
 
 // Hitos del partido: ocupan todo el ancho, sin lado
 const MARKERS = {
+  [MATCH_EVENT.START]: 'Inicio del partido',
   [MATCH_EVENT.KICKOFF]: 'Inicio del partido',
   [MATCH_EVENT.HALFTIME]: 'Entretiempo',
   [MATCH_EVENT.SECOND_HALF]: 'Comienza el segundo tiempo',
@@ -17,7 +18,9 @@ function EventBody({ entry }) {
     <span className={styles.eventBody}>
       <MatchEventIcon type={entry.type} />
       <span className={styles.eventText}>
-        {isSubstitution ? (
+        {entry.type === MATCH_EVENT.SCORE ? (
+          <span className={styles.eventName}>Punto</span>
+        ) : isSubstitution ? (
           <>
             <span className={styles.eventName}>{entry.playerIn}</span>
             <span className={styles.eventDetail}>Sale {entry.playerOut}</span>
@@ -62,7 +65,7 @@ export default function MatchTimeline({ timeline }) {
             <div className={`${styles.eventSide} ${styles.eventHome}`}>
               {entry.side === 'home' && <EventBody entry={entry} />}
             </div>
-            <span className={styles.eventMinute}>{entry.minute}&apos;</span>
+            <span className={styles.eventMinute}>{entry.score ?? `${entry.minute}'`}</span>
             <div className={`${styles.eventSide} ${styles.eventAway}`}>
               {entry.side === 'away' && <EventBody entry={entry} />}
             </div>

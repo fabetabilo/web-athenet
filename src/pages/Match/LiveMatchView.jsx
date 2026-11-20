@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import useLiveMatch from '../../service/liveMatch/useLiveMatch'
 import { describeEntry } from '../../service/liveMatch/matchEvents'
+import { LIVE_MOCK_MODE } from '../../service/liveMatch/matchStream'
 import MatchHeader from './MatchHeader'
 import MatchStats from './MatchStats'
 import MatchTimeline from './MatchTimeline'
@@ -9,10 +10,11 @@ import styles from './Match.module.css'
 // Foto del banner (public/img): estadio de noche, de Mario Klassen en Unsplash (licencia libre), 2400 px de ancho
 const STADIUM_PHOTO = `${import.meta.env.BASE_URL}img/estadio-banner.jpg`
 
+// El topico marcador no trae estadisticas: en modo real solo queda la cronologia
 const TABS = [
   { id: 'stats', label: 'Estadísticas' },
   { id: 'timeline', label: 'Cronología' },
-]
+].filter((item) => LIVE_MOCK_MODE || item.id !== 'stats')
 
 /**
  * Vista de un partido: banner con foto y marcador, y debajo pestañas de estadisticas y cronologia
@@ -24,7 +26,7 @@ const TABS = [
  */
 export default function LiveMatchView({ match, backLink }) {
   const { state, connection, historyStatus } = useLiveMatch(match)
-  const [tab, setTab] = useState('stats')
+  const [tab, setTab] = useState(TABS[0].id)
   const lastEntry = state.timeline[state.timeline.length - 1]
 
   // un partido ya jugado muestra su historia guardada; sin ella, un aviso en vez de ceros
