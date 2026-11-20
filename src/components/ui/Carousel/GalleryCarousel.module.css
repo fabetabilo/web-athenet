@@ -1,0 +1,83 @@
+.gallery {
+  --per-view: 1;
+  background: var(--bg-light);
+  padding-block: var(--section-pad-lg);
+}
+
+.header {
+  width: var(--layout-container);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: var(--display-xs);
+  letter-spacing: var(--tracking-title);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--leading-none);
+  color: var(--text-dark);
+}
+
+.viewport {
+  overflow: clip;
+  background: var(--color-ink);
+}
+
+.track {
+  display: flex;
+  transform: translateX(calc(-100% / var(--per-view) * var(--position)));
+  transition: transform var(--duration-carousel) var(--ease-out-quart);
+}
+
+.noTransition {
+  transition: none;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 calc(100% / var(--per-view));
+}
+
+.slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transition: background-color var(--duration-fast) ease;
+  pointer-events: none;
+}
+
+.slide:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: -2px;
+}
+
+.img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .slide:hover::after {
+    background: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  }
+}
+
+@media (min-width: 640px) {
+  .gallery {
+    --per-view: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery {
+    --per-view: 4;
+  }
+}

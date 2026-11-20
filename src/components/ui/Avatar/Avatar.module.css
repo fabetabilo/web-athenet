@@ -1,0 +1,48 @@
+.avatar {
+  display: inline-grid;
+  flex: none;
+  overflow: hidden;
+  /* gris del perfil sin foto; la silueta es un gris mas oscuro */
+  color: color-mix(in srgb, var(--color-ink) 40%, var(--color-white));
+  background: color-mix(in srgb, var(--color-ink) 14%, var(--color-white));
+  border-radius: 50%;
+  user-select: none;
+}
+
+.silhouette {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.md {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.lg {
+  width: 5rem;
+  height: 5rem;
+}
+
+.xl {
+  width: 7rem;
+  height: 7rem;
+}
+
+.xxl {
+  width: var(--avatar-size, 10rem);
+  height: var(--avatar-size, 10rem);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

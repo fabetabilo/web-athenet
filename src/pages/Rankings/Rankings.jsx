@@ -1,7 +1,10 @@
 import { Fragment, useEffect, useState } from 'react'
-import { useTransitionHold } from '../../components/transition'
+import { TransitionLink, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
+import TeamStandings from '../../components/ui/TeamStandings/TeamStandings'
+import FilterGroup from '../../components/ui/FilterGroup/FilterGroup'
+import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
 import { getTeamCompetitions } from '../../service/competitionsApi'
 import { formatNumericDate, getLastUpdate } from '../../utils/normalizeRanking'
 import { getRankingHistorico, getRankingSports } from '../../service/rankingApi'
@@ -39,6 +42,18 @@ function LastMatch({ match }) {
   )
 }
 
+function CompetitionCardBody({ competition }) {
+  return (
+    <>
+      <Avatar src={competition.competitionImg} name={competition.name} size="lg" />
+      <span className={styles.compText}>
+        <span className={styles.compName}>{competition.name}</span>
+        <span className={styles.compDate}>{competition.dateLabel}</span>
+      </span>
+    </>
+  )
+}
+
 function CompetitionsPanel({ entry }) {
   if (!entry || entry.status === 'loading') {
     return <p className={styles.panelMessage}>Cargando competencias…</p>
@@ -50,12 +65,17 @@ function CompetitionsPanel({ entry }) {
   return (
     <ul className={styles.compList}>
       {entry.items.map((competition) => (
-        <li key={competition.id} className={styles.compCard}>
-          <Avatar src={competition.logo} name={competition.name} size="lg" />
-          <span className={styles.compText}>
-            <span className={styles.compName}>{competition.name}</span>
-            <span className={styles.compDate}>{competition.dateLabel}</span>
-          </span>
+        <li key={competition.id}>
+          {competition.hasDetail ? (
+            <TransitionLink to={`/competitions/${competition.id}`} className={styles.compCard}>
+              <CompetitionCardBody competition={competition} />
+            </TransitionLink>
+          ) : (
+            // sin pagina con contenido: se muestra pero no es link
+            <div className={`${styles.compCard} ${styles.compCardStatic}`}>
+              <CompetitionCardBody competition={competition} />
+            </div>
+          )}
         </li>
       ))}
     </ul>
@@ -135,30 +155,30 @@ export default function Rankings() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="RANKINGS"
-        backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
+        title="Rankings"
+        subtitle="Posiciones históricas de los equipos universitarios, deporte por deporte."
+        backgroundImage={`${import.meta.env.BASE_URL}img/rankings.webp`}
+        spacious
       />
 
       <section className={styles.content}>
-        <div className={styles.container}>
+        <div className={styles.topBand}>
+          <div className={styles.container}>
+            <TeamStandings rows={rows} />
+          </div>
+        </div>
 
+        <div className={styles.container}>
           <div className={styles.toolbar}>
-            <div className={styles.filter} role="group" aria-label="Filtrar por deporte">
-              {(sports ?? []).map((sport) => (
-                <button
-                  key={sport.key}
-                  type="button"
-                  aria-pressed={sport.key === activeSport?.key}
-                  className={`${styles.filterBtn} ${sport.key === activeSport?.key ? styles.filterBtnActive : ''}`}
-                  onClick={() => {
-                    setSelectedKey(sport.key)
-                    setExpandedId(null)
-                  }}
-                >
-                  {sport.label}
-                </button>
-              ))}
-            </div>
+            <FilterGroup
+              label="Deporte"
+              options={(sports ?? []).map((sport) => ({ id: sport.key, label: sport.label }))}
+              value={activeSport?.key}
+              onChange={(key) => {
+                setSelectedKey(key)
+                setExpandedId(null)
+              }}
+            />
 
             {lastUpdate && (
               <p className={styles.updated}>
@@ -249,6 +269,7 @@ export default function Rankings() {
           </div>
         </div>
       </section>
+      <EventsBoard />
     </div>
   )
 }

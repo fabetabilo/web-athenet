@@ -1,18 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTransitionNavigate, useTransitionHold } from '../../components/transition'
 import PageBanner from '../../components/ui/PageBanner/PageBanner'
 import EventCard from '../../components/ui/EventCard/EventCard'
 import Table, { TableHead, TableBody, TableRow, TableHeadCell, TableCell } from '../../components/ui/Table/Table'
 import TeamMatchup from '../../components/ui/TeamChip/TeamMatchup'
+import EventsBoard from '../../components/ui/EventsBoard/EventsBoard'
+import FilterGroup from '../../components/ui/FilterGroup/FilterGroup'
+import { FILTER_ALL as ALL, uniqueValues } from '../../components/ui/FilterGroup/filterUtils'
 import { OfficialIconH } from '../../components/icons'
 import { getAllEvents } from '../../service/eventsApi'
 import styles from './Events.module.css'
 
-// Todo: FILTROS. Filtro por categoria, por competencia (copa, torneo, etc) y otros.
+// Estado de un evento segun las banderas que calcula normalizeEvent
+const STATUS_OPTIONS = [
+  { id: 'UPCOMING', label: 'Próximos' },
+  { id: 'LIVE', label: 'En curso' },
+  { id: 'FINISHED', label: 'Finalizados' },
+]
+const statusOf = (event) => (event.isFinished ? 'FINISHED' : event.hasStarted ? 'LIVE' : 'UPCOMING')
+
+// Todo: filtro por competencia (copa, torneo, etc): los eventos demo aun no traen competitionId.
 
 export default function Events() {
   const [publicEvents, setPublicEvents] = useState([])
   const [view, setView] = useState('grid')
+  const [sport, setSport] = useState(ALL)
+  const [type, setType] = useState(ALL)
+  const [status, setStatus] = useState(ALL)
   const [isLoading, setIsLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const navigate = useTransitionNavigate()
@@ -40,18 +54,48 @@ export default function Events() {
     }
   }, [])
 
+  // opciones de cada filtro, sacadas de los eventos cargados
+  const sportOptions = useMemo(
+    () => uniqueValues(publicEvents, (e) => e.sportLabel).sort().map((value) => ({ id: value, label: value })),
+    [publicEvents],
+  )
+  const typeOptions = useMemo(
+    () => uniqueValues(publicEvents, (e) => e.typeLabel).map((value) => ({ id: value, label: value })),
+    [publicEvents],
+  )
+  const statusOptions = useMemo(
+    () => STATUS_OPTIONS.filter((option) => publicEvents.some((e) => statusOf(e) === option.id)),
+    [publicEvents],
+  )
+
+  const visibleEvents = publicEvents.filter((e) => (
+    (sport === ALL || e.sportLabel === sport)
+    && (type === ALL || e.typeLabel === type)
+    && (status === ALL || statusOf(e) === status)
+  ))
+
+  const hasFilters = sport !== ALL || type !== ALL || status !== ALL
+  const clearFilters = () => {
+    setSport(ALL)
+    setType(ALL)
+    setStatus(ALL)
+  }
+
   return (
     <div className={styles.page}>
       <PageBanner
-        title="EVENTOS"
-        backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
+        title="Eventos"
+        subtitle="Calendario de partidos, torneos y fechas clave del deporte universitario."
+        backgroundImage={`${import.meta.env.BASE_URL}img/events.webp`}
       />
 
       <section className={styles.content}>
         <div className={styles.container}>
-
-          {/* Toolbar: contador de eventos + toggle de vista */}
           <div className={styles.toolbar}>
+            <FilterGroup label="Estado" allLabel="Todos" options={statusOptions} value={status} onChange={setStatus} />
+            <FilterGroup label="Tipo" allLabel="Todos" options={typeOptions} value={type} onChange={setType} />
+            <FilterGroup label="Deporte" allLabel="Todos" options={sportOptions} value={sport} onChange={setSport} />
+
             <div className={styles.viewToggle} role="radiogroup" aria-label="Cambiar vista">
               <label className={styles.viewOption}>
                 <input
@@ -78,10 +122,19 @@ export default function Events() {
 
           {loadFailed && <p className={styles.status}>No se pudieron cargar los eventos.</p>}
 
+          {!isLoading && !loadFailed && visibleEvents.length === 0 && (
+            <div className={styles.status}>
+              <p>No hay eventos con esos filtros.</p>
+              {hasFilters && (
+                <button type="button" className={styles.clear} onClick={clearFilters}>Limpiar filtros</button>
+              )}
+            </div>
+          )}
+
           {/* Vista grid */}
           {view === 'grid' && (
             <div className={styles.grid}>
-              {publicEvents.map((event) => (
+              {visibleEvents.map((event) => (
                 <EventCard key={event.id} event={event} showCountdown />
               ))}
             </div>
@@ -101,7 +154,7 @@ export default function Events() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {publicEvents.map((event) => (
+                {visibleEvents.map((event) => (
                   <TableRow key={event.id} onClick={() => navigate(`/events/${event.id}`)}>
                     <TableCell>{event.sportLabel || '-'}</TableCell>
                     <TableCell variant="strong">{event.title}</TableCell>
@@ -122,6 +175,7 @@ export default function Events() {
           )}
         </div>
       </section>
+      <EventsBoard />
     </div>
   )
 }

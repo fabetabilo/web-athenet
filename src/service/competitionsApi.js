@@ -1,9 +1,14 @@
 import { normalizeMatch } from '../utils/normalizeMatch'
-import { normalizeCompetitionList } from '../utils/normalizeCompetition'
+import { normalizeCompetition, normalizeCompetitionList } from '../utils/normalizeCompetition'
 import { createApiClient } from './apiClient'
-import { getInstitutionsById } from './institutionsApi'
+import { getInstitutionsById, getSportsById } from './institutionsApi'
 import { getMockTeamCompetitions } from '../data/demo/teamCompetitions'
-import { competitionMatches as competitionMatchesMock } from '../data/demo/competitionMatches'
+import { competitionMatches as competitionMatchesMock, historicCupMatches } from '../data/demo/competitionMatches'
+
+// Todas las llaves del demo: la vigente mas las de las copas terminadas
+const allCupMatchesMock = [...competitionMatchesMock, ...historicCupMatches]
+import { competitions as competitionsMock } from '../data/demo/competitions'
+import { resolveSport as resolveMockSport } from '../data/demo/sports'
 /**
  * @file competitionsApi.js
  * Servicio de consumo para ms-competitions con mocks locales para el modo demo.
@@ -28,6 +33,7 @@ const { request, warn } = createApiClient({
 
 export const COMPETITION_ENDPOINTS = {
     COMPETITIONS: '/competitions',
+    COMPETITION_BY_ID: (id) => `/competitions/${id}`,
     COMPETITION_FIXTURE: (id) => `/competitions/${id}/fixture`,
     CURRENT_FIXTURE: '/competitions/current/fixture',
 }
@@ -46,6 +52,28 @@ export const COMPETITION_ENDPOINTS = {
 async function requestAndNormalize(endpoint, mockData, normalizer, config = {}) {
     const { data } = await request(endpoint, mockData, config)
     return normalizer(data)
+}
+
+/**
+ * Deporte resuelto segun el origen
+ * Si ms-institution no responde, las competencias reales quedan sin deporte.
+ */
+async function getSportResolver(source) {
+    if (source === 'mock') return resolveMockSport
+
+    try {
+        const sportsById = await getSportsById()
+        return (id) => sportsById.get(String(id)) ?? null
+    } catch (error) {
+        warn(`Deportes sin resolver: ${error.message}`)
+        return () => null
+    }
+}
+
+async function requestCompetitions(endpoint, mockData, toResult, config = {}) {
+    const { data, source } = await request(endpoint, mockData, config)
+    const resolveSport = await getSportResolver(source)
+    return toResult(data, { resolveSport })
 }
 
 /** Institucion que no se pudo resolver: el marcador queda con la sigla neutra. */
@@ -99,6 +127,78 @@ export async function getCurrentCompetitionMatches(config = {}) {
     )
 }
 
+/**
+ * Un partido de una competencia, para mostrar su marcador y ronda junto al evento
+ * que lo copia. Lo busca en el fixture publico porque /matches/{id} expone otro DTO.
+ *
+ * @param {number} competitionId
+ * @param {number} matchId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch | null>}
+ */
+export async function getCompetitionMatch(competitionId, matchId, config = {}) {
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(competitionId),
+        competitionMatchesMock,
+        (rawList) => {
+            const raw = Array.isArray(rawList) ? rawList.find((m) => m.id === matchId) : null
+            return raw ? normalizeMatch(raw) : null
+        },
+        config
+    )
+}
+
+/**
+ * Los partidos de una competencia, de octavos a final y en orden de cuadro; sin llave, lista vacia.
+ * El mock trae las llaves de varias copas: se filtra por competencia.
+ *
+ * @param {number|string} competitionId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch[]>}
+ */
+export async function getCompetitionMatches(competitionId, config = {}) {
+    const resolve = await loadInstitutionResolver()
+    const mock = allCupMatchesMock.filter((m) => String(m.competition.id) === String(competitionId))
+
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.COMPETITION_FIXTURE(competitionId),
+        mock,
+        (rawList) => normalizeList(rawList, resolve),
+        config
+    )
+}
+
+/**
+ * Todas las competencias, mas reciente primero.
+ *
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition[]>}
+ */
+export async function getCompetitions(config = {}) {
+    return requestCompetitions(
+        COMPETITION_ENDPOINTS.COMPETITIONS,
+        competitionsMock,
+        normalizeCompetitionList,
+        config
+    )
+}
+
+/**
+ * Una competencia por id; null si no existe.
+ *
+ * @param {number|string} id
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeCompetition').NormalizedCompetition|null>}
+ */
+export async function getCompetitionById(id, config = {}) {
+    return requestCompetitions(
+        COMPETITION_ENDPOINTS.COMPETITION_BY_ID(id),
+        competitionsMock.find((competition) => String(competition.id) === String(id)) ?? null,
+        (raw, resolvers) => (raw ? normalizeCompetition(raw, resolvers) : null),
+        config
+    )
+}
+
 export const TEAM_COMPETITIONS_LIMIT = 5
 
 /**
@@ -114,5 +214,27 @@ export async function getTeamCompetitions(teamId, config = {}) {
         getMockTeamCompetitions(teamId),
         normalizeCompetitionList,
         { ...config, params: { teamId, limit: TEAM_COMPETITIONS_LIMIT } }
+    )
+}
+
+/**
+ * Un partido por id, de cualquier copa (la vigente o una ya terminada). Devuelve null si no existe.
+ * Nota: contra el backend real solo busca en el fixture vigente.
+ *
+ * @param {number|string} matchId
+ * @param {import('axios').AxiosRequestConfig} [config]
+ * @returns {Promise<import('../utils/normalizeMatch').NormalizedMatch | null>}
+ */
+export async function getMatchById(matchId, config = {}) {
+    const resolve = await loadInstitutionResolver()
+
+    return requestAndNormalize(
+        COMPETITION_ENDPOINTS.CURRENT_FIXTURE,
+        allCupMatchesMock,
+        (rawList) => {
+            const list = normalizeList(rawList, resolve)
+            return list.find((m) => String(m.id) === String(matchId)) ?? null
+        },
+        config
     )
 }

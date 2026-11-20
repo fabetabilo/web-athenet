@@ -50,6 +50,7 @@ const STATUS_LABELS = {
   DRAFT:     'Borrador',
   PUBLISHED: 'Publicado',
   CANCELLED: 'Cancelado',
+  FINISHED:  'Finalizado',
 }
 
 /** Nombres de mes en español, índice 0 = enero */
@@ -127,15 +128,16 @@ function splitDisplayDate(isoDate) {
  * @property {string|null} endTime        - "HH:mm" local
  * @property {string}      startsAt       - "YYYY-MM-DDTHH:mm" local, objetivo del countdown
  * @property {boolean}     hasStarted     - true si startsAt ya pasó al momento de normalizar
+ * @property {boolean}     isFinished     - true si el backend lo marcó FINISHED o ya pasó su término
  * Clasificación
  * @property {string}      type           - enum original: MATCH | MEETING | TRACKDAY | OTHER
  * @property {string}      typeLabel      - label legible en español
  * @property {number|null} sportId        - id del deporte en ms-institution
  * @property {string|null} sportLabel     - nombre resuelto; null si no se pudo resolver
  * Estado
- * @property {string}      status         - enum original: DRAFT | PUBLISHED | CANCELLED
+ * @property {string}      status         - enum original: DRAFT | PUBLISHED | CANCELLED | FINISHED
  * @property {string}      statusLabel    - label legible en español
- * @property {boolean}     isVisible      - true solo si status === 'PUBLISHED'
+ * @property {boolean}     isVisible      - true si status es PUBLISHED o FINISHED
  * Oficial
  * @property {boolean}     isOfficial     - true si el evento es verificado/oficial
  * Equipos
@@ -153,6 +155,9 @@ function splitDisplayDate(isoDate) {
  * @property {number|null} organizerInstitutionId
  * @property {number|null} organizerCampusId
  * @property {number|null} organizerTeamId
+ * Competencia (eventos copiados de un partido de ms-competitions)
+ * @property {number|null} competitionId
+ * @property {number|null} competitionMatchId
  */
 
 /** Equipo sin resolver: sin resolver inyectado o id ausente en el catalogo. */
@@ -171,6 +176,7 @@ const toHourMinute = (time) => (time ? String(time).slice(0, 5) : null)
 export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSport = () => null } = {}) {
   const startTime = toHourMinute(rawEvent.startTime)
   const startsAt = `${rawEvent.eventDate}T${startTime ?? '00:00'}`
+  const endsAt = `${rawEvent.endDate ?? rawEvent.eventDate}T${toHourMinute(rawEvent.endTime) ?? '23:59'}`
   const toTeam = (id) => (id != null ? resolveTeam(id) ?? UNKNOWN_TEAM(id) : null)
 
   const hasTeams =
@@ -207,6 +213,7 @@ export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSpor
     // Ya empezo. Se calcula aqui, al traer los datos, y no en el render: leer el
     // reloj durante el render rompe las reglas de pureza de React.
     hasStarted: parseLocalDateTime(startsAt).getTime() <= Date.now(),
+    isFinished: rawEvent.status === 'FINISHED' || parseLocalDateTime(endsAt).getTime() <= Date.now(),
     // Clasificación
     type:       rawEvent.type,
     typeLabel:  TYPE_LABELS[rawEvent.type] ?? rawEvent.type,
@@ -215,7 +222,7 @@ export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSpor
     // Estado
     status:      rawEvent.status,
     statusLabel: STATUS_LABELS[rawEvent.status] ?? rawEvent.status,
-    isVisible:   rawEvent.status === 'PUBLISHED',
+    isVisible:   rawEvent.status === 'PUBLISHED' || rawEvent.status === 'FINISHED',
     // Oficial
     isOfficial: Boolean(rawEvent.isOfficial),
     // Equipos
@@ -231,5 +238,8 @@ export function normalizeEvent(rawEvent, { resolveTeam = () => null, resolveSpor
     organizerInstitutionId: rawEvent.organizerInstitutionId ?? null,
     organizerCampusId:      rawEvent.organizerCampusId ?? null,
     organizerTeamId:        rawEvent.organizerTeamId ?? null,
+    // Competencia
+    competitionId:      rawEvent.competitionId ?? null,
+    competitionMatchId: rawEvent.competitionMatchId ?? null,
   }
 }

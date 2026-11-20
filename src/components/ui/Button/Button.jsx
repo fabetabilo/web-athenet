@@ -7,12 +7,14 @@ const VARIANTS = {
   dark: styles.dark,
   accent: styles.accent,
   solid: styles.solid,
+  muted: styles.muted,
 };
 
-// el tamano por defecto vive en .base; md solo lo sobreescribe
+// el tamano por defecto vive en .base; md y sm solo lo sobreescriben
 const SIZES = {
   lg: '',
   md: styles.md,
+  sm: styles.sm,
 };
 
 /**
@@ -23,14 +25,16 @@ const SIZES = {
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children - Contenido interno del botón.
- * @param {'light'|'dark'|'accent'|'solid'} [props.variant='light'] - Define la paleta de colores del botón. 
+ * @param {'light'|'dark'|'accent'|'solid'|'muted'} [props.variant='light'] - Define la paleta de colores del botón. 
  *   - 'light': Diseñado para usarse sobre fondos claros (renderiza bordes y texto oscuros).
  *   - 'dark': Diseñado para usarse sobre fondos oscuros (renderiza bordes y texto claros).
  *   - 'accent': Variante llamativa que usa --color-cyan de fondo y texto negro, cambiando a fondo blanco en hover.
  *   - 'solid': Relleno blanco con texto negro, que se invierte a relleno negro con texto blanco en hover (borde siempre blanco).
- * @param {'lg'|'md'} [props.size='lg'] - Escala del botón.
+ *   - 'muted': Relleno gris con texto blanco para acciones secundarias sobre fondos oscuros; aclara levemente en hover.
+ * @param {'lg'|'md'|'sm'} [props.size='lg'] - Escala del botón.
  *   - 'lg': tamaño por defecto.
  *   - 'md': version compacta (menos padding y tipografia mas chica).
+ *   - 'sm': version minima (aprox. 20% menor que md), para barras de navegacion.
  * @param {boolean} [props.showArrow=false] - Determina si se debe mostrar el ícono `ArrowRight` a la derecha del contenido.
  * @param {string} [props.to] - Ruta interna. Su presencia cambia el elemento raíz al link del router,
  *   que respeta el `basename` y pasa por la pantalla de transición. Usar siempre esto para rutas propias.

@@ -6,7 +6,17 @@ import {
   LuCalendar,
   LuBuilding2,
   LuUsers,
-  LuSearch
+  LuSearch,
+  LuX,
+  LuEye,
+  LuEyeOff,
+  LuCheck,
+  LuChevronDown,
+  LuPencil,
+  LuClock,
+  LuBell,
+  LuCamera,
+  LuUser
 } from 'react-icons/lu';
 
 import {
@@ -35,7 +45,17 @@ export {
   LuCalendar as Calendar,
   LuBuilding2 as Building2,
   LuUsers as Users,
-  LuSearch as Search
+  LuSearch as Search,
+  LuX as Close,
+  LuEye as Eye,
+  LuEyeOff as EyeOff,
+  LuCheck as Check,
+  LuChevronDown as ChevronDown,
+  LuPencil as Pencil,
+  LuClock as Clock,
+  LuBell as Bell,
+  LuCamera as Camera,
+  LuUser as User
 };
 
 // Logos de redes sociales (set Font Awesome 6)

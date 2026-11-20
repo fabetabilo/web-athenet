@@ -1,7 +1,7 @@
 import styles from './Pill.module.css'
 
 // el color y el tamano por defecto viven en .base; las variantes solo sobreescriben
-const VARIANTS = { default: '', red: styles.red }
+const VARIANTS = { default: '', red: styles.red, neutral: styles.neutral }
 const SIZES = { md: '', lg: styles.lg }
 
 /**
@@ -10,7 +10,7 @@ const SIZES = { md: '', lg: styles.lg }
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children - Texto de la etiqueta.
- * @param {'default'|'red'} [props.variant='default'] - Color de fondo de la etiqueta.
+ * @param {'default'|'red'|'neutral'} [props.variant='default'] - Color de fondo de la etiqueta.
  * @param {'md'|'lg'} [props.size='md'] - Tamaño de la etiqueta.
  * @param {string} [props.className] - Clases adicionales para extender estilos.
  */

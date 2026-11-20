@@ -14,10 +14,10 @@ const MATCH_DURATION_MS = 2 * 60 * 60 * 1000
 
 const COMPETITION = {
   id: 1,
-  name: 'Copa Instituciones de Chile',
+  name: 'Copa Instituciones de Chile 2026',
   season: String(new Date().getFullYear()),
   sportId: 1,
-  competitionImg: null,
+  competitionImg: `${import.meta.env.BASE_URL}img/c-inst2026.png`,
 }
 
 const side = (teamId, score) => {
@@ -76,4 +76,40 @@ export const competitionMatches = [
   match(13, 'SEMI_FINAL', 1, 0, '19:00', [101, 2], [104, 0]),
   match(14, 'SEMI_FINAL', 2, 1, '19:00', [106], [107]),
   match(15, 'FINAL', 1, 4, '18:00'),
+]
+
+/* ---- Copas terminadas: llaves completas con fechas y marcadores fijos ---- */
+
+const finishedCup = (competition) => (id, round, position, date, time, home, away) => ({
+  id,
+  competition: { ...competition, sportId: 1 },
+  round,
+  position,
+  date,
+  time,
+  location: 'Santiago, Chile',
+  address: 'Av. España 8',
+  status: 'FINISHED',
+  home: side(home[0], home[1]),
+  away: side(away[0], away[1]),
+})
+
+const summerCup = finishedCup({
+  id: 5,
+  name: 'Torneo Fútbol de Verano 2025',
+  season: '2025',
+  competitionImg: `${import.meta.env.BASE_URL}img/c-tofuve2025.png`,
+})
+
+/** Fixtures de las copas historicas. Solo se sirven por competencia, nunca como "vigente". */
+export const historicCupMatches = [
+  // Torneo Fútbol de Verano 2025: torneo corto de 8 equipos (desde cuartos), campeon Marea UPC
+  summerCup(501, 'QUARTER_FINAL', 1, '2025-01-20', '17:00', [103, 2], [108, 1]),
+  summerCup(502, 'QUARTER_FINAL', 2, '2025-01-20', '19:30', [105, 1], [109, 0]),
+  summerCup(503, 'QUARTER_FINAL', 3, '2025-01-21', '17:00', [102, 3], [111, 1]),
+  summerCup(504, 'QUARTER_FINAL', 4, '2025-01-21', '19:30', [110, 0], [116, 2]),
+
+  summerCup(505, 'SEMI_FINAL', 1, '2025-02-04', '19:00', [103, 1], [105, 2]),
+  summerCup(506, 'SEMI_FINAL', 2, '2025-02-05', '19:00', [102, 2], [116, 0]),
+  summerCup(507, 'FINAL', 1, '2025-02-15', '18:00', [105, 2], [102, 3]),
 ]

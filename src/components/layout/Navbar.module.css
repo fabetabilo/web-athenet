@@ -109,14 +109,7 @@
   }
 }
 
-.cta {
-  display: none;
-  align-items: center;
-  gap: var(--space-4);
-  pointer-events: auto;
-}
-
-/* Base comun de todo boton de icono: menu, buscador y cerrar. El color lo heredan los svg via currentColor igual que links */
+/* Base comun de los botones de icono: menu y cerrar. El color lo heredan los svg via currentColor igual que links */
 .iconBtn {
   display: flex;
   align-items: center;
@@ -129,11 +122,6 @@
   border: none;
   color: var(--text-primary);
   transition: color var(--duration-fast);
-}
-
-.searchIcon {
-  width: var(--icon-md);
-  height: var(--icon-md);
 }
 
 .topControls {
@@ -452,7 +440,8 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
 @media (min-width: 1024px) {
   .inner {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: var(--space-4);   /* separacion minima entre logo, links y acceso */
     align-items: center;
   }
 
@@ -466,10 +455,11 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
   .links {
     display: flex;
     justify-self: center;
+    gap: clamp(1rem, 1rem + (100vw - 80rem) / 20, 2.5rem);
   }
 
-  .cta {
-    display: flex;
+  .link {
+    font-size: clamp(0.8125rem, 0.8125rem + (100vw - 64rem) / 260, var(--text-md));
   }
 
   .drawer {
@@ -512,5 +502,102 @@ el que lo va descubriendo. Hereda los retardos de .layerMain */
     margin-left: var(--space-16);
     grid-column: 2;
     grid-row: 1;
+  }
+}
+
+/* Acceso de usuarios. Va como tercera celda de la grilla, pegado al borde derecho: si no cabe,
+   empuja los enlaces en vez de superponerse. Bajo 1366px vive en el drawer. */
+.auth {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  justify-self: end;
+}
+
+/* Botones de acceso: misma forma que el recuadro del usuario (UserMenu).
+   Iniciar sesion = placa oscura; Registrarse = celeste */
+.loginButton,
+.registerButton {
+  align-self: stretch;   /* misma altura que el recuadro del usuario */
+  min-height: calc(2rem + var(--space-2) + 2px);
+  padding: 0 var(--space-4);
+  color: var(--color-ink);
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);     /* menor que los links del menu (text-md) */
+  font-weight: 450;              /* igual que los links del menu */
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast), border-color var(--duration-fast);
+}
+
+.registerButton {
+  background: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+}
+
+.loginButton {
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  border: 1px solid var(--color-border-strong);
+  backdrop-filter: blur(6px);
+}
+
+.registerButton:active {
+  background: var(--color-white);
+  border-color: var(--color-white);
+}
+
+.loginButton:active {
+  border-color: var(--color-cyan);
+}
+
+.registerButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-white);
+  outline-offset: 3px;
+}
+
+.loginButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .registerButton:hover {
+    background: var(--color-white);
+    border-color: var(--color-white);
+  }
+
+  .loginButton:hover {
+    border-color: var(--color-cyan);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loginButton,
+  .registerButton {
+    transition: none;
+  }
+}
+
+.drawerAuth {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 1366px) {
+  .auth {
+    display: flex;
+  }
+
+  .inner:has(> .auth) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .drawerAuth {
+    display: none;
   }
 }

@@ -36,7 +36,8 @@ export default function Institutions() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="INSTITUCIONES"
+        title="Instituciones"
+        subtitle="Las casas de estudio que compiten en la liga universitaria y los equipos que representan."
         backgroundImage="https://images.unsplash.com/photo-1564981797816-1043664bf78d?q=80&w=2070&auto=format&fit=crop"
       />
 

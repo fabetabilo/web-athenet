@@ -4,7 +4,7 @@
 
 .content {
   background: var(--bg-light);
-  padding: var(--section-pad-sm) 0 var(--section-pad-lg);
+  padding-block: var(--section-pad-sm) var(--section-pad-lg);
 }
 
 .container {
@@ -14,17 +14,21 @@
 
 .toolbar {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: var(--space-10);
+  gap: var(--space-4) var(--space-8);
+  margin-bottom: var(--section-pad-sm);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
-/* radios nativos: solo el espaciado que el reset global quita y el color sobre fondo claro */
 .viewToggle {
   display: flex;
   gap: var(--space-4);
+  margin-left: auto;
   color: var(--text-dark);
   font-size: var(--text-base);
+  accent-color: var(--color-cyan);
 }
 
 .viewOption {
@@ -47,10 +51,8 @@
     gap: var(--grid-gap-lg);
   }
 
-  .toolbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
+  .viewToggle {
+    margin-left: 0;
   }
 }
 
@@ -65,4 +67,20 @@
 .status {
   padding: var(--space-8) 0;
   color: var(--text-dark-muted);
+}
+
+.clear {
+  margin-top: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  background: transparent;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  color: var(--text-dark);
+  font: inherit;
+  cursor: pointer;
+}
+
+.clear:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-cyan);
+  outline-offset: var(--focus-ring-offset);
 }

@@ -21,7 +21,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: color-mix(in srgb, var(--color-black) 25%, transparent);
+  background: var(--color-scrim);
   z-index: 1;
 }
 
@@ -39,18 +39,70 @@
 .titleWrapper {
   flex-grow: 1;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
   padding-bottom: var(--space-8);
+}
+
+.bannerText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.bannerTop {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.officialBadgeImg {
+  height: 1.75rem;
+  width: auto;
+  max-width: none;
+  filter: drop-shadow(var(--shadow-badge));
+}
+
+.countdownSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.bannerLocation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.bannerDate {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+}
+
+.dateSep {
+  margin-inline: var(--space-2);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-regular);
 }
 
 .title {
   color: var(--text-primary);
-  font-family: var(--font-heading);
-  font-weight: var(--font-weight-bold);
-  font-style: italic;
-  font-size: var(--display-lg);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-display);
+  font-family: var(--font-primary);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--display-sm);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-title);
   text-shadow: var(--text-shadow-banner-soft);
 }
 
@@ -84,20 +136,22 @@
   flex-shrink: 0;
 }
 
-.officialItemIcon {
-  height: clamp(1.5rem, 4vw, 2.5rem);
-  width: auto;
-  flex-shrink: 0;
+.itemLabel {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
 .itemText {
   font-family: var(--font-primary);
   font-size: var(--text-md);
-  font-weight: var(--font-text-weight);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 
@@ -129,19 +183,27 @@
 
 
 
-.boldDescription {
+.lead {
   font-family: var(--font-primary);
-  font-size: var(--text-body);
+  font-weight: var(--font-text-strong-weight);
+  font-size: var(--text-md);
   line-height: var(--leading-relaxed);
   color: var(--text-dark);
 }
 
-.loremText {
+.body {
   font-family: var(--font-primary);
   font-weight: var(--font-text-weight);
-  font-size: var(--text-body);
+  font-size: var(--text-md);
   line-height: var(--leading-relaxed);
   color: var(--text-dark);
+}
+
+@media (min-width: 768px) {
+  .lead,
+  .body {
+    font-size: var(--text-lead);
+  }
 }
 
 .sidebarContent {
@@ -236,7 +298,6 @@
   display: inline-flex;
   align-items: center;
   color: var(--text-secondary);
-  margin-bottom: var(--space-4);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -247,10 +308,6 @@
   width: var(--icon-sm);
   height: var(--icon-sm);
   margin-right: var(--space-1);
-}
-
-.footerItem.footerItemBadge {
-  padding: 0;
 }
 
 .notFoundLink {

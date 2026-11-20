@@ -59,7 +59,8 @@ export default function ConfirmSubscription() {
   return (
     <div className={styles.page}>
       <PageBanner
-        title="SUSCRIPCIÓN"
+        title="Suscripción"
+        subtitle="Confirma tu correo para recibir eventos, competencias y resultados de Athenet."
         backgroundImage="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop"
       />
 
