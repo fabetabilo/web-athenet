@@ -40,6 +40,8 @@ jobs:
           VITE_RANKING_API_URL: ${{ secrets.VITE_RANKING_API_URL }}
           VITE_NOTIFICATIONS_API_URL: ${{ secrets.VITE_NOTIFICATIONS_API_URL }}
           VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.VITE_COGNITO_USER_POOL_ID }}
+          VITE_COGNITO_CLIENT_ID: ${{ secrets.VITE_COGNITO_CLIENT_ID }}
         run: npm run build
 
       - name: Crear 404.html para soporte de SPA routing en GitHub Pages
