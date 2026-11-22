@@ -2,6 +2,8 @@ import { useState } from 'react'
 import useLiveMatch from '../../service/liveMatch/useLiveMatch'
 import { describeEntry } from '../../service/liveMatch/matchEvents'
 import { LIVE_MOCK_MODE } from '../../service/liveMatch/matchStream'
+import { chatRoomOf } from '../../service/liveChat/chatStream'
+import MatchChat from './MatchChat'
 import MatchHeader from './MatchHeader'
 import MatchStats from './MatchStats'
 import MatchTimeline from './MatchTimeline'
@@ -18,7 +20,7 @@ const TABS = [
 
 /**
  * Vista de un partido: banner con foto y marcador, y debajo pestañas de estadisticas y cronologia
- * alimentadas por el stream en vivo.
+ * alimentadas por el stream en vivo, con el chat del partido al costado.
  *
  * @param {Object} props
  * @param {import('../../utils/normalizeMatch').NormalizedMatch} props.match
@@ -28,6 +30,7 @@ export default function LiveMatchView({ match, backLink }) {
   const { state, connection, historyStatus } = useLiveMatch(match)
   const [tab, setTab] = useState(TABS[0].id)
   const lastEntry = state.timeline[state.timeline.length - 1]
+  const chatRoom = chatRoomOf(match)
 
   // un partido ya jugado muestra su historia guardada; sin ella, un aviso en vez de ceros
   let panel
@@ -59,36 +62,40 @@ export default function LiveMatchView({ match, backLink }) {
         </div>
       </section>
 
-      <div className={`${styles.container} ${styles.body}`}>
-        <div className={styles.tabs} role="tablist" aria-label="Detalle del partido" onKeyDown={handleKeyDown}>
-          {TABS.map((item) => (
-            <button
-              key={item.id}
-              id={`match-tab-${item.id}`}
-              type="button"
-              role="tab"
-              aria-selected={tab === item.id}
-              aria-controls={`match-panel-${item.id}`}
-              tabIndex={tab === item.id ? 0 : -1}
-              className={`${styles.tab} ${tab === item.id ? styles.tabActive : ''}`}
-              onClick={() => setTab(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
+      <div className={chatRoom ? `${styles.wide} ${styles.body} ${styles.layout}` : `${styles.container} ${styles.body}`}>
+        <div className={styles.main}>
+          <div className={styles.tabs} role="tablist" aria-label="Detalle del partido" onKeyDown={handleKeyDown}>
+            {TABS.map((item) => (
+              <button
+                key={item.id}
+                id={`match-tab-${item.id}`}
+                type="button"
+                role="tab"
+                aria-selected={tab === item.id}
+                aria-controls={`match-panel-${item.id}`}
+                tabIndex={tab === item.id ? 0 : -1}
+                className={`${styles.tab} ${tab === item.id ? styles.tabActive : ''}`}
+                onClick={() => setTab(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          <section
+            id={`match-panel-${tab}`}
+            role="tabpanel"
+            aria-labelledby={`match-tab-${tab}`}
+            className={styles.panel}
+          >
+            {panel}
+          </section>
+
+          {/* anuncia cada evento nuevo a lectores de pantalla */}
+          <p className={styles.srOnly} aria-live="polite">{describeEntry(lastEntry, state)}</p>
         </div>
 
-        <section
-          id={`match-panel-${tab}`}
-          role="tabpanel"
-          aria-labelledby={`match-tab-${tab}`}
-          className={styles.panel}
-        >
-          {panel}
-        </section>
-
-        {/* anuncia cada evento nuevo a lectores de pantalla */}
-        <p className={styles.srOnly} aria-live="polite">{describeEntry(lastEntry, state)}</p>
+        {chatRoom && <MatchChat roomId={chatRoom} />}
       </div>
     </>
   )
