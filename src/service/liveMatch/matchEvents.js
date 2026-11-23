@@ -16,11 +16,18 @@
  *   FULLTIME      { minute }
  *   STATS         { stats: { possession: { home, away }, shots: { home, away }, ... } }
  *
+ * El modo real (tópico marcador, sin reloj) solo usa:
+ *   START         -
+ *   SCORE         { home, away }                            marcador absoluto
+ *   FULLTIME      -
+ *
  * `side` es 'home' | 'away'. `id` es unico por evento: el reductor ignora los repetidos (reconexion).
  * La historia de un partido jugado es la lista de estos eventos, de KICKOFF a FULLTIME (ver loadMatchHistory).
  */
 
 export const MATCH_EVENT = Object.freeze({
+  START: 'START',
+  SCORE: 'SCORE',
   KICKOFF: 'KICKOFF',
   CLOCK: 'CLOCK',
   GOAL: 'GOAL',
@@ -35,6 +42,7 @@ export const MATCH_EVENT = Object.freeze({
 
 export const MATCH_PHASE = Object.freeze({
   SCHEDULED: 'SCHEDULED',
+  LIVE: 'LIVE',
   FIRST_HALF: 'FIRST_HALF',
   HALFTIME: 'HALFTIME',
   SECOND_HALF: 'SECOND_HALF',
@@ -98,6 +106,7 @@ const withEntry = (state, event, extra = {}) => ({
       assist: event.assist ?? null,
       playerIn: event.playerIn ?? null,
       playerOut: event.playerOut ?? null,
+      score: event.score ?? null,
     },
   ],
   ...extra,
@@ -107,6 +116,40 @@ const bump = (stats, key, side) => ({
   ...stats,
   [key]: { ...stats[key], [side]: stats[key][side] + 1 },
 })
+
+const isScore = (value) => Number.isInteger(value) && value >= 0
+
+/** Puntos del lado que anoto, segun el parcial 'local-visita' de la entrada. */
+const pointsOf = (entry) => Number(entry.score.split('-')[entry.side === 'home' ? 0 : 1])
+
+/**
+ * Fija el marcador absoluto. Agrega una entrada solo cuando sube un unico lado; una correccion
+ * a la baja quita de la cronologia los puntos que ya no cuentan.
+ */
+function applyScore(state, { home, away }) {
+  if (!isScore(home) || !isScore(away) || state.phase === MATCH_PHASE.FINISHED) return state
+  if (home === state.home.score && away === state.away.score) return state
+
+  const score = { home, away }
+  const next = {
+    ...state,
+    phase: state.phase === MATCH_PHASE.SCHEDULED ? MATCH_PHASE.LIVE : state.phase,
+    home: { ...state.home, score: home },
+    away: { ...state.away, score: away },
+    timeline: state.timeline.filter((entry) => entry.type !== MATCH_EVENT.SCORE || pointsOf(entry) <= score[entry.side]),
+  }
+  const homeUp = home > state.home.score && away === state.away.score
+  const awayUp = away > state.away.score && home === state.home.score
+  if (!homeUp && !awayUp) return next
+
+  const side = homeUp ? 'home' : 'away'
+  return withEntry(next, {
+    id: `${MATCH_EVENT.SCORE}-${side}-${score[side]}`,
+    type: MATCH_EVENT.SCORE,
+    side,
+    score: `${home}-${away}`,
+  })
+}
 
 /**
  * Aplica un evento al estado del partido. Ignora los de otro partido y los repetidos.
@@ -123,6 +166,13 @@ export function matchReducer(state, event) {
   const side = event.side === 'home' || event.side === 'away' ? event.side : null
 
   switch (event.type) {
+    case MATCH_EVENT.START:
+      if (state.phase !== MATCH_PHASE.SCHEDULED) return state
+      return withEntry(state, event, { phase: MATCH_PHASE.LIVE })
+
+    case MATCH_EVENT.SCORE:
+      return applyScore(state, event)
+
     case MATCH_EVENT.KICKOFF:
       return withEntry(state, event, { phase: MATCH_PHASE.FIRST_HALF, minute: 0 })
 
@@ -206,6 +256,9 @@ export function describeEntry(entry, state) {
       return `${at}: tarjeta roja para ${entry.player ?? 'un jugador'} de ${team}.`
     case MATCH_EVENT.SUBSTITUTION:
       return `${at}: cambio en ${team}, entra ${entry.playerIn} y sale ${entry.playerOut}.`
+    case MATCH_EVENT.SCORE:
+      return `Punto para ${team}, ${entry.score}.`
+    case MATCH_EVENT.START:
     case MATCH_EVENT.KICKOFF:
       return 'Comienza el partido.'
     case MATCH_EVENT.HALFTIME:

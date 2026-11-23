@@ -5,7 +5,7 @@ import { measureLogo } from '../../utils/logoFit'
 import MatchEventIcon from './MatchEventIcon'
 import styles from './Match.module.css'
 
-const LIVE_PHASES = [MATCH_PHASE.FIRST_HALF, MATCH_PHASE.HALFTIME, MATCH_PHASE.SECOND_HALF]
+const LIVE_PHASES = [MATCH_PHASE.LIVE, MATCH_PHASE.FIRST_HALF, MATCH_PHASE.HALFTIME, MATCH_PHASE.SECOND_HALF]
 
 const CONNECTION_LABELS = {
   connecting: 'Conectando…',
@@ -65,6 +65,8 @@ function TeamBlock({ team, events }) {
 /** Texto bajo el marcador: minuto en juego, entretiempo, final o la hora programada. */
 function statusText(state, match) {
   switch (state.phase) {
+    case MATCH_PHASE.LIVE:
+      return 'En juego'
     case MATCH_PHASE.FIRST_HALF:
     case MATCH_PHASE.SECOND_HALF:
       return `${state.minute}'`

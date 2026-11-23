@@ -48,13 +48,19 @@ Levanta el proyecto en tu entorno local:
    ```
 
    Variables disponibles en `.env`:
+
    | Variable | Descripción | Valor por defecto |
    | :--- | :--- | :--- |
    | `VITE_EVENTS_API_URL` | URL base de `ms-events` (Public Controller). Si se omite, se usan mocks. | `http://localhost:8081/api/public` |
    | `VITE_INSTITUTIONS_API_URL` | URL base de `ms-institution` (solo GET públicos). Fuente de instituciones, sedes, equipos y deportes; también resuelve los equipos y el deporte de los eventos reales. Si se omite, se usan mocks. | `https://na279sqez3.execute-api.us-east-1.amazonaws.com/api/v1` |
    | `VITE_COMPETITIONS_API_URL` | URL base de `ms-competitions`. Si se omite, `MatchStrip` usa mocks. | _(vacía)_ |
-| `VITE_NOTIFICATIONS_API_URL` | URL base del servicio de suscripciones de `ms-notifications`. Sin mocks: si se omite, el newsletter muestra error. Ver [docs/dev/turnstile.md](docs/dev/turnstile.md). | _(vacía)_ |
-| `VITE_TURNSTILE_SITE_KEY` | Site key pública de Cloudflare Turnstile para el newsletter. | `1x00000000000000000000AA` (prueba) |
+   | `VITE_NOTIFICATIONS_API_URL` | URL base del servicio de suscripciones de `ms-notifications`. Sin mocks: si se omite, el newsletter muestra error. Ver [docs/dev/turnstile.md](docs/dev/turnstile.md). | _(vacía)_ |
+   | `VITE_TURNSTILE_SITE_KEY` | Site key pública de Cloudflare Turnstile para el newsletter. | `1x00000000000000000000AA` (prueba) |
+   | `VITE_STATISTICS_API_URL` | URL base de `ms-statistics` (marcador en vivo por STOMP en `<url>/ws`). Si se omite, el marcador se simula. | _(vacía)_ |
+   | `VITE_COGNITO_USER_POOL_ID` | User Pool de Cognito para el acceso de usuarios. Sin pool o sin client, el acceso se simula solo en desarrollo. | _(vacía)_ |
+   | `VITE_COGNITO_CLIENT_ID` | App Client público (sin secret, con `ALLOW_USER_SRP_AUTH`). Debe ser el mismo que acepta `api-athenet-chat`. | _(vacía)_ |
+   | `VITE_CHAT_API_URL` | URL base HTTPS del API Gateway del chat; el ticket se pide en `<url>/api/ws/ticket`. | _(vacía)_ |
+   | `VITE_CHAT_WS_URL` | URL base del WebSocket del chat. En GitHub Pages debe ser `wss://`. Sin ambas URLs del chat, o con el acceso simulado, el chat se simula. | _(vacía)_ |
    | `VITE_USE_DEMO_MOCKS` | Modo demo: fuerza los mocks de todos los servicios de lectura sin llamadas de red (`true` \| `false`). | `false` |
 
    > Los eventos reales solo se resuelven con el catálogo real de `ms-institution`, nunca con mocks: si ese servicio no responde, se muestran sin equipos ni deporte.
